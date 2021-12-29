@@ -24,5 +24,8 @@ public class RobotOutput {
         this.drive = new DriveOutput();
     }
 
+    public void stopAll() {
+        this.drive.stopAll();
+    }
 
 }

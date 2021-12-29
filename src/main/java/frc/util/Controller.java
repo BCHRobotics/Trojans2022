@@ -17,6 +17,10 @@ public class Controller extends XboxController {
         super(port);
     }
 
+    public boolean getModeSwitchButtonsPressed() {
+        return this.getStartButtonPressed() || this.getBackButtonPressed();
+    }
+
     public double getJoystick(Side side, Axis axis) {
         double deadzone = Constants.CONTROLLER_DEADZONE;
 

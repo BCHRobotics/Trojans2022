@@ -58,4 +58,9 @@ public class DriveOutput {
     public CANEncoder getDriveR2Encoder() {
         return this.driveR2.getEncoder();
     }
+
+    public void stopAll() {
+        setDriveLeft(0);
+        setDriveRight(0);
+    }
 }
