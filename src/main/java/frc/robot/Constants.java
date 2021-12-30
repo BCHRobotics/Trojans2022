@@ -9,6 +9,7 @@ public class Constants {
     public static final double CONTROLLER_DEADZONE = 0.1;
     public static final double WhHEEL_DIAMETER = 6;
     public static final double MAX_OUTPUT = 1;
+    public static final double PATH_TURN_P = 6;
 
     //#region PID
 

@@ -1,6 +1,7 @@
 package frc.io;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.util.PIDConstants;
 
 public class Dashboard {
@@ -64,5 +65,10 @@ public class Dashboard {
 		SmartDashboard.putNumber(name + "-D", constants.d);
 		SmartDashboard.putNumber(name + "-FF", constants.ff);
 		SmartDashboard.putNumber(name + "-EPS", constants.eps);
+	}
+
+    // Get the PID Turn
+	public double getPathTurnP() {
+		return SmartDashboard.getNumber("Path Turn P", Constants.PATH_TURN_P);
 	}
 }
