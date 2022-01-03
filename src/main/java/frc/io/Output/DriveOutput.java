@@ -4,7 +4,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class DriveOutput {
+public class DriveOutput implements IRobotOutput {
     private CANSparkMax driveL1;
     private CANSparkMax driveL2;
     private CANSparkMax driveR1;
@@ -59,6 +59,7 @@ public class DriveOutput {
         return this.driveR2.getEncoder();
     }
 
+    @Override
     public void stopAll() {
         setDriveLeft(0);
         setDriveRight(0);

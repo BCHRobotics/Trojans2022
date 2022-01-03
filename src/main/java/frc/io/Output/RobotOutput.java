@@ -3,7 +3,7 @@ package frc.io.Output;
 /**
  * This class is used to initiate all the Output Classes
  */
-public class RobotOutput {
+public class RobotOutput implements IRobotOutput {
     private static RobotOutput instance;
 
     public DriveOutput drive;
@@ -24,6 +24,7 @@ public class RobotOutput {
         this.drive = new DriveOutput();
     }
 
+    @Override
     public void stopAll() {
         this.drive.stopAll();
     }
