@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     private Drive drive;
 
     private boolean pushToDashboard = true;
-    public static boolean teleopInitialized = false;
+    public static boolean teleopInitialized = true;
 
     /**
      * This function is run when the robot is first started up and should be used
