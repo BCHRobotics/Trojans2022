@@ -39,8 +39,8 @@ https://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json
 
 FIRST BSD License
 
-Copyright (c) 2009-2021 FIRST and other WPILib contributors 
-Copyright (c) 2020-2021 Team 2386
+Copyright (c) 2009-2022 FIRST and other WPILib contributors 
+Copyright (c) 2020-2022 Team 2386
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
