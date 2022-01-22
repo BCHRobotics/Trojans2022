@@ -7,6 +7,7 @@ public class RobotOutput implements IRobotOutput {
     private static RobotOutput instance;
 
     public DriveOutput drive;
+    public ClimberOutput climber;
 
     /**
      * Get the instance of the RobotOutput, if none create a new instance
@@ -22,6 +23,7 @@ public class RobotOutput implements IRobotOutput {
 
     private RobotOutput() {
         this.drive = new DriveOutput();
+        this.climber = new ClimberOutput();
     }
 
     @Override
