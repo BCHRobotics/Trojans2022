@@ -5,12 +5,21 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class DriveOutput implements IRobotOutput {
+    private static DriveOutput instance;
+
     private CANSparkMax driveL1;
     private CANSparkMax driveL2;
     private CANSparkMax driveR1;
     private CANSparkMax driveR2;
 
-    protected DriveOutput() {
+    public static DriveOutput getInstance() {
+        if (instance == null) {
+            instance = new DriveOutput();
+        }
+        return instance;
+    }
+
+    private DriveOutput() {
         this.driveL1 = new CANSparkMax(11, MotorType.kBrushless);   
         this.driveL2 = new CANSparkMax(12, MotorType.kBrushless);   
         this.driveR1 = new CANSparkMax(15, MotorType.kBrushless);
