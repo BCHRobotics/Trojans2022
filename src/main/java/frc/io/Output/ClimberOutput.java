@@ -11,6 +11,9 @@ public class ClimberOutput implements IRobotOutput {
     private CANSparkMax armRotateRight;
     private CANSparkMax armRotateLeft;
 
+    /**
+     * Initiates the Climber Output 
+     */
     protected ClimberOutput() {
         this.armExtendRight = new CANSparkMax(20, MotorType.kBrushless);
         this.armRotateRight = new CANSparkMax(21, MotorType.kBrushless);
@@ -26,48 +29,91 @@ public class ClimberOutput implements IRobotOutput {
         this.armRotateLeft.setInverted(false);
     }
 
+    /**
+     * Set the speed of both the Right and Left Extend Motors
+     * @param speed speed in percent (-1 to 1)
+     */
     public void setArmExtend(double speed) {
         this.setArmExtendRight(speed);
         this.setArmExtendLeft(speed);
     }
 
+    /**
+     * Set the speed of both the Right and Left Rotate Motors
+     * @param speed speed in percent (-1 to 1)
+     */
     public void setArmRotate(double speed) {
         this.setArmRotateRight(speed);
         this.setArmRotateLeft(speed);
     }
 
+    /**
+     * Set the speed of the Right Extend Motor
+     * @param speed speed in percent (-1 to 1)
+     */
     public void setArmExtendRight(double speed) {
         this.armExtendRight.set(speed);
     }
 
+    /**
+     * Set the speed of the Left Extend Motor
+     * @param speed speed in percent (-1 to 1)
+     */
     public void setArmExtendLeft(double speed) {
         this.armExtendLeft.set(speed);
     }
 
+    /**
+     * Set the speed of the Right Rotate Motor
+     * @param speed speed in percent (-1 to 1)
+     */
     public void setArmRotateRight(double speed) {
         this.armExtendRight.set(speed);
     }
 
+    /**
+     * Set the speed of the Left Rotate Motor
+     * @param speed speed in percent (-1 to 1)
+     */
     public void setArmRotateLeft(double speed) {
         this.armRotateLeft.set(speed);
     }
 
+    /**
+     * Get the reference to the Right Arm Extend Encoder
+     * @return CANEncoder reference
+     */
     public CANEncoder getArmExtendRightEncoder() {
         return this.armExtendRight.getEncoder();
     }
 
+    /**
+     * Get the reference to the Left Arm Extend Encoder
+     * @return CANEncoder reference
+     */
     public CANEncoder getArmExtendLeftEncoder() {
         return this.armExtendLeft.getEncoder();
     }
 
+    /**
+     * Get the reference to the Right Arm Rotate Encoder
+     * @return CANEncoder reference
+     */
     public CANEncoder getArmRotateRightEncoder() {
         return this.armRotateRight.getEncoder();
     }
 
+    /**
+     * Get the reference to the Left Arm Rotate Encoder
+     * @return CANEncoder reference
+     */
     public CANEncoder getArmRotateLeftEncoder() {
         return this.armRotateLeft.getEncoder();
     }
 
+    /**
+     * Stop all motors
+     */
     @Override
     public void stopAll() {
         setArmExtend(0);
