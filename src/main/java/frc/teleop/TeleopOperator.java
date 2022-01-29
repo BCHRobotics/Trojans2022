@@ -1,7 +1,10 @@
 package frc.teleop;
 
 import frc.io.DriverInput;
+import frc.subsystems.Climber;
 import frc.util.Controller;
+import frc.util.Controller.Axis;
+import frc.util.Controller.Side;
 
 public class TeleopOperator extends TeleopComponent {
     private static TeleopOperator instance;
@@ -14,6 +17,8 @@ public class TeleopOperator extends TeleopComponent {
     }
 
     private OperatorMode operatorMode = OperatorMode.DRIVE;
+
+    private Climber climber;
 
     /**
      * Get the instance of the TeleopOperator, if none create a new instance
@@ -31,6 +36,7 @@ public class TeleopOperator extends TeleopComponent {
     public void firstCycle() {
         this.driverInput = DriverInput.getInstance();
         this.operatorController = driverInput.getOperatorController();
+        this.climber = Climber.getInstance();
     }
 
     @Override
@@ -49,13 +55,23 @@ public class TeleopOperator extends TeleopComponent {
             if (operatorMode == OperatorMode.CLIMB) operatorMode = OperatorMode.DRIVE;
             if (operatorMode == OperatorMode.DRIVE) operatorMode = OperatorMode.CLIMB;
         }
+
+        climber.calculate();
     }
 
     /**
      * Climb mode for operator controller
      */
     private void climbMode() {
+        double speed = 0.3;
         
+        climber.setSyncExtendOutput(
+            operatorController.getJoystick(Side.LEFT, Axis.Y) * speed
+        );
+
+        climber.setSyncRotateOutput(
+            operatorController.getJoystick(Side.RIGHT, Axis.X) * speed
+        );
     }
 
     /**
