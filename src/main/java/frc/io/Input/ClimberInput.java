@@ -5,6 +5,8 @@ import com.revrobotics.CANEncoder;
 import frc.io.Output.RobotOutput;
 
 public class ClimberInput implements ISensorInput {
+    private static ClimberInput instance;
+
     private RobotOutput robotOutput;
 
     private CANEncoder armExtendRightEncoder;
@@ -13,10 +15,17 @@ public class ClimberInput implements ISensorInput {
     private CANEncoder armRotateRightEncoder;
     private CANEncoder armRotateLeftEncoder;
 
+    public static ClimberInput getInstance() {
+        if (instance == null) {
+            instance = new ClimberInput();
+        }
+        return instance;
+    }
+
     /**
      * Initiates the Climber Input, gets the encoders from RobotOutput and assigns them
      */
-    protected ClimberInput() {
+    private ClimberInput() {
         this.robotOutput = RobotOutput.getInstance();
 
         this.armExtendRightEncoder = robotOutput.climber.getArmExtendRightEncoder();

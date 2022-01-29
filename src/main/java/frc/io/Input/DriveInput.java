@@ -8,6 +8,8 @@ import frc.robot.Constants;
 import frc.util.Navx;
 
 public class DriveInput implements ISensorInput {
+    private static DriveInput instance;
+
     private RobotOutput robotOutput;
 
     // Gyro
@@ -27,7 +29,14 @@ public class DriveInput implements ISensorInput {
     private double lastTime = 0.0;
 	private double deltaTime = 20.0;
 
-    protected DriveInput() {
+    public static DriveInput getInstance() {
+        if (instance == null) {
+            instance = new DriveInput();
+        }
+        return instance;
+    }
+
+    private DriveInput() {
         this.robotOutput = RobotOutput.getInstance();
 
         this.navx = new Navx(SerialPort.Port.kUSB);

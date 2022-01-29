@@ -22,8 +22,8 @@ public class RobotOutput implements IRobotOutput {
     }
 
     private RobotOutput() {
-        this.drive = new DriveOutput();
-        this.climber = new ClimberOutput();
+        this.drive = DriveOutput.getInstance();
+        this.climber = ClimberOutput.getInstance();
     }
 
     @Override

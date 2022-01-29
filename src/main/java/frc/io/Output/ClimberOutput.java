@@ -5,16 +5,25 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class ClimberOutput implements IRobotOutput {
+    private static ClimberOutput instance;
+
     private CANSparkMax armExtendRight;
     private CANSparkMax armExtendLeft;
 
     private CANSparkMax armRotateRight;
     private CANSparkMax armRotateLeft;
 
+    public static ClimberOutput getInstance(){
+        if (instance == null) {
+            instance = new ClimberOutput();
+        }
+        return instance;
+    }
+
     /**
      * Initiates the Climber Output 
      */
-    protected ClimberOutput() {
+    private ClimberOutput() {
         this.armExtendRight = new CANSparkMax(20, MotorType.kBrushless);
         this.armRotateRight = new CANSparkMax(21, MotorType.kBrushless);
 

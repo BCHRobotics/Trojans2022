@@ -4,6 +4,7 @@ public class SensorInput implements ISensorInput {
     private static SensorInput instance;
 
     public DriveInput drive; 
+    public ClimberInput climber;
 
     /**
      * Get the instance of the SensorInput, if none create a new instance
@@ -18,7 +19,8 @@ public class SensorInput implements ISensorInput {
     }
 
     private SensorInput() {
-        this.drive = new DriveInput();
+        this.drive = DriveInput.getInstance();
+        this.climber = ClimberInput.getInstance();
     }
 
     @Override
