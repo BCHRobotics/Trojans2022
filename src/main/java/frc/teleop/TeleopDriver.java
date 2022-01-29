@@ -1,6 +1,5 @@
 package frc.teleop;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.io.DriverInput;
 import frc.subsystems.Drive;
 import frc.util.Controller;
@@ -44,8 +43,8 @@ public class TeleopDriver extends TeleopComponent {
         
         double speed = 0.75;
 
-        if (driverController.getBumper(Hand.kLeft)) speed = 0.5;
-        if (driverController.getBumper(Hand.kRight)) speed = 1.0;
+        if (driverController.getLeftBumper()) speed = 0.5;
+        if (driverController.getRightBumper()) speed = 1.0;
 
         drive.setOutput(
             driverController.getJoystick(Side.LEFT, Axis.Y) * speed, 

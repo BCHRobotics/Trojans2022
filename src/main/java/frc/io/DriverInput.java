@@ -1,6 +1,5 @@
 package frc.io;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.util.Controller;
 import frc.util.Controller.Axis;
 import frc.util.Controller.Side;
@@ -84,16 +83,16 @@ public class DriverInput {
 
 	public boolean getAutonStepIncrease() {
 		// only returns true on rising edge
-		boolean result = this.driver.getBumper(Hand.kRight) && !this.autonIncreaseStepWasPressed;
-		this.autonIncreaseStepWasPressed = this.driver.getBumper(Hand.kRight);
+		boolean result = this.driver.getRightBumper() && !this.autonIncreaseStepWasPressed;
+		this.autonIncreaseStepWasPressed = this.driver.getRightBumper();
 		return result;
 
 	}
 
 	public boolean getAutonStepDecrease() {
 		// only returns true on rising edge
-		boolean result = this.driver.getBumper(Hand.kLeft) && !this.autonDecreaseStepWasPressed;
-		this.autonDecreaseStepWasPressed = this.driver.getBumper(Hand.kLeft);
+		boolean result = this.driver.getLeftBumper() && !this.autonDecreaseStepWasPressed;
+		this.autonDecreaseStepWasPressed = this.driver.getLeftBumper();
 		return result;
 
 	}

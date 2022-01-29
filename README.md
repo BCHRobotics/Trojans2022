@@ -19,9 +19,8 @@ To drive the code you must have:
 These are the vendor libraries that we are using. These are what you need to copy if they are missing.
 
 ```
-https://www.kauailabs.com/dist/frc/2020/navx_frc.json
-http://devsite.ctr-electronics.com/maven/release/com/ctre/phoenix/Phoenix-latest.json
-https://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json
+https://www.kauailabs.com/dist/frc/2022/navx_frc.json
+https://software-metadata.revrobotics.com/REVLib.json
 ```
 
 ### Running the code
