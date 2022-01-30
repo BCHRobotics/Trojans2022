@@ -1,7 +1,7 @@
 package frc.io.Output;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class ClimberOutput implements IRobotOutput {
@@ -92,7 +92,7 @@ public class ClimberOutput implements IRobotOutput {
      * Get the reference to the Right Arm Extend Encoder
      * @return CANEncoder reference
      */
-    public CANEncoder getArmExtendRightEncoder() {
+    public RelativeEncoder getArmExtendRightEncoder() {
         return this.armExtendRight.getEncoder();
     }
 
@@ -100,7 +100,7 @@ public class ClimberOutput implements IRobotOutput {
      * Get the reference to the Left Arm Extend Encoder
      * @return CANEncoder reference
      */
-    public CANEncoder getArmExtendLeftEncoder() {
+    public RelativeEncoder getArmExtendLeftEncoder() {
         return this.armExtendLeft.getEncoder();
     }
 
@@ -108,7 +108,7 @@ public class ClimberOutput implements IRobotOutput {
      * Get the reference to the Right Arm Rotate Encoder
      * @return CANEncoder reference
      */
-    public CANEncoder getArmRotateRightEncoder() {
+    public RelativeEncoder getArmRotateRightEncoder() {
         return this.armRotateRight.getEncoder();
     }
 
@@ -116,7 +116,7 @@ public class ClimberOutput implements IRobotOutput {
      * Get the reference to the Left Arm Rotate Encoder
      * @return CANEncoder reference
      */
-    public CANEncoder getArmRotateLeftEncoder() {
+    public RelativeEncoder getArmRotateLeftEncoder() {
         return this.armRotateLeft.getEncoder();
     }
 

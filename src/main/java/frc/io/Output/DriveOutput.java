@@ -1,7 +1,7 @@
 package frc.io.Output;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class DriveOutput implements IRobotOutput {
@@ -52,19 +52,19 @@ public class DriveOutput implements IRobotOutput {
         this.driveR2.setOpenLoopRampRate(rampRateSecondsToFull);
     }
 
-    public CANEncoder getDriveL1Encoder() {
+    public RelativeEncoder getDriveL1Encoder() {
         return this.driveL1.getEncoder();
     }
 
-    public CANEncoder getDriveL2Encoder() {
+    public RelativeEncoder getDriveL2Encoder() {
         return this.driveL2.getEncoder();
     }
 
-    public CANEncoder getDriveR1Encoder() {
+    public RelativeEncoder getDriveR1Encoder() {
         return this.driveR1.getEncoder();
     }
 
-    public CANEncoder getDriveR2Encoder() {
+    public RelativeEncoder getDriveR2Encoder() {
         return this.driveR2.getEncoder();
     }
 
