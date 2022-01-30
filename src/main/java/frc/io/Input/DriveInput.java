@@ -1,6 +1,7 @@
 package frc.io.Input;
 
-import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.SerialPort;
 
 import frc.io.Output.RobotOutput;
@@ -16,10 +17,10 @@ public class DriveInput implements ISensorInput {
     private Navx navx;
     
     // Drive encoders
-    private CANEncoder driveL1Encoder;
-    private CANEncoder driveL2Encoder;
-    private CANEncoder driveR1Encoder;
-    private CANEncoder driveR2Encoder;
+    private RelativeEncoder driveL1Encoder;
+    private RelativeEncoder driveL2Encoder;
+    private RelativeEncoder driveR1Encoder;
+    private RelativeEncoder driveR2Encoder;
 
     // Robot position
     private double xPosition = 0;

@@ -1,6 +1,6 @@
 package frc.io.Input;
 
-import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
 
 import frc.io.Output.RobotOutput;
 
@@ -9,11 +9,11 @@ public class ClimberInput implements ISensorInput {
 
     private RobotOutput robotOutput;
 
-    private CANEncoder armExtendRightEncoder;
-    private CANEncoder armExtendLeftEncoder;
+    private RelativeEncoder armExtendRightEncoder;
+    private RelativeEncoder armExtendLeftEncoder;
 
-    private CANEncoder armRotateRightEncoder;
-    private CANEncoder armRotateLeftEncoder;
+    private RelativeEncoder armRotateRightEncoder;
+    private RelativeEncoder armRotateLeftEncoder;
 
     public static ClimberInput getInstance() {
         if (instance == null) {
