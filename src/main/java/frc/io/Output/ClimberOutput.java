@@ -77,7 +77,7 @@ public class ClimberOutput implements IRobotOutput {
      * @param speed speed in percent (-1 to 1)
      */
     public void setArmRotateRight(double speed) {
-        this.armExtendRight.set(speed);
+        this.armRotateRight.set(speed);
     }
 
     /**

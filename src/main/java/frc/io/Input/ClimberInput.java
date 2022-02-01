@@ -75,7 +75,7 @@ public class ClimberInput implements ISensorInput {
      * @return position in inches
      */
     public double getArmExtendLeftEncoder() {
-        return this.armExtendRightEncoder.getPosition();
+        return this.armExtendLeftEncoder.getPosition();
     }
 
     /**

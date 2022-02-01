@@ -5,12 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.auton.AutonControl;
 import frc.imaging.Limelight;
 import frc.io.Dashboard;
 import frc.io.Input.SensorInput;
 import frc.io.Output.RobotOutput;
+import frc.subsystems.Climber;
 import frc.subsystems.Drive;
+import frc.subsystems.Climber.ClimberMode;
 import frc.teleop.TeleopControl;
 
 /**
@@ -56,6 +59,7 @@ public class Robot extends TimedRobot {
         this.sensorInput.reset();
 
         Limelight.getInstance().setLedMode(1);
+        SmartDashboard.putNumber("Test", 0);
     }
 
     /**
@@ -124,12 +128,16 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
+
+        System.out.println("Started Teleop Periodic!");
+
         if (this.autonControl.isRunning()) {
             this.autonomousPeriodic();
         } else {
             if (!Robot.teleopInitialized) {
                 this.teleopInit();
             }
+            System.out.println("Teleop is running!");
             this.sensorInput.update();
             this.teleopControl.runCycle();
             this.dashboard.updateAll();
@@ -165,5 +173,22 @@ public class Robot extends TimedRobot {
     public void testPeriodic() {
         this.sensorInput.update();
         this.dashboard.updateAll();
+
+        /*Climber climber = Climber.getInstance();
+
+        climber.setCurrentMode(ClimberMode.INDEPENDENT);
+
+        climber.setLeftExtendOutput(0.3);
+        climber.setRightExtendOutput(0.3);
+        climber.setLeftRotateOutput(0.3);
+        climber.setRightRotateOutput(0.3);
+
+        climber.calculate();*/
+
+        //double test = sensorInput.climber.getArmRotateLeftEncoder();
+        //SmartDashboard.putNumber("Test", test);
+
+        robotOutput.climber.setArmExtend(0.3);
+        robotOutput.climber.setArmRotate(0.3);
     }
 }

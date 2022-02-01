@@ -16,7 +16,7 @@ public class TeleopOperator extends TeleopComponent {
         CLIMB, DRIVE
     }
 
-    private OperatorMode operatorMode = OperatorMode.DRIVE;
+    private OperatorMode operatorMode = OperatorMode.CLIMB;
 
     private Climber climber;
 
@@ -41,6 +41,9 @@ public class TeleopOperator extends TeleopComponent {
 
     @Override
     public void calculate() {
+
+        System.out.println("Teleop Operator Calculate!");
+
         switch (operatorMode) {
             case CLIMB:
                 climbMode();
@@ -63,6 +66,9 @@ public class TeleopOperator extends TeleopComponent {
      * Climb mode for operator controller
      */
     private void climbMode() {
+
+        System.out.println("Climb Mode!");
+
         double speed = 0.3;
         
         climber.setSyncExtendOutput(
