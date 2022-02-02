@@ -50,6 +50,8 @@ public class TeleopDriver extends TeleopComponent {
             driverController.getJoystick(Side.LEFT, Axis.Y) * speed, 
             driverController.getJoystick(Side.RIGHT, Axis.X) * speed
         );
+
+        drive.calculate();
         
     }
 

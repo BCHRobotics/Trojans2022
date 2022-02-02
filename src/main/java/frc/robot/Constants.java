@@ -5,8 +5,8 @@ import frc.util.PIDConstants;
 
 public class Constants {
 
-    public static final boolean DRIVE_ENABLED = false;
-    public static final boolean CLIMBER_ENABLED = true;
+    public static final boolean DRIVE_ENABLED = true;
+    public static final boolean CLIMBER_ENABLED = false;
     
     public static final boolean USING_DASHBOARD = true;
     public static final double CONTROLLER_DEADZONE = 0.1;

@@ -26,10 +26,10 @@ public class DriveOutput implements IRobotOutput {
     private DriveOutput() {
         if (!enabled) return;
             
-        this.driveL1 = new CANSparkMax(10, MotorType.kBrushless);   
-        this.driveL2 = new CANSparkMax(11, MotorType.kBrushless);   
-        this.driveR1 = new CANSparkMax(12, MotorType.kBrushless);
-        this.driveR2 = new CANSparkMax(13, MotorType.kBrushless); 
+        this.driveL1 = new CANSparkMax(11, MotorType.kBrushless);   
+        this.driveL2 = new CANSparkMax(12, MotorType.kBrushless);   
+        this.driveR1 = new CANSparkMax(15, MotorType.kBrushless);
+        this.driveR2 = new CANSparkMax(16, MotorType.kBrushless); 
 
         this.driveL1.setInverted(true);
         this.driveR1.setInverted(false);

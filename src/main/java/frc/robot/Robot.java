@@ -188,7 +188,9 @@ public class Robot extends TimedRobot {
         //double test = sensorInput.climber.getArmRotateLeftEncoder();
         //SmartDashboard.putNumber("Test", test);
 
-        robotOutput.climber.setArmExtend(0.3);
-        robotOutput.climber.setArmRotate(0.3);
+        Drive drive = Drive.getInstance();
+        
+        drive.setOutput(0.3, 0);
+        drive.calculate();
     }
 }
