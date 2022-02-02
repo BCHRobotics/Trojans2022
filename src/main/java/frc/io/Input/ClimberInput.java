@@ -3,9 +3,12 @@ package frc.io.Input;
 import com.revrobotics.RelativeEncoder;
 
 import frc.io.Output.RobotOutput;
+import frc.robot.Constants;
 
 public class ClimberInput implements ISensorInput {
     private static ClimberInput instance;
+
+    private boolean enabled = Constants.CLIMBER_ENABLED;
 
     private RobotOutput robotOutput;
 
@@ -26,6 +29,8 @@ public class ClimberInput implements ISensorInput {
      * Initiates the Climber Input, gets the encoders from RobotOutput and assigns them
      */
     private ClimberInput() {
+        if (!enabled) return;
+
         this.robotOutput = RobotOutput.getInstance();
 
         this.armExtendRightEncoder = robotOutput.climber.getArmExtendRightEncoder();
@@ -47,6 +52,8 @@ public class ClimberInput implements ISensorInput {
      */
     @Override
     public void reset() {
+        if (!enabled) return;
+
         this.armExtendRightEncoder.setPosition(0);
         this.armExtendLeftEncoder.setPosition(0);
 
@@ -59,7 +66,7 @@ public class ClimberInput implements ISensorInput {
      */
     @Override
     public void update() {
-
+        if (!enabled) return;
     }
 
     /**
@@ -67,6 +74,7 @@ public class ClimberInput implements ISensorInput {
      * @return position in inches
      */
     public double getArmExtendRightEncoder() {
+        if (!enabled) return 0;
         return this.armExtendRightEncoder.getPosition();
     }
 
@@ -75,6 +83,7 @@ public class ClimberInput implements ISensorInput {
      * @return position in inches
      */
     public double getArmExtendLeftEncoder() {
+        if (!enabled) return 0;
         return this.armExtendLeftEncoder.getPosition();
     }
 
@@ -83,6 +92,7 @@ public class ClimberInput implements ISensorInput {
      * @return position in degrees
      */
     public double getArmRotateRightEncoder() {
+        if (!enabled) return 0;
         return this.armRotateRightEncoder.getPosition();
     }
 
@@ -91,6 +101,7 @@ public class ClimberInput implements ISensorInput {
      * @return position in degrees
      */
     public double getArmRotateLeftEncoder() {
+        if (!enabled) return 0;
         return this.armRotateLeftEncoder.getPosition();
     }
 

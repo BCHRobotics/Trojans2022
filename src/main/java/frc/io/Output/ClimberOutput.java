@@ -4,8 +4,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.Constants;
+
 public class ClimberOutput implements IRobotOutput {
     private static ClimberOutput instance;
+
+    private boolean enabled = Constants.CLIMBER_ENABLED;
 
     private CANSparkMax armExtendRight;
     private CANSparkMax armExtendLeft;
@@ -24,6 +28,8 @@ public class ClimberOutput implements IRobotOutput {
      * Initiates the Climber Output 
      */
     private ClimberOutput() {
+        if (!enabled) return;
+
         this.armExtendRight = new CANSparkMax(20, MotorType.kBrushless);
         this.armRotateRight = new CANSparkMax(21, MotorType.kBrushless);
 
@@ -43,6 +49,7 @@ public class ClimberOutput implements IRobotOutput {
      * @param speed speed in percent (-1 to 1)
      */
     public void setArmExtend(double speed) {
+        if (!enabled) return;
         this.setArmExtendRight(speed);
         this.setArmExtendLeft(speed);
     }
@@ -52,6 +59,7 @@ public class ClimberOutput implements IRobotOutput {
      * @param speed speed in percent (-1 to 1)
      */
     public void setArmRotate(double speed) {
+        if (!enabled) return;
         this.setArmRotateRight(speed);
         this.setArmRotateLeft(speed);
     }
@@ -61,6 +69,7 @@ public class ClimberOutput implements IRobotOutput {
      * @param speed speed in percent (-1 to 1)
      */
     public void setArmExtendRight(double speed) {
+        if (!enabled) return;
         this.armExtendRight.set(speed);
     }
 
@@ -69,6 +78,7 @@ public class ClimberOutput implements IRobotOutput {
      * @param speed speed in percent (-1 to 1)
      */
     public void setArmExtendLeft(double speed) {
+        if (!enabled) return;
         this.armExtendLeft.set(speed);
     }
 
@@ -77,6 +87,7 @@ public class ClimberOutput implements IRobotOutput {
      * @param speed speed in percent (-1 to 1)
      */
     public void setArmRotateRight(double speed) {
+        if (!enabled) return;
         this.armRotateRight.set(speed);
     }
 
@@ -85,6 +96,7 @@ public class ClimberOutput implements IRobotOutput {
      * @param speed speed in percent (-1 to 1)
      */
     public void setArmRotateLeft(double speed) {
+        if (!enabled) return;
         this.armRotateLeft.set(speed);
     }
 
@@ -93,6 +105,7 @@ public class ClimberOutput implements IRobotOutput {
      * @return CANEncoder reference
      */
     public RelativeEncoder getArmExtendRightEncoder() {
+        if (!enabled) return null;
         return this.armExtendRight.getEncoder();
     }
 
@@ -101,6 +114,7 @@ public class ClimberOutput implements IRobotOutput {
      * @return CANEncoder reference
      */
     public RelativeEncoder getArmExtendLeftEncoder() {
+        if (!enabled) return null;
         return this.armExtendLeft.getEncoder();
     }
 
@@ -109,6 +123,7 @@ public class ClimberOutput implements IRobotOutput {
      * @return CANEncoder reference
      */
     public RelativeEncoder getArmRotateRightEncoder() {
+        if (!enabled) return null;
         return this.armRotateRight.getEncoder();
     }
 
@@ -117,6 +132,7 @@ public class ClimberOutput implements IRobotOutput {
      * @return CANEncoder reference
      */
     public RelativeEncoder getArmRotateLeftEncoder() {
+        if (!enabled) return null;
         return this.armRotateLeft.getEncoder();
     }
 
