@@ -11,6 +11,8 @@ import frc.util.Navx;
 public class DriveInput implements ISensorInput {
     private static DriveInput instance;
 
+    private boolean enabled = Constants.DRIVE_ENABLED;
+
     private RobotOutput robotOutput;
 
     // Gyro
@@ -38,9 +40,11 @@ public class DriveInput implements ISensorInput {
     }
 
     private DriveInput() {
+        if (!enabled) return;
+
         this.robotOutput = RobotOutput.getInstance();
 
-        /*this.navx = new Navx(SerialPort.Port.kUSB);
+        this.navx = new Navx(SerialPort.Port.kUSB);
 
         this.driveL1Encoder = robotOutput.drive.getDriveL1Encoder();
         this.driveL2Encoder = robotOutput.drive.getDriveL2Encoder();
@@ -52,12 +56,14 @@ public class DriveInput implements ISensorInput {
         this.driveL1Encoder.setPositionConversionFactor(driveFactor);
         this.driveL2Encoder.setPositionConversionFactor(driveFactor);
         this.driveR1Encoder.setPositionConversionFactor(driveFactor);
-        this.driveR2Encoder.setPositionConversionFactor(driveFactor);*/
+        this.driveR2Encoder.setPositionConversionFactor(driveFactor);
     }
 
     @Override
     public void reset() {
-        /*this.navx.reset();
+        if (!enabled) return;
+
+        this.navx.reset();
 
         this.driveL1Encoder.setPosition(0);
         this.driveL2Encoder.setPosition(0);
@@ -65,12 +71,13 @@ public class DriveInput implements ISensorInput {
         this.driveR2Encoder.setPosition(0);
 
         this.xPosition = 0;
-        this.yPosition = 0;*/
+        this.yPosition = 0;
     }
 
     @Override
     public void update() {
-        /*
+        if (!enabled) return;
+
         if (this.lastTime == 0.0) {
             this.deltaTime = 20;
             this.lastTime = System.currentTimeMillis();
@@ -84,29 +91,29 @@ public class DriveInput implements ISensorInput {
         double driveXSpeed = getDriveSpeedFPS() * Math.cos(Math.toRadians(getGyroAngle()));
         double driveYSpeed = getDriveSpeedFPS() * Math.sin(Math.toRadians(getGyroAngle()));
         xPosition += driveXSpeed * this.deltaTime / 1000.0;
-        yPosition += driveYSpeed * this.deltaTime / 1000.0;*/
+        yPosition += driveYSpeed * this.deltaTime / 1000.0;
     }
 
     //#region EncoderPositions
 
     public double getDriveL1Encoder() {
-        //return this.driveL1Encoder.getPosition();
-        return 0;
+        if (!enabled) return 0;
+        return this.driveL1Encoder.getPosition();
     }
 
     public double getDriveL2Encoder() {
-        //return this.driveL2Encoder.getPosition();
-        return 0;
+        if (!enabled) return 0;
+        return this.driveL2Encoder.getPosition();
     }
 
     public double getDriveR1Encoder() {
-        //return this.driveR1Encoder.getPosition();
-        return 0;
+        if (!enabled) return 0;
+        return this.driveR1Encoder.getPosition();
     }
 
     public double getDriveR2Encoder() {
-        //return this.driveR2Encoder.getPosition();
-        return 0;
+        if (!enabled) return 0;
+        return this.driveR2Encoder.getPosition();
     }
 
     //#endregion EncoderPositions
@@ -136,38 +143,38 @@ public class DriveInput implements ISensorInput {
     //#region EncoderFPS
 
     public double getDriveL1SpeedFPS() {
-        return 0;
-        //return (this.driveL1Encoder.getVelocity() * (Constants.WhHEEL_DIAMETER * Math.PI) / 12) / 60;
+        if (!enabled) return 0;
+        return (this.driveL1Encoder.getVelocity() * (Constants.WhHEEL_DIAMETER * Math.PI) / 12) / 60;
     }
 
     public double getDriveL2SpeedFPS() {
-        return 0;
-        //return (this.driveL2Encoder.getVelocity() * (Constants.WhHEEL_DIAMETER * Math.PI) / 12) / 60;
+        if (!enabled) return 0;
+        return (this.driveL2Encoder.getVelocity() * (Constants.WhHEEL_DIAMETER * Math.PI) / 12) / 60;
     }
 
     public double getDriveR1SpeedFPS() {
-        return 0;
-        //return (this.driveR1Encoder.getVelocity() * (Constants.WhHEEL_DIAMETER * Math.PI) / 12) / 60;
+        if (!enabled) return 0;
+        return (this.driveR1Encoder.getVelocity() * (Constants.WhHEEL_DIAMETER * Math.PI) / 12) / 60;
     }
 
     public double getDriveR2SpeedFPS() {
-        return 0;
-        //return (this.driveR2Encoder.getVelocity() * (Constants.WhHEEL_DIAMETER * Math.PI) / 12) / 60;
+        if (!enabled) return 0;
+        return (this.driveR2Encoder.getVelocity() * (Constants.WhHEEL_DIAMETER * Math.PI) / 12) / 60;
     }
 
     public double getDriveLeftSpeedFPS() {
-        return 0;
-        //return (getDriveL1SpeedFPS() + getDriveL2SpeedFPS()) / 2.0;
+        if (!enabled) return 0;
+        return (getDriveL1SpeedFPS() + getDriveL2SpeedFPS()) / 2.0;
     }
 
     public double getDriveRightSpeedFPS() {
-        return 0;
-        //return (getDriveR1SpeedFPS() + getDriveR2SpeedFPS()) / 2.0;
+        if (!enabled) return 0;
+        return (getDriveR1SpeedFPS() + getDriveR2SpeedFPS()) / 2.0;
     }
 
     public double getDriveSpeedFPS() {
-        return 0;
-        //return (getDriveLeftSpeedFPS() + getDriveRightSpeedFPS()) / 2.0;
+        if (!enabled) return 0;
+        return (getDriveLeftSpeedFPS() + getDriveRightSpeedFPS()) / 2.0;
     }
 
     //#endregion EncoderFPS
@@ -176,8 +183,8 @@ public class DriveInput implements ISensorInput {
     //#region Gyro
 
     public double getGyroAngle() {
-        return 0;
-        //return this.navx.getAngle();
+        if (!enabled) return 0;
+        return this.navx.getAngle();
     }
 
     //#endregion Gyro
