@@ -1,7 +1,7 @@
 package frc.teleop;
 
 import frc.io.DriverInput;
-import frc.util.Controller;
+import frc.util.devices.Controller;
 
 public class TeleopOperator extends TeleopComponent {
     private static TeleopOperator instance;

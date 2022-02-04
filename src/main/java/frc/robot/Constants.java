@@ -1,7 +1,7 @@
 package frc.robot;
 
 import frc.io.Dashboard;
-import frc.util.PIDConstants;
+import frc.util.pid.PIDConstants;
 
 public class Constants {
     

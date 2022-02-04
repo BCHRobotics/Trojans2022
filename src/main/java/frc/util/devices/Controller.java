@@ -1,4 +1,4 @@
-package frc.util;
+package frc.util.devices;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;

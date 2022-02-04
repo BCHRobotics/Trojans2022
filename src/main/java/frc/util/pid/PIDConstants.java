@@ -1,4 +1,4 @@
-package frc.util;
+package frc.util.pid;
 
 public class PIDConstants {
     public final double p;

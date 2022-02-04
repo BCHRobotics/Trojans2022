@@ -1,4 +1,4 @@
-package frc.util;
+package frc.util.pid;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 

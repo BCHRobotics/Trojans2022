@@ -3,13 +3,11 @@ package frc.imaging;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.io.Input.SensorInput;
 
 public class Limelight {
     private static Limelight instance;
 
     private NetworkTable networkTable;
-    private SensorInput sensorInput;
     private LimelightTargetType currentTarget;
 
     public static Limelight getInstance() {
@@ -25,7 +23,6 @@ public class Limelight {
 
     public Limelight() {
         this.networkTable = NetworkTableInstance.getDefault().getTable("limelight");
-        this.sensorInput = SensorInput.getInstance();
     }
 
     public void setLimelightState(LimelightTargetType state) {
@@ -43,11 +40,9 @@ public class Limelight {
 
         if (currentTarget == LimelightTargetType.POWER_PORT) {
 
-            desiredTarget.setX(sensorInput.drive.getDriveXPos() + getVisionTargetDistance() * 
-                                Math.cos(getTargetX() + sensorInput.drive.getGyroAngle()));
+            desiredTarget.setX(getVisionTargetDistance());
 
-            desiredTarget.setY(sensorInput.drive.getDriveYPos() + getVisionTargetDistance() *
-                                Math.sin(getTargetX() + sensorInput.drive.getGyroAngle()));
+            desiredTarget.setY(getVisionTargetDistance());
             
             desiredTarget.setTargetFound(getTargetExists());
 

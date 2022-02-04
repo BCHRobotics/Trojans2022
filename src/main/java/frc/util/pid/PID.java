@@ -1,6 +1,7 @@
-package frc.util;
+package frc.util.pid;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.util.math.Lib;
 
 public class PID {
     private double pConst;

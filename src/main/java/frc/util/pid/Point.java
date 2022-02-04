@@ -1,4 +1,4 @@
-package frc.util;
+package frc.util.pid;
 
 public class Point {
     private double x;

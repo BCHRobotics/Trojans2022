@@ -1,4 +1,6 @@
-package frc.util;
+package frc.util.math;
+
+import frc.util.pid.Point;
 
 public class Lib {
     public static double limitValue(double val) {
