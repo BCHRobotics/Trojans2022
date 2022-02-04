@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.auton.AutonControl;
 import frc.imaging.Limelight;
 import frc.io.Dashboard;
 import frc.io.subsystems.IO;
@@ -26,7 +25,6 @@ public class Robot extends TimedRobot {
     private IO robotIO;
     private TeleopControl teleopControl;
     private Dashboard dashboard;
-    private AutonControl autonControl;
 
     private Drive drive;
 
@@ -46,7 +44,6 @@ public class Robot extends TimedRobot {
         this.robotIO = IO.getInstance();
         this.teleopControl = TeleopControl.getInstance();
         this.dashboard = Dashboard.getInstance();
-        this.autonControl = AutonControl.getInstance();
 
         this.drive = Drive.getInstance();
 
@@ -89,9 +86,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        this.autonControl.initialize();
-        this.autonControl.setRunning(true);
-        this.autonControl.setOverrideAuto(false);
 
         this.drive.firstCycle();
         this.robotIO.resetInputs();
@@ -102,32 +96,24 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {
         this.robotIO.updateInputs();
         this.dashboard.updateAll();
-
-        this.autonControl.runCycle();
     }
 
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
-        if (!this.autonControl.isRunning()) {
-            this.teleopControl.initialize();
-            Robot.teleopInitialized = true;
-        }
+        this.teleopControl.initialize();
+        Robot.teleopInitialized = true;
     }
 
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        if (this.autonControl.isRunning()) {
-            this.autonomousPeriodic();
-        } else {
-            if (!Robot.teleopInitialized) {
-                this.teleopInit();
-            }
-            this.robotIO.updateInputs();
-            this.teleopControl.runCycle();
-            this.dashboard.updateAll();
+        if (!Robot.teleopInitialized) {
+            this.teleopInit();
         }
+        this.robotIO.updateInputs();
+        this.teleopControl.runCycle();
+        this.dashboard.updateAll();
     }
 
     /** This function is called once when the robot is disabled. */
@@ -142,7 +128,6 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
         this.robotIO.updateInputs();
         this.dashboard.updateAll();
-        this.autonControl.updateModes();
     }
 
     /** This function is called once when test mode is enabled. */
