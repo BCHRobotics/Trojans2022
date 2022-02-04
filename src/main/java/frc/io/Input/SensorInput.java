@@ -5,6 +5,7 @@ public class SensorInput implements ISensorInput {
 
     public DriveInput drive; 
     public ClimberInput climber;
+    public ShooterInput shooter;
 
     /**
      * Get the instance of the SensorInput, if none create a new instance
@@ -21,15 +22,20 @@ public class SensorInput implements ISensorInput {
     private SensorInput() {
         this.drive = DriveInput.getInstance();
         this.climber = ClimberInput.getInstance();
+        this.shooter = ShooterInput.getInstance();
     }
 
     @Override
     public void reset() {
         this.drive.reset();
+        this.climber.reset();
+        this.shooter.reset();
     }
 
     @Override
     public void update() {
         this.drive.update();
+        this.climber.update();
+        this.shooter.update();
     }
 }

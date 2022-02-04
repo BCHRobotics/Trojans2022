@@ -87,8 +87,7 @@ public class Drive extends Subsystem {
 
     @Override
     public void disable() {
-        this.robotOutput.drive.setDriveLeft(0.0);
-        this.robotOutput.drive.setDriveRight(0.0);
+        this.robotOutput.drive.stopAll();
     }
 
     /**

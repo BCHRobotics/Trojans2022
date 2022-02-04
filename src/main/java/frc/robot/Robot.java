@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.swing.text.Position;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.auton.AutonControl;
@@ -11,6 +13,7 @@ import frc.imaging.Limelight;
 import frc.io.Dashboard;
 import frc.io.Input.SensorInput;
 import frc.io.Output.RobotOutput;
+import frc.subsystems.Shooter;
 import frc.subsystems.Climber;
 import frc.subsystems.Drive;
 import frc.subsystems.Climber.ClimberMode;
@@ -34,6 +37,7 @@ public class Robot extends TimedRobot {
     private AutonControl autonControl;
 
     private Drive drive;
+    private double position = 0;
 
     private boolean pushToDashboard = true;
     public static boolean teleopInitialized = false;
@@ -60,6 +64,7 @@ public class Robot extends TimedRobot {
 
         Limelight.getInstance().setLedMode(1);
         SmartDashboard.putNumber("Test", 0);
+        SmartDashboard.putNumber("Set Position", 0);
     }
 
     /**
@@ -174,23 +179,9 @@ public class Robot extends TimedRobot {
         this.sensorInput.update();
         this.dashboard.updateAll();
 
-        /*Climber climber = Climber.getInstance();
-
-        climber.setCurrentMode(ClimberMode.INDEPENDENT);
-
-        climber.setLeftExtendOutput(0.3);
-        climber.setRightExtendOutput(0.3);
-        climber.setLeftRotateOutput(0.3);
-        climber.setRightRotateOutput(0.3);
-
-        climber.calculate();*/
-
-        //double test = sensorInput.climber.getArmRotateLeftEncoder();
-        //SmartDashboard.putNumber("Test", test);
-
-        Drive drive = Drive.getInstance();
-        
-        drive.setOutput(0.3, 0);
-        drive.calculate();
+        Shooter shooter = Shooter.getInstance();
+        double dsPos = SmartDashboard.getNumber("Set Position", 0);
+        shooter.setShooterTurretPosition(dsPos);
+        shooter.calculate();
     }
 }

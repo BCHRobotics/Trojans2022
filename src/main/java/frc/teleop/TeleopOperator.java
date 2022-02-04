@@ -2,6 +2,7 @@ package frc.teleop;
 
 import frc.io.DriverInput;
 import frc.subsystems.Climber;
+import frc.subsystems.Shooter;
 import frc.util.Controller;
 import frc.util.Controller.Axis;
 import frc.util.Controller.Side;
@@ -19,6 +20,7 @@ public class TeleopOperator extends TeleopComponent {
     private OperatorMode operatorMode = OperatorMode.CLIMB;
 
     private Climber climber;
+    private Shooter shooter;
 
     /**
      * Get the instance of the TeleopOperator, if none create a new instance
@@ -37,6 +39,7 @@ public class TeleopOperator extends TeleopComponent {
         this.driverInput = DriverInput.getInstance();
         this.operatorController = driverInput.getOperatorController();
         this.climber = Climber.getInstance();
+        this.shooter = Shooter.getInstance();
     }
 
     @Override
