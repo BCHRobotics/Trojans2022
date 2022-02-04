@@ -14,7 +14,7 @@ public class TeleopOperator extends TeleopComponent {
     private DriverInput driverInput;
 
     private enum OperatorMode {
-        CLIMB, DRIVE
+        CLIMB, DRIVE, SHOOT
     }
 
     private OperatorMode operatorMode = OperatorMode.CLIMB;
@@ -51,6 +51,9 @@ public class TeleopOperator extends TeleopComponent {
             case CLIMB:
                 climbMode();
                 break;
+            case SHOOT:
+                shootMode();
+                break;
             case DRIVE:
             default:
                 driveMode();
@@ -59,9 +62,11 @@ public class TeleopOperator extends TeleopComponent {
 
         if (operatorController.getModeSwitchButtonsPressed()) {
             if (operatorMode == OperatorMode.CLIMB) operatorMode = OperatorMode.DRIVE;
-            if (operatorMode == OperatorMode.DRIVE) operatorMode = OperatorMode.CLIMB;
+            if (operatorMode == OperatorMode.DRIVE) operatorMode = OperatorMode.SHOOT;
+            if (operatorMode == OperatorMode.SHOOT) operatorMode = OperatorMode.CLIMB;
         }
 
+        shooter.calculate();
         climber.calculate();
     }
 
@@ -80,6 +85,25 @@ public class TeleopOperator extends TeleopComponent {
 
         climber.setSyncRotateOutput(
             operatorController.getJoystick(Side.RIGHT, Axis.X) * speed
+        );
+    }
+
+    /**
+     * Climb mode for operator controller
+     */
+    private void shootMode() {
+
+        System.out.println("Shoot Mode!");
+
+        double speed = 0.3;
+        double position = 80;
+        
+        shooter.setShooterWheelSpeed(
+            operatorController.getJoystick(Side.LEFT, Axis.Y) * speed
+        );
+
+        shooter.setShooterTurretPosition(
+            operatorController.getJoystick(Side.RIGHT, Axis.X) * position
         );
     }
 
