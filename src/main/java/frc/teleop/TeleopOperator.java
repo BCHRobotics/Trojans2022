@@ -1,7 +1,10 @@
 package frc.teleop;
 
 import frc.io.DriverInput;
+import frc.subsystems.Shooter;
 import frc.util.devices.Controller;
+import frc.util.devices.Controller.Axis;
+import frc.util.devices.Controller.Side;
 
 public class TeleopOperator extends TeleopComponent {
     private static TeleopOperator instance;
@@ -10,10 +13,12 @@ public class TeleopOperator extends TeleopComponent {
     private DriverInput driverInput;
 
     private enum OperatorMode {
-        CLIMB, DRIVE
+        DRIVE, SHOOT
     }
 
-    private OperatorMode operatorMode = OperatorMode.DRIVE;
+    private OperatorMode operatorMode = OperatorMode.SHOOT;
+
+    private Shooter shooter;
 
     /**
      * Get the instance of the TeleopOperator, if none create a new instance
@@ -31,13 +36,17 @@ public class TeleopOperator extends TeleopComponent {
     public void firstCycle() {
         this.driverInput = DriverInput.getInstance();
         this.operatorController = driverInput.getOperatorController();
+        this.shooter = Shooter.getInstance();
     }
 
     @Override
     public void calculate() {
+
+        System.out.println("Teleop Operator Calculate!");
+
         switch (operatorMode) {
-            case CLIMB:
-                climbMode();
+            case SHOOT:
+                shootMode();
                 break;
             case DRIVE:
             default:
@@ -46,16 +55,30 @@ public class TeleopOperator extends TeleopComponent {
         }
 
         if (operatorController.getModeSwitchButtonsPressed()) {
-            if (operatorMode == OperatorMode.CLIMB) operatorMode = OperatorMode.DRIVE;
-            if (operatorMode == OperatorMode.DRIVE) operatorMode = OperatorMode.CLIMB;
+            if (operatorMode == OperatorMode.DRIVE) operatorMode = OperatorMode.SHOOT;
+            if (operatorMode == OperatorMode.SHOOT) operatorMode = OperatorMode.DRIVE;
         }
+
+        shooter.calculate();
     }
 
     /**
      * Climb mode for operator controller
      */
-    private void climbMode() {
+    private void shootMode() {
+
+        System.out.println("Shoot Mode!");
+
+        double speed = 0.3;
+        double position = 80;
         
+        shooter.setShooterWheelSpeed(
+            operatorController.getJoystick(Side.LEFT, Axis.Y) * speed
+        );
+
+        shooter.setShooterTurretPosition(
+            operatorController.getJoystick(Side.RIGHT, Axis.X) * position
+        );
     }
 
     /**

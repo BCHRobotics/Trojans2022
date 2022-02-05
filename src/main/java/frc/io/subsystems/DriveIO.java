@@ -30,7 +30,12 @@ public class DriveIO implements IIO {
         this.driveL1 = new CANSparkMax(11, MotorType.kBrushless);   
         this.driveL2 = new CANSparkMax(12, MotorType.kBrushless);   
         this.driveR1 = new CANSparkMax(15, MotorType.kBrushless);
-        this.driveR2 = new CANSparkMax(16, MotorType.kBrushless); 
+        this.driveR2 = new CANSparkMax(16, MotorType.kBrushless);
+        
+        this.driveL1Encoder = driveL1.getEncoder();
+        this.driveL2Encoder = driveL1.getEncoder();
+        this.driveR1Encoder = driveL1.getEncoder();
+        this.driveR2Encoder = driveL1.getEncoder();
 
         // when factor 1 travels: 46.4
         double driveFactor = 100 / 46.4;

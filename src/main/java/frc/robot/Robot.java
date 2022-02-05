@@ -5,10 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.auto.AutoControl;
 import frc.imaging.Limelight;
 import frc.io.Dashboard;
 import frc.io.subsystems.IO;
 import frc.subsystems.Drive;
+import frc.subsystems.Shooter;
 import frc.teleop.TeleopControl;
 
 /**
@@ -24,9 +26,11 @@ public class Robot extends TimedRobot {
 
     private IO robotIO;
     private TeleopControl teleopControl;
+    private AutoControl autoControl;
     private Dashboard dashboard;
 
     private Drive drive;
+    private Shooter shooter;
 
     private boolean pushToDashboard = true;
     public static boolean teleopInitialized = false;
@@ -43,9 +47,11 @@ public class Robot extends TimedRobot {
 
         this.robotIO = IO.getInstance();
         this.teleopControl = TeleopControl.getInstance();
+        this.autoControl = AutoControl.getInstance();
         this.dashboard = Dashboard.getInstance();
 
         this.drive = Drive.getInstance();
+        this.shooter = Shooter.getInstance();
 
         this.robotIO.resetInputs();
 
@@ -86,14 +92,16 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-
+        this.autoControl.initialize();
         this.drive.firstCycle();
+        this.shooter.firstCycle();
         this.robotIO.resetInputs();
     }
 
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
+        this.autoControl.runCycle();
         this.robotIO.updateInputs();
         this.dashboard.updateAll();
     }
@@ -135,6 +143,7 @@ public class Robot extends TimedRobot {
     public void testInit() {
         this.robotIO.resetInputs();
         this.drive.firstCycle();
+        this.shooter.firstCycle();
 
         if (this.pushToDashboard) Constants.pushValues();
     }
