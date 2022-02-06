@@ -47,5 +47,3 @@ public class CSVWriter {
         return Stream.of(input).collect(Collectors.joining(",")).replace(" ", "");
     }
 }
-
-
