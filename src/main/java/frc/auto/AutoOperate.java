@@ -35,6 +35,7 @@ public class AutoOperate extends AutoComponent {
             data = CSVReader.convertToArrayList("csv/test2.csv");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return;
         }
     }
 
@@ -54,8 +55,6 @@ public class AutoOperate extends AutoComponent {
 
         System.out.println("Shoot Mode!");
 
-        double speed = 0.5;
-
         currentTime = System.currentTimeMillis()-startTime;
 
         try {
@@ -71,7 +70,7 @@ public class AutoOperate extends AutoComponent {
 
     @Override
     public void disable() {
-        
+        shooter.disable();
     }
     
 }
