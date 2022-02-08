@@ -27,9 +27,13 @@ public class AutoOperate extends AutoComponent {
         return instance;
     }
 
+    private AutoOperate() {
+        this.shooter = Shooter.getInstance();
+    }
+
     @Override
     public void firstCycle(){
-        this.shooter = Shooter.getInstance();
+        shooter.firstCycle();
         startTime = System.currentTimeMillis();
         try {
             data = CSVReader.convertToArrayList("csv/test2.csv");
@@ -64,13 +68,15 @@ public class AutoOperate extends AutoComponent {
                 data.remove(0);
             }
         } catch (Exception e) {
+            shooter.disable();
             return;
         }
     }
 
     @Override
     public void disable() {
-        shooter.disable();
+        this.shooter.calculate();
+        this.shooter.disable();
     }
     
 }

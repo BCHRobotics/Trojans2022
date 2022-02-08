@@ -32,11 +32,16 @@ public class TeleopOperator extends TeleopComponent {
         return instance;
     }
 
+    private TeleopOperator() {
+        this.shooter = Shooter.getInstance();
+        
+        this.driverInput = DriverInput.getInstance();
+    }
+
     @Override
     public void firstCycle() {
-        this.driverInput = DriverInput.getInstance();
         this.operatorController = driverInput.getOperatorController();
-        this.shooter = Shooter.getInstance();
+        this.shooter.firstCycle();
     }
 
     @Override
@@ -72,13 +77,9 @@ public class TeleopOperator extends TeleopComponent {
         double speed = 0.3;
         double position = 80;
         
-        shooter.setShooterWheelSpeed(
-            operatorController.getJoystick(Side.LEFT, Axis.Y) * speed
-        );
+        shooter.setShooterWheelSpeed(operatorController.getJoystick(Side.LEFT, Axis.Y) * speed);
 
-        shooter.setShooterTurretPosition(
-            operatorController.getJoystick(Side.RIGHT, Axis.X) * position
-        );
+        shooter.setShooterTurretPosition(operatorController.getJoystick(Side.RIGHT, Axis.X) * position);
     }
 
     /**
@@ -89,8 +90,8 @@ public class TeleopOperator extends TeleopComponent {
     }
 
     @Override
-    public void disable() {
-        
+    public void disable(){
+        shooter.disable();
     }
     
 }

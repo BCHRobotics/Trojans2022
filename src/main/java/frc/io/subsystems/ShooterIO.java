@@ -62,7 +62,7 @@ public class ShooterIO implements IIO{
 
         //Before running code on robot, check motor direction
         this.wheelMotor.setInverted(false);
-        this.turretMotor.setInverted(true);
+        this.turretMotor.setInverted(false);
 
     }
 
@@ -119,7 +119,7 @@ public class ShooterIO implements IIO{
      */
     @Override
     public void stopAllOutputs() {
-        setWheelSpeed(0);
-        setTurretPosition(0);
+        this.wheelMotor.disable();
+        this.turretMotor.disable();
     }
 }

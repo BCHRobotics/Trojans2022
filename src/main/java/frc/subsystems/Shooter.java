@@ -36,7 +36,6 @@ public class Shooter extends Subsystem {
 
     @Override
     public void disable() {
-        // Auto-generated method stub
         this.shooterIO.stopAllOutputs();
     }
 
