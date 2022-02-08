@@ -1,4 +1,4 @@
-package frc.util.constants;
+package frc.util.pid;
 
 public class SparkMaxConstants {
     //#region turret

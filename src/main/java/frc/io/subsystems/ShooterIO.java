@@ -5,12 +5,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants;
-import frc.util.constants.SparkMaxConstants;
+import frc.util.pid.SparkMaxConstants;
 import frc.util.pid.SparkMaxPID;
 
 public class ShooterIO implements IIO{
-    private static final int wheelID = 22;
-    private static final int turretID = 21;
 
     private static ShooterIO instance;
 
@@ -38,8 +36,8 @@ public class ShooterIO implements IIO{
      */
     private ShooterIO() {
 
-        this.wheelMotor = new CANSparkMax(wheelID, MotorType.kBrushless);
-        this.turretMotor = new CANSparkMax(turretID, MotorType.kBrushless);
+        this.wheelMotor = new CANSparkMax(Constants.wheelID, MotorType.kBrushless);
+        this.turretMotor = new CANSparkMax(Constants.turretID, MotorType.kBrushless);
 
         this.wheelEncoder = wheelMotor.getEncoder();
         this.turretEncoder = turretMotor.getEncoder();

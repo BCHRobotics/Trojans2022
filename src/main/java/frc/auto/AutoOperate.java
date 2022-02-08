@@ -16,9 +16,9 @@ public class AutoOperate extends AutoComponent {
     private Shooter shooter;
 
     /**
-     * Get the instance of the TeleopOperator, if none create a new instance
+     * Get the instance of the AutoOperator, if none create a new instance
      * 
-     * @return instance of the TeleopOperator
+     * @return instance of the AutoOperator
      */
     public static AutoOperate getInstance() {
         if (instance == null) {
