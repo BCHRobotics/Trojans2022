@@ -45,7 +45,7 @@ public class ShooterIO implements IIO{
         this.wheelMotor.restoreFactoryDefaults();
         this.turretMotor.restoreFactoryDefaults();
         
-        this.wheelMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        this.wheelMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         this.wheelPidController = new SparkMaxPID(wheelMotor);
         this.turretPidController = new SparkMaxPID(turretMotor);
