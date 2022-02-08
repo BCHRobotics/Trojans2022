@@ -11,7 +11,7 @@ public class SparkMaxPID {
         pidController = motor.getPIDController();
     }
 
-    public void setPID(double kP, double kI, double kD, double kIz, double kFF, double kMaxOutput, double kMinOutput){
+    public void setPID(double kP, double kI, double kD, double kIz, double kFF, double kMinOutput, double kMaxOutput){
         pidController.setP(kP);
         pidController.setI(kI);
         pidController.setD(kD);
@@ -20,9 +20,9 @@ public class SparkMaxPID {
         pidController.setOutputRange(kMinOutput, kMaxOutput);
     }
 
-    public void setSmartMotion(int smartMotionSlot, double maxRPM, double minVel, double maxVel, double maxAcc, double allowedErr){
-        pidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
+    public void setSmartMotion(int smartMotionSlot, double minVel, double maxVel, double maxAcc, double allowedErr){  
         pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
+        pidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
         pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
         pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
     }

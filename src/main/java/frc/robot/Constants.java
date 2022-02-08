@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.io.Dashboard;
+import frc.util.constants.SparkMaxConstants;
 import frc.util.pid.PIDConstants;
 
 public class Constants {
@@ -11,8 +12,13 @@ public class Constants {
     public static final double MAX_OUTPUT = 1;
     public static final double PATH_TURN_P = 6;
 
-    //#region PID
-
+    // Shooter Turret PID
+    public static final SparkMaxConstants TURRET_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 2000, 1500, 0);
+    
+    // Shooter Wheel PID
+    public static final SparkMaxConstants WHEEL_CONSTANTS = new SparkMaxConstants(6e-5, 0, 0, 0, 0.000015, -1, 1, 0, 0, 6000, 3000, 0);
+    
+    //#region PID 
     private static PIDConstants driveStraightPID = new PIDConstants(0.5, 0, 4, 0.05); // Updated 2021-03-25
 	private static PIDConstants driveTurnPID = new PIDConstants(0.15, 0.01, 0.65, 1);
 	private static PIDConstants driveVelocityPID = new PIDConstants(0.0, 0, 0.0, 1.0 / 14.0, 0);

@@ -4,8 +4,8 @@ public class PIDConstants {
     public final double p;
 	public final double i;
 	public final double d;
-	public final double eps;
 	public final double ff;
+	public final double eps;
 
     public PIDConstants(double pVal, double iVal, double dVal, double epsilon) {
 		this(pVal, iVal, dVal, 0, epsilon);
