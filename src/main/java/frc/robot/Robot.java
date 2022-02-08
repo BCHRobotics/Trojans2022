@@ -93,8 +93,6 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         this.autoControl.initialize();
-        this.drive.firstCycle();
-        this.shooter.firstCycle();
         this.robotIO.resetInputs();
     }
 
@@ -128,7 +126,8 @@ public class Robot extends TimedRobot {
     /** This function is called once when the robot is disabled. */
     @Override
     public void disabledInit() {
-        this.robotIO.stopAllOutputs();
+        //this.robotIO.stopAllOutputs();
+        this.autoControl.disable();
         this.teleopControl.disable();
     }
 
