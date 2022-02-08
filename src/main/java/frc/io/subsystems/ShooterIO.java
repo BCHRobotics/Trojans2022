@@ -4,6 +4,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.Constants;
+import frc.util.constants.SparkMaxConstants;
 import frc.util.pid.SparkMaxPID;
 
 public class ShooterIO implements IIO{
@@ -21,7 +23,8 @@ public class ShooterIO implements IIO{
     private SparkMaxPID wheelPidController;
     private SparkMaxPID turretPidController;
 
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
+    private SparkMaxConstants wheelConstants = Constants.WHEEL_CONSTANTS;
+    private SparkMaxConstants turretConstants = Constants.TURRET_CONSTANTS;
 
     public static ShooterIO getInstance() {
         if (instance == null) {
@@ -46,24 +49,18 @@ public class ShooterIO implements IIO{
 
         this.wheelPidController = new SparkMaxPID(wheelMotor);
         this.turretPidController = new SparkMaxPID(turretMotor);
+        
+        // set wheel PID Coefficients
+        this.wheelPidController.setPID(wheelConstants.kP, wheelConstants.kI, wheelConstants.kD, wheelConstants.kIz, wheelConstants.kFF, wheelConstants.kMinOutput, wheelConstants.kMaxOutput);
 
-        // PID coefficients
-        kP = 5e-5; 
-        kI = 1e-6;
-        kD = 0; 
-        kIz = 0; 
-        kFF = 0.000156; 
-        kMaxOutput = 1; 
-        kMinOutput = -1;
-        // Smart Motion Coefficients
-        maxVel = 2000; // rpm
-        maxAcc = 1500;
+        //set wheel Smart Motion Coefficients
+        this.wheelPidController.setSmartMotion(wheelConstants.slot, wheelConstants.minVel, wheelConstants.maxVel, wheelConstants.maxAcc, wheelConstants.allowedErr);
 
-        // set PID Coefficients
-        this.turretPidController.setPID(kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput);
+        // set turret PID Coefficients
+        this.turretPidController.setPID(turretConstants.kP, turretConstants.kI, turretConstants.kD, turretConstants.kIz, turretConstants.kFF, turretConstants.kMinOutput, turretConstants.kMaxOutput);
 
-        //set Smart Motion Coefficients
-        this.turretPidController.setSmartMotion(0, maxRPM, minVel, maxVel, maxAcc, allowedErr);
+        //set turret Smart Motion Coefficients
+        this.turretPidController.setSmartMotion(turretConstants.slot, turretConstants.minVel, turretConstants.maxVel, turretConstants.maxAcc, turretConstants.allowedErr);
 
         //Before running code on robot, check motor direction
         this.wheelMotor.setInverted(false);
@@ -72,23 +69,23 @@ public class ShooterIO implements IIO{
     }
 
     /**
-     * Set the speed of the Right Extend Motor
-     * @param speed speed in percent (-1 to 1)
+     * Set the speed of the Shooter Wheel Motor
+     * @param speed speed in rpm
      */
     public void setWheelSpeed(double speed) {
         this.wheelPidController.setVelocity(speed);
     }
 
     /**
-     * Set the speed of the Left Extend Motor
-     * @param speed speed in percent (-1 to 1)
+     * Set the position of the Shooter Turret Motor
+     * @param setPoint position in revolutions
      */
     public void setTurretPosition(double setPoint) {
         this.turretPidController.setPosition(setPoint);
     }
 
     /**
-     * Get the reference to the Right Arm Extend Encoder
+     * Get the reference to the Shooter Wheel Encoder
      * @return CANEncoder reference
      */
     public RelativeEncoder getWheelEncoder() {
@@ -96,7 +93,7 @@ public class ShooterIO implements IIO{
     }
 
     /**
-     * Get the reference to the Left Arm Extend Encoder
+     * Get the reference to the Shooter Turret Encoder
      * @return CANEncoder reference
      */
     public RelativeEncoder getTurretEncoder() {
