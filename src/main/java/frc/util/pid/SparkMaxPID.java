@@ -32,7 +32,7 @@ public class SparkMaxPID {
     }
 
     public void setVelocity(double speed){
-        pidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
+        pidController.setReference(speed, CANSparkMax.ControlType.kSmartVelocity);
     }
 
 }

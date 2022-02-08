@@ -74,7 +74,7 @@ public class TeleopOperator extends TeleopComponent {
 
         System.out.println("Shoot Mode!");
 
-        double speed = 0.3;
+        double speed = 6000;
         double position = 80;
         
         shooter.setShooterWheelSpeed(operatorController.getJoystick(Side.LEFT, Axis.Y) * speed);
