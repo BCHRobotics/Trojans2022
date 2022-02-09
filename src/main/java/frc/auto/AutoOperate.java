@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import frc.robot.Constants;
 import frc.subsystems.Shooter;
 import frc.util.csv.CSVReader;
 
@@ -36,7 +37,7 @@ public class AutoOperate extends AutoComponent {
         shooter.firstCycle();
         startTime = System.currentTimeMillis();
         try {
-            data = CSVReader.convertToArrayList("csv/test2.csv");
+            data = CSVReader.convertToArrayList(Constants.rootDirectory + "test3.csv");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -59,7 +60,7 @@ public class AutoOperate extends AutoComponent {
 
         System.out.println("Shoot Mode!");
 
-        currentTime = System.currentTimeMillis()-startTime;
+        currentTime = System.currentTimeMillis() - startTime;
 
         try {
             if(currentTime >= data.get(0).get(0).longValue()) {

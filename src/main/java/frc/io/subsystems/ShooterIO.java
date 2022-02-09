@@ -46,6 +46,7 @@ public class ShooterIO implements IIO{
         this.turretMotor.restoreFactoryDefaults();
         
         this.wheelMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.turretMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         this.wheelPidController = new SparkMaxPID(wheelMotor);
         this.turretPidController = new SparkMaxPID(turretMotor);
@@ -54,7 +55,7 @@ public class ShooterIO implements IIO{
         this.wheelPidController.setPID(wheelConstants.kP, wheelConstants.kI, wheelConstants.kD, wheelConstants.kIz, wheelConstants.kFF, wheelConstants.kMinOutput, wheelConstants.kMaxOutput);
 
         //set wheel Smart Motion Coefficients
-        this.wheelPidController.setSmartMotion(wheelConstants.slot, wheelConstants.minVel, wheelConstants.maxVel, wheelConstants.maxAcc, wheelConstants.allowedErr);
+        // this.wheelPidController.setSmartMotion(wheelConstants.slot, wheelConstants.minVel, wheelConstants.maxVel, wheelConstants.maxAcc, wheelConstants.allowedErr);
 
         // set turret PID Coefficients
         this.turretPidController.setPID(turretConstants.kP, turretConstants.kI, turretConstants.kD, turretConstants.kIz, turretConstants.kFF, turretConstants.kMinOutput, turretConstants.kMaxOutput);
@@ -62,9 +63,9 @@ public class ShooterIO implements IIO{
         //set turret Smart Motion Coefficients
         this.turretPidController.setSmartMotion(turretConstants.slot, turretConstants.minVel, turretConstants.maxVel, turretConstants.maxAcc, turretConstants.allowedErr);
 
-        //Before running code on robot, check motor direction
+        // Before running code on robot, check motor direction
         this.wheelMotor.setInverted(false);
-        this.turretMotor.setInverted(false);
+        this.turretMotor.setInverted(true);
 
     }
 

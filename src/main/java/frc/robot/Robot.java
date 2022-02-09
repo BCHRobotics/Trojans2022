@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
 import frc.imaging.Limelight;
 import frc.io.Dashboard;
@@ -35,6 +37,9 @@ public class Robot extends TimedRobot {
     private boolean pushToDashboard = true;
     public static boolean teleopInitialized = false;
 
+    
+    private AutoBuilder autoBuilder;
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any
@@ -49,6 +54,7 @@ public class Robot extends TimedRobot {
         this.teleopControl = TeleopControl.getInstance();
         this.autoControl = AutoControl.getInstance();
         this.dashboard = Dashboard.getInstance();
+        this.autoBuilder = AutoBuilder.getInstance();
 
         this.drive = Drive.getInstance();
         this.shooter = Shooter.getInstance();
@@ -146,12 +152,26 @@ public class Robot extends TimedRobot {
         this.shooter.firstCycle();
 
         if (this.pushToDashboard) Constants.pushValues();
+        
+        SmartDashboard.putBoolean("Recording", false);
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        this.robotIO.updateInputs();
+        this.robotIO.stopAllOutputs();
         this.dashboard.updateAll();
+
+        try {
+            if(SmartDashboard.getBoolean("Recording", true)){
+                this.autoBuilder.setStartRecording();
+                this.autoBuilder.recordData();
+            } else {
+                this.autoBuilder.convertData();
+            }
+        } catch (Exception e) {
+            return;
+        }
+        
     }
 }

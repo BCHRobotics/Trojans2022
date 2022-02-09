@@ -16,8 +16,11 @@ public class Constants {
     public static final int turretID = 21;
 
     // Shooter PID Constants
-    public static final SparkMaxConstants TURRET_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 2000, 1500, 0);
+    public static final SparkMaxConstants TURRET_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
     public static final SparkMaxConstants WHEEL_CONSTANTS = new SparkMaxConstants(6e-5, 0, 0, 0, 0.000015, -1, 1, 0, 0, 6000, 3000, 0);
+
+    //Auto directory
+    public static final String rootDirectory = "csv/";
 
     //#region PID 
     private static PIDConstants driveStraightPID = new PIDConstants(0.5, 0, 4, 0.05); // Updated 2021-03-25
