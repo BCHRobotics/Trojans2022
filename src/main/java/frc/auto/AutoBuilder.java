@@ -11,7 +11,6 @@ public class AutoBuilder {
     private static AutoBuilder instance;
     private static CSVWriter writer;
     private static List<List<Double>> data = new ArrayList<>();
-    private static List<Double> row = new ArrayList<>();
 
     private static long startTime;
     private static long currentTime;
@@ -31,29 +30,32 @@ public class AutoBuilder {
        shooterIO.stopAllOutputs();
     }
 
-    public void convertData() {
-        try {
-            writer.setFileName("test3");
-            writer.setHeader("time,motor");
-            writer.importData(data);
-            writer.output();
-        } catch (Exception e) {
-            return;
-        }
-    }
-
     public void setStartRecording() {
         startTime = System.currentTimeMillis();
     }
     
     public void recordData() {
 
-        currentTime = System.currentTimeMillis();
-        
-        row.add((double)currentTime - (double)startTime);
-        row.add(shooterIO.getTurretEncoder().getPosition());
+        try {
+            currentTime = System.currentTimeMillis();
+            data.get(data.size()).add((double)currentTime - (double)startTime);
+            data.get(data.size()).add(shooterIO.getTurretEncoder().getPosition());
+        } catch (Exception e) {
+            System.err.println(e);
+            return;
+        }
 
-        data.add(row);
+    }
 
+    public void convertData() {
+        try {
+            writer.setFileName("test6");
+            writer.setHeader("time,motor");
+            writer.importData(data);
+            writer.output();
+        } catch (Exception e) {
+            System.err.println(e);
+            return;
+        }
     }
 }

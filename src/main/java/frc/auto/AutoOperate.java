@@ -37,7 +37,7 @@ public class AutoOperate extends AutoComponent {
         shooter.firstCycle();
         startTime = System.currentTimeMillis();
         try {
-            data = CSVReader.convertToArrayList(Constants.rootDirectory + "test3.csv");
+            data = CSVReader.convertToArrayList(Constants.rootDirectory + "test6.csv");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
