@@ -12,7 +12,7 @@ public class PID {
 	private double errorSum;
 	protected double finishedRange;
 	private double maxOutput;
-	private double minOuput;
+	private double minOutput;
 	private int minCycleCount;
 	private int currentCycleCount;
 	private boolean firstCycle;
@@ -38,7 +38,7 @@ public class PID {
 		this.currentCycleCount = 0;
 		this.minCycleCount = 5;
 		this.debug = false;
-		this.minOuput = 0;
+		this.minOutput = 0;
 		this.iRange = 1000; // Default high number to always apply I
 	}
 
@@ -83,7 +83,7 @@ public class PID {
 
 	public void setMinMaxOutput(double min, double max) {
 		this.maxOutput = max;
-		this.minOuput = min;
+		this.minOutput = min;
 	}
 
 	public void setMinDoneCycles(int num) {
@@ -144,19 +144,19 @@ public class PID {
 		double deriv = (error - this.previousError) / this.deltaTime;
 		dVal = this.dConst * deriv;
 
-		// overal PID calc
+		// overall PID calc
 		double output = pVal + iVal + dVal;
 
 		// limit the output
 		output = Lib.limitValue(output, this.maxOutput);
 
 		if (output > 0) {
-			if (output < this.minOuput) {
-				output = this.minOuput;
+			if (output < this.minOutput) {
+				output = this.minOutput;
 			}
 		} else {
-			if (output > -this.minOuput) {
-				output = -this.minOuput;
+			if (output > -this.minOutput) {
+				output = -this.minOutput;
 			}
 		}
 
