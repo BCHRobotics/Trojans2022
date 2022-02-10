@@ -4,8 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.robot.Constants;
-import frc.subsystems.Shooter;
+import frc.subsystems.Drive;
 import frc.util.csv.CSVReader;
 
 public class AutoOperate extends AutoComponent {
@@ -14,7 +13,7 @@ public class AutoOperate extends AutoComponent {
     private static long startTime;
     private static long currentTime;
 
-    private Shooter shooter;
+    private Drive drive;
 
     /**
      * Get the instance of the AutoOperator, if none create a new instance
@@ -29,12 +28,12 @@ public class AutoOperate extends AutoComponent {
     }
 
     private AutoOperate() {
-        this.shooter = Shooter.getInstance();
+        this.drive = Drive.getInstance();
     }
 
     @Override
     public void firstCycle(){
-        this.shooter.firstCycle();
+        this.drive.firstCycle();
         startTime = System.currentTimeMillis();
         try {
             data = CSVReader.convertToArrayList("test");
@@ -47,7 +46,7 @@ public class AutoOperate extends AutoComponent {
     @Override
     public void calculate() {
         shootMode();
-        this.shooter.calculate();
+        this.drive.calculate();
     }
 
     /**
@@ -58,20 +57,21 @@ public class AutoOperate extends AutoComponent {
 
         try {
             if(currentTime >= data.get(0).get(0).longValue()) {
-                this.shooter.setShooterTurretPosition(data.get(0).get(1));
+                this.drive.setDriveLeft(data.get(0).get(1));
+                this.drive.setDriveRight(data.get(0).get(2));
                 System.out.println(data.get(0).get(1));
                 data.remove(0);
             }
         } catch (Exception e) {
-            this.shooter.disable();
+            this.drive.disable();
             return;
         }
     }
 
     @Override
     public void disable() {
-        this.shooter.calculate();
-        this.shooter.disable();
+        this.drive.calculate();
+        this.drive.disable();
     }
     
 }

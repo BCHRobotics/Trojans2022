@@ -6,6 +6,10 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.Constants;
+import frc.util.pid.SparkMaxConstants;
+import frc.util.pid.SparkMaxPID;
+
 public class DriveIO implements IIO {
     private static DriveIO instance;
 
@@ -21,21 +25,39 @@ public class DriveIO implements IIO {
     private RelativeEncoder driveR1Encoder;
     private RelativeEncoder driveR2Encoder;
 
+    // PID Controllers
+    private SparkMaxPID driveL1PidController;
+    private SparkMaxPID driveR1PidController;
+
+    // PID Constants
+    private SparkMaxConstants driveL1Constants = Constants.DRIVEL1_CONSTANTS;
+    private SparkMaxConstants driveR1Constants = Constants.DRIVER1_CONSTANTS;
+
     public static DriveIO getInstance() {
         if(instance == null) instance = new DriveIO();
         return instance;
     }
 
     private DriveIO() {
-        this.driveL1 = new CANSparkMax(11, MotorType.kBrushless);   
-        this.driveL2 = new CANSparkMax(12, MotorType.kBrushless);   
-        this.driveR1 = new CANSparkMax(15, MotorType.kBrushless);
-        this.driveR2 = new CANSparkMax(16, MotorType.kBrushless);
+        this.driveL1 = new CANSparkMax(Constants.driveL1ID, MotorType.kBrushless);   
+        this.driveL2 = new CANSparkMax(Constants.driveL2ID, MotorType.kBrushless);   
+        this.driveR1 = new CANSparkMax(Constants.driveR1ID, MotorType.kBrushless);
+        this.driveR2 = new CANSparkMax(Constants.driveR2ID, MotorType.kBrushless);
         
         this.driveL1Encoder = driveL1.getEncoder();
         this.driveL2Encoder = driveL1.getEncoder();
         this.driveR1Encoder = driveL1.getEncoder();
         this.driveR2Encoder = driveL1.getEncoder();
+
+        this.driveL1.restoreFactoryDefaults();
+        this.driveL2.restoreFactoryDefaults();
+        this.driveR1.restoreFactoryDefaults();
+        this.driveR2.restoreFactoryDefaults();
+
+        this.driveL1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.driveL2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.driveR2.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         // when factor 1 travels: 46.4
         double driveFactor = 100 / 46.4;
@@ -50,6 +72,23 @@ public class DriveIO implements IIO {
         this.driveR1.setSmartCurrentLimit(60, 10);
         this.driveR2.setSmartCurrentLimit(60, 10);
 
+        // set PID controllers
+        this.driveL1PidController = new SparkMaxPID(driveL1);
+        this.driveR1PidController = new SparkMaxPID(driveR1);
+
+        // set Left Motor PID Coefficients
+        this.driveL1PidController.setPID(driveL1Constants.kP, driveL1Constants.kI, driveL1Constants.kD, driveL1Constants.kIz, driveL1Constants.kFF, driveL1Constants.kMinOutput, driveL1Constants.kMaxOutput);
+
+        //set Left Motor Smart Motion Coefficients
+        this.driveL1PidController.setSmartMotion(driveL1Constants.slot, driveL1Constants.minVel, driveL1Constants.maxVel, driveL1Constants.maxAcc, driveL1Constants.allowedErr);
+
+        // set Right Motor PID Coefficients
+        this.driveR1PidController.setPID(driveR1Constants.kP, driveR1Constants.kI, driveR1Constants.kD, driveR1Constants.kIz, driveR1Constants.kFF, driveR1Constants.kMinOutput, driveR1Constants.kMaxOutput);
+
+        //set Right Motor Smart Motion Coefficients
+        this.driveR1PidController.setSmartMotion(driveR1Constants.slot, driveR1Constants.minVel, driveR1Constants.maxVel, driveR1Constants.maxAcc, driveR1Constants.allowedErr);
+
+
         this.driveL1.setInverted(true);
         this.driveR1.setInverted(false);
 
@@ -63,6 +102,14 @@ public class DriveIO implements IIO {
 
     public void setDriveRight(double speed) {
         this.driveR1.set(speed);
+    }
+
+    public void setDriveLeftPos(double position) {
+        this.driveL1PidController.setPosition(position);
+    }
+
+    public void setDriveRightPos(double position) {
+        this.driveR1PidController.setPosition(position);
     }
 
     public void setDriveRampRate(double rampRateSecondsToFull) {
@@ -107,7 +154,9 @@ public class DriveIO implements IIO {
 
     @Override
     public void stopAllOutputs() {
-        setDriveLeft(0);
-        setDriveRight(0);
+        this.driveL1.disable();
+        this.driveL2.disable();
+        this.driveR1.disable();
+        this.driveR2.disable();
     }
 }

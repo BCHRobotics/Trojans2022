@@ -3,7 +3,7 @@ package frc.auto;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.io.subsystems.ShooterIO;
+import frc.io.subsystems.DriveIO;
 import frc.robot.Constants;
 import frc.util.csv.CSVWriter;
 
@@ -16,7 +16,7 @@ public class AutoBuilder {
     private static long currentTime;
     private static long timer;
 
-    private static ShooterIO shooterIO;
+    private static DriveIO driveIO;
 
     public static AutoBuilder getInstance() {
         if (instance == null) {
@@ -27,8 +27,8 @@ public class AutoBuilder {
 
     private AutoBuilder(){
        writer = new CSVWriter(Constants.rootDirectory);
-       shooterIO = ShooterIO.getInstance();
-       shooterIO.stopAllOutputs();
+       driveIO = DriveIO.getInstance();
+       driveIO.stopAllOutputs();
     }
 
     public void setStartRecording() {
@@ -43,7 +43,8 @@ public class AutoBuilder {
 
             List<Double> rows = new ArrayList<Double>();
             rows.add(0,(double)timer);
-            rows.add(1,(double)shooterIO.getTurretEncoder().getPosition());
+            rows.add(1,(double)driveIO.getDriveL1Encoder());
+            rows.add(2,(double)driveIO.getDriveR1Encoder());
             data.add(rows);
         } catch (Exception e) {
             System.err.println(e);
@@ -55,7 +56,7 @@ public class AutoBuilder {
     public void convertData() {
         try {
             writer.setFileName("test");
-            writer.setHeader("time,motor");
+            writer.setHeader("time,leftMotor,rightMotor");
             writer.importData(data);
             writer.output();
         } catch (Exception e) {

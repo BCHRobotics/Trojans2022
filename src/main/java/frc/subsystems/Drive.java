@@ -61,8 +61,7 @@ public class Drive extends Subsystem {
 
     @Override
     public void disable() {
-        this.driveIO.setDriveLeft(0.0);
-        this.driveIO.setDriveRight(0.0);
+        this.driveIO.stopAllOutputs();
     }
 
     /**
@@ -75,5 +74,13 @@ public class Drive extends Subsystem {
 
         this.leftOut = (y + turn) * Constants.MAX_OUTPUT;
         this.rightOut =  (y - turn) * Constants.MAX_OUTPUT;
+    }
+
+    public void setDriveLeft(double position) {
+        this.driveIO.setDriveLeftPos(position);
+    }
+
+    public void setDriveRight(double position) {
+        this.driveIO.setDriveRightPos(position);;
     }
 }
