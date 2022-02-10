@@ -108,7 +108,7 @@ public class ShooterIO implements IIO{
     }
 
     /**
-     * Reset the state of the inputs
+     * Update the state of the inputs
      */
     @Override
     public void updateInputs() {
