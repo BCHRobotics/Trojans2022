@@ -42,9 +42,9 @@ public class AutoBuilder {
             timer = currentTime - startTime;
 
             List<Double> rows = new ArrayList<Double>();
-            rows.add(0,(double)timer);
-            rows.add(1,(double)driveIO.getDriveL1Encoder());
-            rows.add(2,(double)driveIO.getDriveR1Encoder());
+            rows.add((double)timer);
+            rows.add((double)driveIO.getDriveL1Encoder());
+            rows.add((double)driveIO.getDriveR1Encoder());
             data.add(rows);
         } catch (Exception e) {
             System.err.println(e);

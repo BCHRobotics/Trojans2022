@@ -12,7 +12,6 @@ public class AutoOperate extends AutoComponent {
     private static List<List<Double>> data = new ArrayList<>();
     private static long startTime;
     private static long currentTime;
-
     private Drive drive;
 
     /**
@@ -45,21 +44,20 @@ public class AutoOperate extends AutoComponent {
 
     @Override
     public void calculate() {
-        shootMode();
+        driveMode();
         this.drive.calculate();
     }
 
     /**
      * Shooter mode for autonomous
      */
-    private void shootMode() {
+    private void driveMode() {
         currentTime = System.currentTimeMillis() - startTime;
 
         try {
             if(currentTime >= data.get(0).get(0).longValue()) {
                 this.drive.setDriveLeft(data.get(0).get(1));
                 this.drive.setDriveRight(data.get(0).get(2));
-                System.out.println(data.get(0).get(1));
                 data.remove(0);
             }
         } catch (Exception e) {

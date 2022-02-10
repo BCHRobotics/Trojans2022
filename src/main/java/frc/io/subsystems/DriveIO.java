@@ -2,7 +2,6 @@ package frc.io.subsystems;
 
 // Imports for motor outputs
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -45,9 +44,9 @@ public class DriveIO implements IIO {
         this.driveR2 = new CANSparkMax(Constants.driveR2ID, MotorType.kBrushless);
         
         this.driveL1Encoder = driveL1.getEncoder();
-        this.driveL2Encoder = driveL1.getEncoder();
-        this.driveR1Encoder = driveL1.getEncoder();
-        this.driveR2Encoder = driveL1.getEncoder();
+        this.driveL2Encoder = driveL2.getEncoder();
+        this.driveR1Encoder = driveR1.getEncoder();
+        this.driveR2Encoder = driveR2.getEncoder();
 
         this.driveL1.restoreFactoryDefaults();
         this.driveL2.restoreFactoryDefaults();
