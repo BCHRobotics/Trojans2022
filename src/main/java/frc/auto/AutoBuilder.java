@@ -38,8 +38,11 @@ public class AutoBuilder {
 
         try {
             currentTime = System.currentTimeMillis();
-            data.get(data.size()).add((double)currentTime - (double)startTime);
-            data.get(data.size()).add(shooterIO.getTurretEncoder().getPosition());
+
+            List<Double> rows = new ArrayList<Double>();
+            rows.add((double)currentTime-startTime);
+            rows.add((double)shooterIO.getTurretEncoder().getPosition());
+            data.add(rows);
         } catch (Exception e) {
             System.err.println(e);
             return;
