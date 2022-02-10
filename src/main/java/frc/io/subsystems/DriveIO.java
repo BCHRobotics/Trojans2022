@@ -58,13 +58,6 @@ public class DriveIO implements IIO {
         this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.driveR2.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
-        // when factor 1 travels: 46.4
-        double driveFactor = 100 / 46.4;
-        this.driveL1Encoder.setPositionConversionFactor(driveFactor);
-        this.driveL2Encoder.setPositionConversionFactor(driveFactor);
-        this.driveR1Encoder.setPositionConversionFactor(driveFactor);
-        this.driveR2Encoder.setPositionConversionFactor(driveFactor);
-
         // set motor current limits
         this.driveL1.setSmartCurrentLimit(60, 10);
         this.driveL2.setSmartCurrentLimit(60, 10);

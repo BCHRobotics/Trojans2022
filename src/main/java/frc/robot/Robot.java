@@ -163,20 +163,26 @@ public class Robot extends TimedRobot {
         this.robotIO.stopAllOutputs();
         this.dashboard.updateAll();
 
-        try {
-            if(SmartDashboard.getBoolean("Recording", true)){
-                if (isRecording == false) {
-                    this.autoBuilder.setStartRecording();
-                    isRecording = true;
-                } 
-                this.autoBuilder.recordData();
-            } else {
-                this.autoBuilder.convertData();
-                isRecording = false;
-            }
-        } catch (Exception e) {
-            return;
-        }
-        
+        // try {
+        //     if(SmartDashboard.getBoolean("Recording", true)){
+        //         if (isRecording == false) {
+        //             this.autoBuilder.setStartRecording();
+        //             isRecording = true;
+        //         } 
+        //         this.autoBuilder.recordData();
+        //     } else {
+        //         this.autoBuilder.convertData();
+        //         isRecording = false;
+        //     }
+        // } catch (Exception e) {
+        //     return;
+        // }
+
+        this.shooter.setShooterTurretPosition(30);
+        this.shooter.calculate();
+
+        this.drive.setDriveLeft(30);
+        this.drive.setDriveRight(30);
+        this.drive.calculate();
     }
 }

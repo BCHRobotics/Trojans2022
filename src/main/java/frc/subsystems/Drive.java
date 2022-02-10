@@ -17,7 +17,8 @@ public class Drive extends Subsystem {
 
     // states
     private DriveState currentState = DriveState.POSITION;
-    private double leftOut,rightOut;
+    private double leftOut;
+    private double rightOut;
 
     /**
      * Get the instance of the Drive, if none create a new instance
