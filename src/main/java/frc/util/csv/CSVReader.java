@@ -6,12 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import frc.robot.Constants;
+
 public class CSVReader {
     
     private static final String COMMA_DELIMITER = ",";
+    private static final String fileType = ".csv";
+    private static String path;
     private static List<List<Double>> records = new ArrayList<>();
 
-    public static List<List<Double>> convertToArrayList(String path) throws FileNotFoundException {
+    public static List<List<Double>> convertToArrayList(String fileName) throws FileNotFoundException {
+        path = new String(path = Constants.rootDirectory + fileName + fileType);
+        System.out.println(path);
         try (Scanner scanner = new Scanner(new File(path));) {
             scanner.nextLine();
             while (scanner.hasNextLine()) {

@@ -34,10 +34,10 @@ public class AutoOperate extends AutoComponent {
 
     @Override
     public void firstCycle(){
-        shooter.firstCycle();
+        this.shooter.firstCycle();
         startTime = System.currentTimeMillis();
         try {
-            data = CSVReader.convertToArrayList(Constants.rootDirectory + "test.csv");
+            data = CSVReader.convertToArrayList("test");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -46,30 +46,24 @@ public class AutoOperate extends AutoComponent {
 
     @Override
     public void calculate() {
-
-        System.out.println("Auto Operator Calculate!");
-        
         shootMode();
-        shooter.calculate();
+        this.shooter.calculate();
     }
 
     /**
      * Shooter mode for autonomous
      */
     private void shootMode() {
-
-        System.out.println("Shoot Mode!");
-
         currentTime = System.currentTimeMillis() - startTime;
 
         try {
             if(currentTime >= data.get(0).get(0).longValue()) {
-                shooter.setShooterTurretPosition(data.get(0).get(1));
+                this.shooter.setShooterTurretPosition(data.get(0).get(1));
                 System.out.println(data.get(0).get(1));
                 data.remove(0);
             }
         } catch (Exception e) {
-            shooter.disable();
+            this.shooter.disable();
             return;
         }
     }
