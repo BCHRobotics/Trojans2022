@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
 
     private boolean pushToDashboard = true;
     public static boolean teleopInitialized = false;
+    private static boolean isRecording = false;
 
     
     private AutoBuilder autoBuilder;
@@ -164,10 +165,14 @@ public class Robot extends TimedRobot {
 
         try {
             if(SmartDashboard.getBoolean("Recording", true)){
-                this.autoBuilder.setStartRecording();
+                if (isRecording == false) {
+                    this.autoBuilder.setStartRecording();
+                    isRecording = true;
+                } 
                 this.autoBuilder.recordData();
             } else {
                 this.autoBuilder.convertData();
+                isRecording = false;
             }
         } catch (Exception e) {
             return;

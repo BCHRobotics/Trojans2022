@@ -14,6 +14,7 @@ public class AutoBuilder {
 
     private static long startTime;
     private static long currentTime;
+    private static long timer;
 
     private static ShooterIO shooterIO;
 
@@ -38,10 +39,11 @@ public class AutoBuilder {
 
         try {
             currentTime = System.currentTimeMillis();
+            timer = currentTime - startTime;
 
             List<Double> rows = new ArrayList<Double>();
-            rows.add((double)currentTime-startTime);
-            rows.add((double)shooterIO.getTurretEncoder().getPosition());
+            rows.add(0,(double)timer);
+            rows.add(1,(double)shooterIO.getTurretEncoder().getPosition());
             data.add(rows);
         } catch (Exception e) {
             System.err.println(e);
@@ -52,7 +54,7 @@ public class AutoBuilder {
 
     public void convertData() {
         try {
-            writer.setFileName("test6");
+            writer.setFileName("test");
             writer.setHeader("time,motor");
             writer.importData(data);
             writer.output();
