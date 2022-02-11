@@ -163,13 +163,12 @@ public class DriveIO implements IIO {
     public void stopAllOutputs() {
         if (!enabled) return;
 
-        this.setDriveLeft(0);
-        this.setDriveRight(0);
+        this.driveL1.disable();
+        this.driveR1.disable();
 
-        System.out.println("Stack trace:");
-        StackTraceElement[] stackTraces = Thread.currentThread().getStackTrace();
-        for (int i = 1; i < stackTraces.length; i++) {
-            System.out.println(stackTraces[i]);
+        if (!miniBot) {
+            this.driveL2.disable();
+            this.driveR2.disable();
         }
     }
 }
