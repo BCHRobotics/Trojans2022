@@ -32,6 +32,9 @@ public class DriveIO implements IIO {
     private SparkMaxConstants driveL1Constants = Constants.DRIVEL1_CONSTANTS;
     private SparkMaxConstants driveR1Constants = Constants.DRIVER1_CONSTANTS;
 
+    private boolean enabled = Constants.DRIVE_ENABLED;
+    private boolean miniBot = Constants.MINI_BOT;
+
     public static DriveIO getInstance() {
         if(instance == null) {
             instance = new DriveIO();
@@ -40,96 +43,92 @@ public class DriveIO implements IIO {
     }
 
     private DriveIO() {
-        this.driveL1 = new CANSparkMax(Constants.driveL1ID, MotorType.kBrushless);   
-        this.driveL2 = new CANSparkMax(Constants.driveL2ID, MotorType.kBrushless);   
-        this.driveR1 = new CANSparkMax(Constants.driveR1ID, MotorType.kBrushless);
-        this.driveR2 = new CANSparkMax(Constants.driveR2ID, MotorType.kBrushless);
-        
-        this.driveL1Encoder = driveL1.getEncoder();
-        this.driveL2Encoder = driveL2.getEncoder();
-        this.driveR1Encoder = driveR1.getEncoder();
-        this.driveR2Encoder = driveR2.getEncoder();
+        if (!enabled) return;
+    
+        initMainMotors();
 
-        this.driveL1.restoreFactoryDefaults();
-        this.driveL2.restoreFactoryDefaults();
-        this.driveR1.restoreFactoryDefaults();
-        this.driveR2.restoreFactoryDefaults();
+        if (!miniBot) initFollowMotors();
+    }
+
+    private void initMainMotors() {
+        this.driveL1 = new CANSparkMax(Constants.driveL1ID, MotorType.kBrushless); 
+        this.driveR1 = new CANSparkMax(Constants.driveR1ID, MotorType.kBrushless);
+
+        this.driveL1Encoder = driveL1.getEncoder();
+        this.driveR1Encoder = driveR1.getEncoder();
+
+        // this.driveL1.restoreFactoryDefaults();
+        // this.driveR1.restoreFactoryDefaults();
 
         this.driveL1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        this.driveL2.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        this.driveR2.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
-        // set motor current limits
         this.driveL1.setSmartCurrentLimit(60, 10);
-        this.driveL2.setSmartCurrentLimit(60, 10);
         this.driveR1.setSmartCurrentLimit(60, 10);
-        this.driveR2.setSmartCurrentLimit(60, 10);
 
-        // set PID controllers
-        this.driveL1PidController = new SparkMaxPID(driveL1);
-        this.driveR1PidController = new SparkMaxPID(driveR1);
-
-        /*
-        // set Left Motor PID Coefficients
-        this.driveL1PidController.setPID(driveL1Constants.kP, driveL1Constants.kI, driveL1Constants.kD, driveL1Constants.kIz, driveL1Constants.kFF, driveL1Constants.kMinOutput, driveL1Constants.kMaxOutput);
-
-        //set Left Motor Smart Motion Coefficients
-        this.driveL1PidController.setSmartMotion(driveL1Constants.slot, driveL1Constants.minVel, driveL1Constants.maxVel, driveL1Constants.maxAcc, driveL1Constants.allowedErr);
-
-        // set Right Motor PID Coefficients
-        this.driveR1PidController.setPID(driveR1Constants.kP, driveR1Constants.kI, driveR1Constants.kD, driveR1Constants.kIz, driveR1Constants.kFF, driveR1Constants.kMinOutput, driveR1Constants.kMaxOutput);
-
-        //set Right Motor Smart Motion Coefficients
-        this.driveR1PidController.setSmartMotion(driveR1Constants.slot, driveR1Constants.minVel, driveR1Constants.maxVel, driveR1Constants.maxAcc, driveR1Constants.allowedErr);
-        */
-
-        this.driveL1PidController.setFromConstants(driveL1Constants);
-        this.driveR1PidController.setFromConstants(driveR1Constants);
+        this.driveL1PidController = new SparkMaxPID(driveL1, driveL1Constants);
+        this.driveR1PidController = new SparkMaxPID(driveR1, driveR1Constants);
 
         this.driveL1.setInverted(true);
         this.driveR1.setInverted(false);
 
+        System.out.println(driveL1PidController.getConstants());
+        System.out.println(driveR1PidController.getConstants());
+    }
+
+    private void initFollowMotors() {
+        this.driveL2 = new CANSparkMax(Constants.driveL2ID, MotorType.kBrushless);  
+        this.driveR2 = new CANSparkMax(Constants.driveR2ID, MotorType.kBrushless);
+        
+        this.driveL2Encoder = driveL2.getEncoder();
+        this.driveR2Encoder = driveR2.getEncoder();
+
+        this.driveL2.setSmartCurrentLimit(60, 10);
+        this.driveR2.setSmartCurrentLimit(60, 10);
+
         this.driveL2.follow(this.driveL1, false);
         this.driveR2.follow(this.driveR1, false);
-
-        this.driveL1.burnFlash();
-        this.driveL2.burnFlash();
-        this.driveR1.burnFlash();
-        this.driveR2.burnFlash();
     }
 
     public void setDriveLeft(double speed) {
+        if (!enabled) return;
         this.driveL1.set(speed);
     }
 
     public void setDriveRight(double speed) {
+        if (!enabled) return;
         this.driveR1.set(speed);
     }
 
     public void setDriveLeftPos(double position) {
+        if (!enabled) return;
         this.driveL1PidController.setPosition(position);
     }
 
     public void setDriveRightPos(double position) {
+        if (!enabled) return;
         this.driveR1PidController.setPosition(position);
     }
 
     //#region EncoderPositions
 
     public RelativeEncoder getDriveL1Encoder() {
+        if (!enabled) return null;
         return this.driveL1Encoder;
     }
 
     public RelativeEncoder getDriveL2Encoder() {
+        if (!enabled || !miniBot) return null;
         return this.driveL2Encoder;
     }
 
     public RelativeEncoder getDriveR1Encoder() {
+        if (!enabled) return null;
         return this.driveR1Encoder;
     }
 
     public RelativeEncoder getDriveR2Encoder() {
+        if (!enabled || !miniBot) return null;
         return this.driveR2Encoder;
     }
 
@@ -137,22 +136,32 @@ public class DriveIO implements IIO {
 
     @Override
     public void resetInputs() {
+        if (!enabled) return;
+
         this.driveL1Encoder.setPosition(0);
-        this.driveL2Encoder.setPosition(0);
         this.driveR1Encoder.setPosition(0);
-        this.driveR2Encoder.setPosition(0);
+
+        if (!miniBot) {
+            this.driveL2Encoder.setPosition(0);
+            this.driveR2Encoder.setPosition(0);
+        }
     }
 
     @Override
     public void updateInputs() {
-       
+        if (!enabled) return;
     }
 
     @Override
     public void stopAllOutputs() {
+        if (!enabled) return;
+
         this.driveL1.disable();
-        this.driveL2.disable();
         this.driveR1.disable();
-        this.driveR2.disable();
+
+        if (!miniBot) {
+            this.driveL2.disable();
+            this.driveR2.disable();
+        }
     }
 }
