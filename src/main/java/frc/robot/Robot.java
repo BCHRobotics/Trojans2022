@@ -160,8 +160,6 @@ public class Robot extends TimedRobot {
         if (this.pushToDashboard) Constants.pushValues();
         
         SmartDashboard.putBoolean("Recording", false);
-
-        DriveIO.getInstance().resetInputs();
     }
 
     /** This function is called periodically during test mode. */
