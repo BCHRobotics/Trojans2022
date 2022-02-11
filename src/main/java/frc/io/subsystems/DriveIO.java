@@ -84,10 +84,6 @@ public class DriveIO implements IIO {
         this.driveL2Encoder = driveL2.getEncoder();
         this.driveR2Encoder = driveR2.getEncoder();
 
-        //set Right Motor Smart Motion Coefficients
-        this.driveR1PidController.setSmartMotion(driveR1Constants.slot, driveR1Constants.minVel, driveR1Constants.maxVel, driveR1Constants.maxAcc, driveR1Constants.allowedErr);
-
-
         this.driveL2.setSmartCurrentLimit(60, 10);
         this.driveR2.setSmartCurrentLimit(60, 10);
 
