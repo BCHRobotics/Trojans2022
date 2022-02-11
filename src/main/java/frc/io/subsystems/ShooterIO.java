@@ -67,6 +67,8 @@ public class ShooterIO implements IIO{
         this.wheelMotor.setInverted(false);
         this.turretMotor.setInverted(true);
 
+        this.wheelMotor.burnFlash();
+        this.turretMotor.burnFlash();
     }
 
     /**

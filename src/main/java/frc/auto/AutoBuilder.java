@@ -43,8 +43,8 @@ public class AutoBuilder {
 
             List<Double> rows = new ArrayList<Double>();
             rows.add((double)timer);
-            rows.add((double)driveIO.getDriveL1Encoder());
-            rows.add((double)driveIO.getDriveR1Encoder());
+            rows.add((double)driveIO.getDriveL1Encoder().getPosition());
+            rows.add((double)driveIO.getDriveR1Encoder().getPosition());
             data.add(rows);
         } catch (Exception e) {
             System.err.println(e);

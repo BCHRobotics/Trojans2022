@@ -33,7 +33,9 @@ public class DriveIO implements IIO {
     private SparkMaxConstants driveR1Constants = Constants.DRIVER1_CONSTANTS;
 
     public static DriveIO getInstance() {
-        if(instance == null) instance = new DriveIO();
+        if(instance == null) {
+            instance = new DriveIO();
+        }
         return instance;
     }
 
@@ -86,6 +88,11 @@ public class DriveIO implements IIO {
 
         this.driveL2.follow(this.driveL1, false);
         this.driveR2.follow(this.driveR1, false);
+
+        this.driveL1.burnFlash();
+        this.driveL2.burnFlash();
+        this.driveR1.burnFlash();
+        this.driveR2.burnFlash();
     }
 
     public void setDriveLeft(double speed) {
@@ -104,29 +111,22 @@ public class DriveIO implements IIO {
         this.driveR1PidController.setPosition(position);
     }
 
-    public void setDriveRampRate(double rampRateSecondsToFull) {
-        this.driveL1.setOpenLoopRampRate(rampRateSecondsToFull);
-        this.driveL2.setOpenLoopRampRate(rampRateSecondsToFull);
-        this.driveR1.setOpenLoopRampRate(rampRateSecondsToFull);
-        this.driveR2.setOpenLoopRampRate(rampRateSecondsToFull);
-    }
-
     //#region EncoderPositions
 
-    public double getDriveL1Encoder() {
-        return this.driveL1Encoder.getPosition();
+    public RelativeEncoder getDriveL1Encoder() {
+        return this.driveL1Encoder;
     }
 
-    public double getDriveL2Encoder() {
-        return this.driveL2Encoder.getPosition();
+    public RelativeEncoder getDriveL2Encoder() {
+        return this.driveL2Encoder;
     }
 
-    public double getDriveR1Encoder() {
-        return this.driveR1Encoder.getPosition();
+    public RelativeEncoder getDriveR1Encoder() {
+        return this.driveR1Encoder;
     }
 
-    public double getDriveR2Encoder() {
-        return this.driveR2Encoder.getPosition();
+    public RelativeEncoder getDriveR2Encoder() {
+        return this.driveR2Encoder;
     }
 
     //#endregion EncoderPositions

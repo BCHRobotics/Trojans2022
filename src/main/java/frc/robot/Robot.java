@@ -10,7 +10,9 @@ import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
 import frc.imaging.Limelight;
 import frc.io.Dashboard;
+import frc.io.subsystems.DriveIO;
 import frc.io.subsystems.IO;
+import frc.io.subsystems.ShooterIO;
 import frc.subsystems.Drive;
 import frc.subsystems.Shooter;
 import frc.teleop.TeleopControl;
@@ -52,6 +54,7 @@ public class Robot extends TimedRobot {
         if (this.pushToDashboard) Constants.pushValues();
 
         this.robotIO = IO.getInstance();
+        ShooterIO.getInstance();
         this.teleopControl = TeleopControl.getInstance();
         this.autoControl = AutoControl.getInstance();
         this.dashboard = Dashboard.getInstance();
@@ -178,11 +181,8 @@ public class Robot extends TimedRobot {
         //     return;
         // }
 
-        this.shooter.setShooterTurretPosition(30);
-        this.shooter.calculate();
-
-        this.drive.setDriveLeft(30);
-        this.drive.setDriveRight(30);
-        this.drive.calculate();
+        shooter.firstCycle();
+        shooter.setShooterTurretPosition(30);
+        shooter.calculate();
     }
 }

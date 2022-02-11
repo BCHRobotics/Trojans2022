@@ -6,9 +6,11 @@ import com.revrobotics.SparkMaxPIDController;
 public class SparkMaxPID {
 
     private SparkMaxPIDController pidController;
+    private CANSparkMax motor;
 
     public SparkMaxPID(CANSparkMax motor) {
-        pidController = motor.getPIDController();
+        this.motor = motor;
+        pidController = this.motor.getPIDController();
     }
 
     public void setPID(double kP, double kI, double kD, double kIz, double kFF, double kMinOutput, double kMaxOutput){
@@ -28,7 +30,7 @@ public class SparkMaxPID {
     }
 
     public void setPosition(double setPoint) {
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
+        System.out.println(pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion));
     }
 
     public void setVelocity(double speed){
