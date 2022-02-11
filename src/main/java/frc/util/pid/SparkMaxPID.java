@@ -11,6 +11,7 @@ public class SparkMaxPID {
     public SparkMaxPID(CANSparkMax motor) {
         this.motor = motor;
         pidController = this.motor.getPIDController();
+        System.out.println("==HERE==" + motor.getDeviceId());
     }
 
     public void setPID(double kP, double kI, double kD, double kIz, double kFF, double kMinOutput, double kMaxOutput){
@@ -27,6 +28,12 @@ public class SparkMaxPID {
         pidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
         pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
         pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+    }
+
+    public void setFromConstants(SparkMaxConstants c) {
+        System.out.println("Set constants");
+        this.setPID(c.kP, c.kI, c.kD, c.kIz, c.kFF, c.kMinOutput, c.kMaxOutput);
+        this.setSmartMotion(c.slot, c.minVel, c.maxVel, c.maxAcc, c.allowedErr);
     }
 
     public void setPosition(double setPoint) {

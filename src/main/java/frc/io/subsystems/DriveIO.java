@@ -70,6 +70,7 @@ public class DriveIO implements IIO {
         this.driveL1PidController = new SparkMaxPID(driveL1);
         this.driveR1PidController = new SparkMaxPID(driveR1);
 
+        /*
         // set Left Motor PID Coefficients
         this.driveL1PidController.setPID(driveL1Constants.kP, driveL1Constants.kI, driveL1Constants.kD, driveL1Constants.kIz, driveL1Constants.kFF, driveL1Constants.kMinOutput, driveL1Constants.kMaxOutput);
 
@@ -81,7 +82,10 @@ public class DriveIO implements IIO {
 
         //set Right Motor Smart Motion Coefficients
         this.driveR1PidController.setSmartMotion(driveR1Constants.slot, driveR1Constants.minVel, driveR1Constants.maxVel, driveR1Constants.maxAcc, driveR1Constants.allowedErr);
+        */
 
+        this.driveL1PidController.setFromConstants(driveL1Constants);
+        this.driveR1PidController.setFromConstants(driveR1Constants);
 
         this.driveL1.setInverted(true);
         this.driveR1.setInverted(false);

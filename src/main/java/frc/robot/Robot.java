@@ -158,6 +158,8 @@ public class Robot extends TimedRobot {
         if (this.pushToDashboard) Constants.pushValues();
         
         SmartDashboard.putBoolean("Recording", false);
+
+        drive.firstCycle();
     }
 
     /** This function is called periodically during test mode. */
@@ -181,8 +183,13 @@ public class Robot extends TimedRobot {
         //     return;
         // }
 
-        shooter.firstCycle();
+        /*shooter.firstCycle();
         shooter.setShooterTurretPosition(30);
         shooter.calculate();
+        */
+
+        drive.setDriveLeft(30);
+        drive.setDriveRight(30);
+        drive.calculate();
     }
 }

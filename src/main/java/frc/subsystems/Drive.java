@@ -20,6 +20,9 @@ public class Drive extends Subsystem {
     private double leftOut;
     private double rightOut;
 
+    private double posLeft;
+    private double posRight;
+
     /**
      * Get the instance of the Drive, if none create a new instance
      * 
@@ -54,8 +57,11 @@ public class Drive extends Subsystem {
                 this.driveIO.setDriveRight(this.rightOut);
                 break;
             case POSITION:
-                this.driveIO.setDriveLeftPos(this.leftOut);
-                this.driveIO.setDriveRightPos(this.rightOut);
+            System.out.println("Made it to Drive.java");
+                System.out.println(posLeft);
+                this.driveIO.setDriveLeftPos(this.posLeft);
+                System.out.println(posRight);
+                this.driveIO.setDriveRightPos(this.posRight);
             default:
                 disable();
                 break;
@@ -81,11 +87,11 @@ public class Drive extends Subsystem {
 
     public void setDriveLeft(double position) {
         this.currentState = DriveState.POSITION;
-        this.leftOut = position;
+        this.posLeft = 30;
     }
 
     public void setDriveRight(double position) {
         this.currentState = DriveState.POSITION;
-        this.rightOut = position;
+        this.posRight = 30;
     }
 }
