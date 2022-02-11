@@ -81,6 +81,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        SmartDashboard.putNumber("DriveR Pos", DriveIO.getInstance().getDriveR1Encoder().getPosition());
+        SmartDashboard.putNumber("DriveL Pos", DriveIO.getInstance().getDriveL1Encoder().getPosition());
     }
 
     /**
@@ -158,12 +160,13 @@ public class Robot extends TimedRobot {
         if (this.pushToDashboard) Constants.pushValues();
         
         SmartDashboard.putBoolean("Recording", false);
+
+        DriveIO.getInstance().resetInputs();
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        this.robotIO.stopAllOutputs();
         this.dashboard.updateAll();
 
         // try {
@@ -181,8 +184,19 @@ public class Robot extends TimedRobot {
         //     return;
         // }
 
+        /*
         shooter.firstCycle();
         shooter.setShooterTurretPosition(30);
         shooter.calculate();
+        */
+
+        /*
+        drive.setDriveLeft(30);
+        drive.setDriveRight(30);
+        drive.calculate();
+        */
+        DriveIO driveIO = DriveIO.getInstance();
+        driveIO.setDriveLeftPos(30);
+        driveIO.setDriveRightPos(30);
     }
 }

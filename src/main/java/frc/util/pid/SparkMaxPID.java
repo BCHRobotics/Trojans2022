@@ -6,31 +6,65 @@ import com.revrobotics.SparkMaxPIDController;
 public class SparkMaxPID {
 
     private SparkMaxPIDController pidController;
-    private CANSparkMax motor;
+
+    private int slot;
 
     public SparkMaxPID(CANSparkMax motor) {
-        this.motor = motor;
-        pidController = this.motor.getPIDController();
+        pidController = motor.getPIDController();
     }
 
-    public void setPID(double kP, double kI, double kD, double kIz, double kFF, double kMinOutput, double kMaxOutput){
-        pidController.setP(kP);
-        pidController.setI(kI);
-        pidController.setD(kD);
-        pidController.setIZone(kIz);
-        pidController.setFF(kFF);
-        pidController.setOutputRange(kMinOutput, kMaxOutput);
+    public SparkMaxPID(CANSparkMax motor, SparkMaxConstants constants) {
+        this(motor);
+        this.setConstants(constants);
     }
 
-    public void setSmartMotion(int smartMotionSlot, double minVel, double maxVel, double maxAcc, double allowedErr){  
-        pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
-        pidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
-        pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
-        pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+    public SparkMaxPID(SparkMaxPIDController pidController) {
+        this.pidController = pidController;
+    }
+
+    public SparkMaxPID(SparkMaxPIDController pidController, SparkMaxConstants constants) {
+        this(pidController);
+        this.setConstants(constants);
+    }
+
+    public void setConstants(SparkMaxConstants c) {
+        this.slot = c.slot;
+        
+        pidController.setP(c.kP, c.slot);  
+        pidController.setI(c.kI, c.slot);
+        pidController.setD(c.kD, c.slot);
+        pidController.setIZone(c.kIz, c.slot);
+        pidController.setFF(c.kFF, c.slot);
+        pidController.setOutputRange(c.kMinOutput, c.kMaxOutput, c.slot);
+
+        pidController.setSmartMotionMinOutputVelocity(c.minVel, c.slot);
+        pidController.setSmartMotionMaxVelocity(c.maxVel, c.slot);
+        pidController.setSmartMotionMaxAccel(c.maxAcc, c.slot);
+        pidController.setSmartMotionAllowedClosedLoopError(c.allowedErr, c.slot);
+    }
+
+    public SparkMaxConstants getConstants(int slot) {
+        return new SparkMaxConstants(
+            pidController.getP(slot), 
+            pidController.getI(slot),
+            pidController.getD(slot),
+            pidController.getIZone(slot),
+            pidController.getFF(slot), 
+            pidController.getOutputMin(slot), 
+            pidController.getOutputMax(slot), 
+            this.slot, 
+            pidController.getSmartMotionMinOutputVelocity(slot), 
+            pidController.getSmartMotionMaxVelocity(slot),
+            pidController.getSmartMotionMaxAccel(slot), 
+            pidController.getSmartMotionAllowedClosedLoopError(slot));
+    }
+
+    public SparkMaxConstants getConstants() {
+        return this.getConstants(this.slot);
     }
 
     public void setPosition(double setPoint) {
-        System.out.println(pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion));
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion, this.slot);
     }
 
     public void setVelocity(double speed){

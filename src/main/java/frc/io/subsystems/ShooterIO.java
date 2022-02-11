@@ -24,6 +24,8 @@ public class ShooterIO implements IIO{
     private SparkMaxConstants wheelConstants = Constants.WHEEL_CONSTANTS;
     private SparkMaxConstants turretConstants = Constants.TURRET_CONSTANTS;
 
+    private boolean enabled = Constants.SHOOTER_ENABLED;
+
     public static ShooterIO getInstance() {
         if (instance == null) {
             instance = new ShooterIO();
@@ -35,6 +37,7 @@ public class ShooterIO implements IIO{
      * Initiates the Climber Output 
      */
     private ShooterIO() {
+        if (!enabled) return;
 
         this.wheelMotor = new CANSparkMax(Constants.wheelID, MotorType.kBrushless);
         this.turretMotor = new CANSparkMax(Constants.turretID, MotorType.kBrushless);
@@ -51,17 +54,8 @@ public class ShooterIO implements IIO{
         this.wheelPidController = new SparkMaxPID(wheelMotor);
         this.turretPidController = new SparkMaxPID(turretMotor);
         
-        // set wheel PID Coefficients
-        this.wheelPidController.setPID(wheelConstants.kP, wheelConstants.kI, wheelConstants.kD, wheelConstants.kIz, wheelConstants.kFF, wheelConstants.kMinOutput, wheelConstants.kMaxOutput);
-
-        //set wheel Smart Motion Coefficients
-        // this.wheelPidController.setSmartMotion(wheelConstants.slot, wheelConstants.minVel, wheelConstants.maxVel, wheelConstants.maxAcc, wheelConstants.allowedErr);
-
-        // set turret PID Coefficients
-        this.turretPidController.setPID(turretConstants.kP, turretConstants.kI, turretConstants.kD, turretConstants.kIz, turretConstants.kFF, turretConstants.kMinOutput, turretConstants.kMaxOutput);
-
-        //set turret Smart Motion Coefficients
-        this.turretPidController.setSmartMotion(turretConstants.slot, turretConstants.minVel, turretConstants.maxVel, turretConstants.maxAcc, turretConstants.allowedErr);
+        this.wheelPidController.setConstants(wheelConstants);
+        this.turretPidController.setConstants(turretConstants);
 
         // Before running code on robot, check motor direction
         this.wheelMotor.setInverted(false);
@@ -76,6 +70,7 @@ public class ShooterIO implements IIO{
      * @param speed speed in rpm
      */
     public void setWheelSpeed(double speed) {
+        if (!enabled) return;
         this.wheelPidController.setVelocity(speed);
     }
 
@@ -84,6 +79,7 @@ public class ShooterIO implements IIO{
      * @param setPoint position in revolutions
      */
     public void setTurretPosition(double setPoint) {
+        if (!enabled) return;
         this.turretPidController.setPosition(setPoint);
     }
 
@@ -92,6 +88,7 @@ public class ShooterIO implements IIO{
      * @return CANEncoder reference
      */
     public RelativeEncoder getWheelEncoder() {
+        if (!enabled) return null;
         return this.wheelMotor.getEncoder();
     }
 
@@ -100,6 +97,7 @@ public class ShooterIO implements IIO{
      * @return CANEncoder reference
      */
     public RelativeEncoder getTurretEncoder() {
+        if (!enabled) return null;
         return this.turretMotor.getEncoder();
     }
 
@@ -108,6 +106,7 @@ public class ShooterIO implements IIO{
      */
     @Override
     public void resetInputs() {
+        if (!enabled) return;
         this.wheelEncoder.setPosition(0);
         this.turretEncoder.setPosition(0);
     }
@@ -117,6 +116,7 @@ public class ShooterIO implements IIO{
      */
     @Override
     public void updateInputs() {
+        if (!enabled) return;
     }
 
     /**
@@ -124,6 +124,7 @@ public class ShooterIO implements IIO{
      */
     @Override
     public void stopAllOutputs() {
+        if (!enabled) return;
         this.wheelMotor.disable();
         this.turretMotor.disable();
     }
