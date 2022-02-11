@@ -20,9 +20,9 @@ public class Constants {
     public static final int driveR1ID = 15;
     public static final int driveR2ID = 16;
 
-    public static final boolean SHOOTER_ENABLED = false;
+    public static final boolean SHOOTER_ENABLED = true;
     public static final boolean DRIVE_ENABLED = true;
-    public static final boolean MINI_BOT = true;
+    public static final boolean MINI_BOT = false;
 
     // Shooter PID Constants
     public static final SparkMaxConstants TURRET_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
