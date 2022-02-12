@@ -2,7 +2,7 @@ package frc.io;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.util.PIDConstants;
+import frc.util.pid.PIDConstants;
 
 public class Dashboard {
     private static Dashboard instance;

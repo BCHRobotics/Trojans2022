@@ -5,12 +5,16 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.auton.AutonControl;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.auto.AutoBuilder;
+import frc.auto.AutoControl;
 import frc.imaging.Limelight;
 import frc.io.Dashboard;
-import frc.io.Input.SensorInput;
-import frc.io.Output.RobotOutput;
+import frc.io.subsystems.DriveIO;
+import frc.io.subsystems.IO;
+import frc.io.subsystems.ShooterIO;
 import frc.subsystems.Drive;
+import frc.subsystems.Shooter;
 import frc.teleop.TeleopControl;
 
 /**
@@ -24,16 +28,20 @@ import frc.teleop.TeleopControl;
  */
 public class Robot extends TimedRobot {
 
-    private RobotOutput robotOutput;
-    private SensorInput sensorInput;
+    private IO robotIO;
     private TeleopControl teleopControl;
+    private AutoControl autoControl;
     private Dashboard dashboard;
-    private AutonControl autonControl;
 
     private Drive drive;
+    private Shooter shooter;
 
     private boolean pushToDashboard = true;
     public static boolean teleopInitialized = false;
+    private static boolean isRecording = false;
+
+    
+    private AutoBuilder autoBuilder;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -45,15 +53,17 @@ public class Robot extends TimedRobot {
 
         if (this.pushToDashboard) Constants.pushValues();
 
-        this.robotOutput = RobotOutput.getInstance();
-        this.sensorInput = SensorInput.getInstance();
+        this.robotIO = IO.getInstance();
+        ShooterIO.getInstance();
         this.teleopControl = TeleopControl.getInstance();
+        this.autoControl = AutoControl.getInstance();
         this.dashboard = Dashboard.getInstance();
-        this.autonControl = AutonControl.getInstance();
+        this.autoBuilder = AutoBuilder.getInstance();
 
         this.drive = Drive.getInstance();
+        this.shooter = Shooter.getInstance();
 
-        this.sensorInput.reset();
+        this.robotIO.resetInputs();
 
         Limelight.getInstance().setLedMode(1);
     }
@@ -71,6 +81,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        SmartDashboard.putNumber("DriveR Pos", DriveIO.getInstance().getDriveR1Encoder().getPosition());
+        SmartDashboard.putNumber("DriveL Pos", DriveIO.getInstance().getDriveL1Encoder().getPosition());
     }
 
     /**
@@ -92,78 +104,97 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        this.robotOutput.drive.setDriveRampRate(0.0);
-
-        this.autonControl.initialize();
-        this.autonControl.setRunning(true);
-        this.autonControl.setOverrideAuto(false);
-
-        this.drive.firstCycle();
-        this.sensorInput.reset();
+        this.autoControl.initialize();
+        this.robotIO.resetInputs();
     }
 
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
-        this.sensorInput.update();
+        this.autoControl.runCycle();
+        this.robotIO.updateInputs();
         this.dashboard.updateAll();
-
-        this.autonControl.runCycle();
     }
 
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
-        if (!this.autonControl.isRunning()) {
-            this.robotOutput.drive.setDriveRampRate(0.15);
-            this.teleopControl.initialize();
-            Robot.teleopInitialized = true;
-        }
+        this.autoControl.disable();
+        this.teleopControl.initialize();
+        Robot.teleopInitialized = true;
     }
 
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        if (this.autonControl.isRunning()) {
-            this.autonomousPeriodic();
-        } else {
-            if (!Robot.teleopInitialized) {
-                this.teleopInit();
-            }
-            this.sensorInput.update();
-            this.teleopControl.runCycle();
-            this.dashboard.updateAll();
+        if (!Robot.teleopInitialized) {
+            this.teleopInit();
         }
+        this.robotIO.updateInputs();
+        this.teleopControl.runCycle();
+        this.dashboard.updateAll();
     }
 
     /** This function is called once when the robot is disabled. */
     @Override
     public void disabledInit() {
-        this.robotOutput.stopAll();
+        //this.robotIO.stopAllOutputs();
+        this.autoControl.disable();
         this.teleopControl.disable();
     }
 
     /** This function is called periodically when disabled. */
     @Override
     public void disabledPeriodic() {
-        this.sensorInput.update();
+        this.robotIO.updateInputs();
         this.dashboard.updateAll();
-        this.autonControl.updateModes();
     }
 
     /** This function is called once when test mode is enabled. */
     @Override
     public void testInit() {
-        this.sensorInput.reset();
+        this.robotIO.resetInputs();
         this.drive.firstCycle();
+        this.shooter.firstCycle();
 
         if (this.pushToDashboard) Constants.pushValues();
+        
+        SmartDashboard.putBoolean("Recording", false);
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        this.sensorInput.update();
         this.dashboard.updateAll();
+
+        // try {
+        //     if(SmartDashboard.getBoolean("Recording", true)){
+        //         if (isRecording == false) {
+        //             this.autoBuilder.setStartRecording();
+        //             isRecording = true;
+        //         } 
+        //         this.autoBuilder.recordData();
+        //     } else {
+        //         this.autoBuilder.convertData();
+        //         isRecording = false;
+        //     }
+        // } catch (Exception e) {
+        //     return;
+        // }
+
+        /*
+        shooter.firstCycle();
+        shooter.setShooterTurretPosition(30);
+        shooter.calculate();
+        */
+
+        /*
+        drive.setDriveLeft(30);
+        drive.setDriveRight(30);
+        drive.calculate();
+        */
+        DriveIO driveIO = DriveIO.getInstance();
+        driveIO.setDriveLeftPos(30);
+        driveIO.setDriveRightPos(30);
     }
 }
