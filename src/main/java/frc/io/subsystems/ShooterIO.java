@@ -32,7 +32,7 @@ public class ShooterIO implements IIO{
     }
 
     /**
-     * Initiates the Climber Output 
+     * Initiates the Shooter Output 
      */
     private ShooterIO() {
 
