@@ -57,8 +57,8 @@ public class DriveIO implements IIO {
         this.driveL1Encoder = driveL1.getEncoder();
         this.driveR1Encoder = driveR1.getEncoder();
 
-        // this.driveL1.restoreFactoryDefaults();
-        // this.driveR1.restoreFactoryDefaults();
+        this.driveL1.restoreFactoryDefaults();
+        this.driveR1.restoreFactoryDefaults();
 
         this.driveL1.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);

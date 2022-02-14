@@ -36,19 +36,18 @@ public class Drive extends Subsystem {
     }
 
     private Drive() {
-        this.driveIO = DriveIO.getInstance();
-
         this.firstCycle();
     }
 
     @Override
     public void firstCycle() {
-
+        
     }
 
     @Override
     public void calculate() {
         SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
+        this.driveIO = DriveIO.getInstance();
 
         switch (currentState) {
             case OUTPUT:
@@ -57,11 +56,12 @@ public class Drive extends Subsystem {
                 this.driveIO.setDriveRight(this.rightOut);
                 break;
             case POSITION:
-            System.out.println("Made it to Drive.java");
-                System.out.println(posLeft);
+                System.out.println("Made it to Drive.java");
+                System.out.println(this.posLeft);
                 this.driveIO.setDriveLeftPos(this.posLeft);
-                System.out.println(posRight);
+                System.out.println(this.posRight);
                 this.driveIO.setDriveRightPos(this.posRight);
+                break;
             default:
                 disable();
                 break;
@@ -71,6 +71,10 @@ public class Drive extends Subsystem {
     @Override
     public void disable() {
         this.driveIO.stopAllOutputs();
+    }
+
+    public void resetPosition() {
+        this.driveIO.resetInputs();
     }
 
     /**
@@ -87,11 +91,11 @@ public class Drive extends Subsystem {
 
     public void setDriveLeft(double position) {
         this.currentState = DriveState.POSITION;
-        this.posLeft = 30;
+        this.posLeft = position;
     }
 
     public void setDriveRight(double position) {
         this.currentState = DriveState.POSITION;
-        this.posRight = 30;
+        this.posRight = position;
     }
 }

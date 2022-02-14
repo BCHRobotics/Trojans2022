@@ -28,7 +28,6 @@ public class AutoBuilder {
     private AutoBuilder(){
        writer = new CSVWriter(Constants.rootDirectory);
        driveIO = DriveIO.getInstance();
-       driveIO.stopAllOutputs();
     }
 
     public void setStartRecording() {
@@ -36,12 +35,13 @@ public class AutoBuilder {
     }
     
     public void recordData() {
-
+        System.out.println("Made it to recordData()!");
         try {
             currentTime = System.currentTimeMillis();
             timer = currentTime - startTime;
 
             List<Double> rows = new ArrayList<Double>();
+            driveIO.updateInputs();
             rows.add((double)timer);
             rows.add((double)driveIO.getDriveL1Encoder().getPosition());
             rows.add((double)driveIO.getDriveR1Encoder().getPosition());
@@ -55,6 +55,7 @@ public class AutoBuilder {
 
     public void convertData() {
         try {
+            System.out.println("Made it to convertData()!");
             writer.setFileName("test");
             writer.setHeader("time,leftMotor,rightMotor");
             writer.importData(data);

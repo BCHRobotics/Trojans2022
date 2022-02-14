@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
     private boolean pushToDashboard = true;
     public static boolean teleopInitialized = false;
     private static boolean isRecording = false;
+    private static boolean stopedRecording = false;
 
     
     private AutoBuilder autoBuilder;
@@ -166,35 +167,39 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {
         this.dashboard.updateAll();
+        this.robotIO.updateInputs();
 
-        // try {
-        //     if(SmartDashboard.getBoolean("Recording", true)){
-        //         if (isRecording == false) {
-        //             this.autoBuilder.setStartRecording();
-        //             isRecording = true;
-        //         } 
-        //         this.autoBuilder.recordData();
-        //     } else {
-        //         this.autoBuilder.convertData();
-        //         isRecording = false;
-        //     }
-        // } catch (Exception e) {
-        //     return;
-        // }
+        try {
+            if(SmartDashboard.getBoolean("Recording", true)){
+                if (isRecording == false) {
+                    this.autoBuilder.setStartRecording();
+                    isRecording = true;
+                    stopedRecording = false;
+                } 
+                this.autoBuilder.recordData();
+            } else {
+                this.autoBuilder.convertData();
+                isRecording = false;
+                if (stopedRecording == false) {
+                    this.robotIO.resetInputs();
+                    stopedRecording = true;
+                }
+            }
+        } catch (Exception e) {
+            return;
+        }
 
-        /*
-        shooter.firstCycle();
-        shooter.setShooterTurretPosition(30);
-        shooter.calculate();
-        */
+        
+        // shooter.firstCycle();
+        // shooter.setShooterTurretPosition(30);
+        // shooter.calculate();
 
-        /*
-        drive.setDriveLeft(30);
-        drive.setDriveRight(30);
-        drive.calculate();
-        */
-        DriveIO driveIO = DriveIO.getInstance();
-        driveIO.setDriveLeftPos(30);
-        driveIO.setDriveRightPos(30);
+        // this.drive.setDriveLeft(30);
+        // this.drive.setDriveRight(30);
+        // this.drive.calculate();
+
+        // DriveIO driveIO = DriveIO.getInstance();
+        // driveIO.setDriveLeftPos(30);
+        // driveIO.setDriveRightPos(30);
     }
 }

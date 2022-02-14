@@ -55,6 +55,10 @@ public class AutoOperate extends AutoComponent {
         currentTime = System.currentTimeMillis() - startTime;
 
         try {
+            if(data.size() <= 0) {
+                this.drive.resetPosition();
+                return;
+            }
             if(currentTime >= data.get(0).get(0).longValue()) {
                 this.drive.setDriveLeft(data.get(0).get(1));
                 this.drive.setDriveRight(data.get(0).get(2));
