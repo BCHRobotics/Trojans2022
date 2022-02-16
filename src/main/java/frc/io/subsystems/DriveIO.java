@@ -14,8 +14,8 @@ public class DriveIO implements IIO {
 
     // Drive motors
     private CANSparkMax driveL1;
-    private CANSparkMax driveL2;
     private CANSparkMax driveR1;
+    private CANSparkMax driveL2;
     private CANSparkMax driveR2;
     
     // Drive encoders
@@ -82,6 +82,12 @@ public class DriveIO implements IIO {
         
         this.driveL2Encoder = driveL2.getEncoder();
         this.driveR2Encoder = driveR2.getEncoder();
+        
+        this.driveL2.restoreFactoryDefaults();
+        this.driveR2.restoreFactoryDefaults();
+
+        this.driveL2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.driveR2.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         this.driveL2.setSmartCurrentLimit(60, 10);
         this.driveR2.setSmartCurrentLimit(60, 10);

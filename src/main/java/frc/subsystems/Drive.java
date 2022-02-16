@@ -51,9 +51,11 @@ public class Drive extends Subsystem {
 
         switch (currentState) {
             case OUTPUT:
-            case VELOCITY:
                 this.driveIO.setDriveLeft(this.leftOut);
                 this.driveIO.setDriveRight(this.rightOut);
+                break;
+            case VELOCITY:
+                disable();
                 break;
             case POSITION:
                 System.out.println("Made it to Drive.java");
@@ -84,6 +86,8 @@ public class Drive extends Subsystem {
      */
     public void setOutput(double y, double turn) {
         this.currentState = DriveState.OUTPUT;
+        System.out.println(y);
+        System.out.println(turn);
 
         this.leftOut = (y + turn) * Constants.MAX_OUTPUT;
         this.rightOut =  (y - turn) * Constants.MAX_OUTPUT;

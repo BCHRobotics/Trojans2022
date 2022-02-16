@@ -16,9 +16,11 @@ public class Constants {
     public static final int turretID = 21;
 
     public static final int driveL1ID = 11;
-    public static final int driveL2ID = 12;
     public static final int driveR1ID = 15;
+    public static final int driveL2ID = 12;
     public static final int driveR2ID = 16;
+
+    public static int version = 1;
 
     public static final boolean SHOOTER_ENABLED = true;
     public static final boolean DRIVE_ENABLED = true;
@@ -29,8 +31,8 @@ public class Constants {
     public static final SparkMaxConstants WHEEL_CONSTANTS = new SparkMaxConstants(6e-5, 0, 0, 0, 0.000015, -1, 1, 0, 0, 6000, 3000, 0);
 
     // Drive PID Constants
-    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
-    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
+    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 1000, 0);
+    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 1000, 0);
     
     //Auto directory
     public static final String rootDirectory = "csv/";

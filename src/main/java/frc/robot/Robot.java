@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
     public static boolean teleopInitialized = false;
     private static boolean isRecording = false;
     private static boolean stopedRecording = false;
+    private static boolean vectorButton = false;
 
     
     private AutoBuilder autoBuilder;
@@ -157,10 +158,12 @@ public class Robot extends TimedRobot {
         this.robotIO.resetInputs();
         this.drive.firstCycle();
         this.shooter.firstCycle();
+        this.teleopControl.initialize();
 
         if (this.pushToDashboard) Constants.pushValues();
         
         SmartDashboard.putBoolean("Recording", false);
+        SmartDashboard.putBoolean("Record Vector", false);
     }
 
     /** This function is called periodically during test mode. */
@@ -170,13 +173,21 @@ public class Robot extends TimedRobot {
         this.robotIO.updateInputs();
 
         try {
-            if(SmartDashboard.getBoolean("Recording", true)){
+            if(SmartDashboard.getBoolean("Recording", false) == true){
+                this.teleopControl.runCycle();
                 if (isRecording == false) {
                     this.autoBuilder.setStartRecording();
+                    this.autoBuilder.recordData();
                     isRecording = true;
                     stopedRecording = false;
-                } 
-                this.autoBuilder.recordData();
+                }
+                vectorButton = SmartDashboard.getBoolean("Record Vector", false);
+                if (vectorButton == true){
+                    this.autoBuilder.recordData();
+                    vectorButton = false;
+                    SmartDashboard.putBoolean("Record Vector", false);
+                }
+                
             } else {
                 this.autoBuilder.convertData();
                 isRecording = false;
