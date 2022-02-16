@@ -20,7 +20,7 @@ public class Constants {
     public static final int driveL2ID = 12;
     public static final int driveR2ID = 16;
 
-    public static int version = 1;
+    public static int version = 2;
 
     public static final boolean SHOOTER_ENABLED = true;
     public static final boolean DRIVE_ENABLED = true;
