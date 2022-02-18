@@ -65,7 +65,7 @@ public class DriverInput {
         return this.driver.getYButton() || this.operator.getYButton();
     }
 
-        // ********************************
+    // ********************************
 	// AUTO SELECTION CONTROLS
 	// ********************************
 

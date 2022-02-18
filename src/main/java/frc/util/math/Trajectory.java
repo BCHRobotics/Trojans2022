@@ -3,29 +3,32 @@ package frc.util.math;
 
 public class Trajectory {
     
-    private static double distance;
-    private static double height;
-    private static double angle;
-    private static double velocity;
+    // Create variables to store input data
+    private double distance;
+    private double height;
     
-    public static void setDistance(double distance) {
+    // Set input distance
+    public void setDistance(double distance) {
         this.distance = distance;
     }
     
-    public static void setHeight(double height) {
+    // Set input Height
+    public void setHeight(double height) {
         this.height = height;
     }
     
-    public static double getAngle() {
+    // Return angle after calculations
+    public double getAngle() {
         return calculateAngle(this.distance, this.height);
     }
     
-    public static double getVelocity() {
+    // Reutrn velocity after calculations
+    public double getVelocity() {
         return calculateVelocity(this.distance, this.height);
     }
     
     //call setShootingAngle to calculate for the nessessary shooter angle
-    private static double calculateAngle(double distance, double height){
+    private double calculateAngle(double distance, double height){
 
         //calculate theoretical distance using given distance
         double theoDistanceC1 = Math.pow(distance,2)*0.0378;
@@ -44,7 +47,7 @@ public class Trajectory {
     }
 
     //call setVelocityShooter to calculate he nessessary ball exit velocity using limelight distance and height
-    private static double calculateVelocity(double distance, double height){
+    private double calculateVelocity(double distance, double height){
 
         //calculate for theoretical distance with limelight distance
         double theoDistanceC1 = Math.pow(distance,2)*0.0378;
