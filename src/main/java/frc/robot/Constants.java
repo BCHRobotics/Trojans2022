@@ -6,7 +6,7 @@ public class Constants {
     
     public static final boolean USING_DASHBOARD = true;
     public static final double CONTROLLER_DEADZONE = 0.1;
-    public static final double WhHEEL_DIAMETER = 6;
+    public static final double WHEEL_DIAMETER = 6;
     public static final double MAX_OUTPUT = 1;
     public static final double PATH_TURN_P = 6;
     
@@ -25,8 +25,12 @@ public class Constants {
     public static final boolean MINI_BOT = false;
 
     // Shooter PID Constants
-    public static final SparkMaxConstants TURRET_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
-    public static final SparkMaxConstants WHEEL_CONSTANTS = new SparkMaxConstants(6e-5, 0, 0, 0, 0.000015, -1, 1, 0, 0, 6000, 3000, 0);
+    public static final SparkMaxConstants LEFT_WHEEL_CONSTANTS = new SparkMaxConstants(6e-5, 0, 0, 0, 0.000015, -1, 1, 0, 0, 6000, 3000, 0);
+    public static final SparkMaxConstants RIGHT_WHEEL_CONSTANTS = new SparkMaxConstants(6e-5, 0, 0, 0, 0.000015, -1, 1, 0, 0, 6000, 3000, 0);
+
+    // Lift PID Constants
+    public static final SparkMaxConstants LEFT_LIFT_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
+    public static final SparkMaxConstants RIGHT_LIFT_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
 
     // Drive PID Constants
     public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 1000, 0);

@@ -12,17 +12,17 @@ public class ShooterIO implements IIO{
 
     private static ShooterIO instance;
 
-    private CANSparkMax wheelMotor;
-    private CANSparkMax turretMotor;
+    private CANSparkMax leftWheelMotor;
+    private CANSparkMax rightWheelMotor;
 
-    private RelativeEncoder wheelEncoder;
-    private RelativeEncoder turretEncoder;
+    private RelativeEncoder leftWheelEncoder;
+    private RelativeEncoder rightWheelEncoder;
 
-    private SparkMaxPID wheelPidController;
-    private SparkMaxPID turretPidController;
+    private SparkMaxPID leftWheelPidController;
+    private SparkMaxPID rightWheelPidController;
 
-    private SparkMaxConstants wheelConstants = Constants.WHEEL_CONSTANTS;
-    private SparkMaxConstants turretConstants = Constants.TURRET_CONSTANTS;
+    private SparkMaxConstants leftWheelConstants = Constants.LEFT_WHEEL_CONSTANTS;
+    private SparkMaxConstants rightWheelConstants = Constants.RIGHT_WHEEL_CONSTANTS;
 
     private boolean enabled = Constants.SHOOTER_ENABLED;
 
@@ -39,30 +39,30 @@ public class ShooterIO implements IIO{
     private ShooterIO() {
         if (!enabled) return;
 
-        this.wheelMotor = new CANSparkMax(Constants.wheelID, MotorType.kBrushless);
-        this.turretMotor = new CANSparkMax(Constants.turretID, MotorType.kBrushless);
+        this.leftWheelMotor = new CANSparkMax(Constants.wheelID, MotorType.kBrushless);
+        this.rightWheelMotor = new CANSparkMax(Constants.turretID, MotorType.kBrushless);
 
-        this.wheelEncoder = wheelMotor.getEncoder();
-        this.turretEncoder = turretMotor.getEncoder();
+        this.leftWheelEncoder = leftWheelMotor.getEncoder();
+        this.rightWheelEncoder = rightWheelMotor.getEncoder();
 
-        this.wheelMotor.restoreFactoryDefaults();
-        this.turretMotor.restoreFactoryDefaults();
+        this.leftWheelMotor.restoreFactoryDefaults();
+        this.rightWheelMotor.restoreFactoryDefaults();
         
-        this.wheelMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        this.turretMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.leftWheelMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.rightWheelMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
-        this.wheelPidController = new SparkMaxPID(wheelMotor);
-        this.turretPidController = new SparkMaxPID(turretMotor);
+        this.leftWheelPidController = new SparkMaxPID(leftWheelMotor);
+        this.rightWheelPidController = new SparkMaxPID(rightWheelMotor);
         
-        this.wheelPidController.setConstants(wheelConstants);
-        this.turretPidController.setConstants(turretConstants);
+        this.leftWheelPidController.setConstants(leftWheelConstants);
+        this.rightWheelPidController.setConstants(rightWheelConstants);
 
         // Before running code on robot, check motor direction
-        this.wheelMotor.setInverted(false);
-        this.turretMotor.setInverted(true);
+        this.leftWheelMotor.setInverted(false);
+        this.rightWheelMotor.setInverted(true);
 
-        this.wheelMotor.burnFlash();
-        this.turretMotor.burnFlash();
+        this.leftWheelMotor.burnFlash();
+        this.rightWheelMotor.burnFlash();
     }
 
     /**
@@ -71,34 +71,26 @@ public class ShooterIO implements IIO{
      */
     public void setWheelSpeed(double speed) {
         if (!enabled) return;
-        this.wheelPidController.setVelocity(speed);
-    }
-
-    /**
-     * Set the position of the Shooter Turret Motor
-     * @param setPoint position in revolutions
-     */
-    public void setTurretPosition(double setPoint) {
-        if (!enabled) return;
-        this.turretPidController.setPosition(setPoint);
+        this.leftWheelPidController.setVelocity(speed);
+        this.rightWheelPidController.setVelocity(speed);
     }
 
     /**
      * Get the reference to the Shooter Wheel Encoder
      * @return CANEncoder reference
      */
-    public RelativeEncoder getWheelEncoder() {
+    public RelativeEncoder getLeftWheelEncoder() {
         if (!enabled) return null;
-        return this.wheelMotor.getEncoder();
+        return this.leftWheelMotor.getEncoder();
     }
 
     /**
      * Get the reference to the Shooter Turret Encoder
      * @return CANEncoder reference
      */
-    public RelativeEncoder getTurretEncoder() {
+    public RelativeEncoder getRightWheelEncoder() {
         if (!enabled) return null;
-        return this.turretMotor.getEncoder();
+        return this.rightWheelMotor.getEncoder();
     }
 
     /**
@@ -107,8 +99,8 @@ public class ShooterIO implements IIO{
     @Override
     public void resetInputs() {
         if (!enabled) return;
-        this.wheelEncoder.setPosition(0);
-        this.turretEncoder.setPosition(0);
+        this.leftWheelEncoder.setPosition(0);
+        this.rightWheelEncoder.setPosition(0);
     }
 
     /**
@@ -125,7 +117,7 @@ public class ShooterIO implements IIO{
     @Override
     public void stopAllOutputs() {
         if (!enabled) return;
-        this.wheelMotor.disable();
-        this.turretMotor.disable();
+        this.leftWheelMotor.disable();
+        this.rightWheelMotor.disable();
     }
 }

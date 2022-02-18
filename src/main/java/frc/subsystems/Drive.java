@@ -17,6 +17,7 @@ public class Drive extends Subsystem {
 
     // states
     private DriveState currentState = DriveState.POSITION;
+
     private double leftOut;
     private double rightOut;
 
