@@ -1,9 +1,11 @@
 package frc.io.subsystems;
 
+// Import required Libraries
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+// Import required Classes
 import frc.robot.Constants;
 import frc.util.pid.SparkMaxConstants;
 import frc.util.pid.SparkMaxPID;

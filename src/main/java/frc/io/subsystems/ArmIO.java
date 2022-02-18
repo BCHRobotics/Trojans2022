@@ -1,16 +1,18 @@
 package frc.io.subsystems;
 
+// Import required Libraries
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+// Import required Classes
 import frc.robot.Constants;
 import frc.util.pid.SparkMaxConstants;
 import frc.util.pid.SparkMaxPID;
 
-public class LiftIO implements IIO{
+public class ArmIO implements IIO{
 
-    private static LiftIO instance;
+    private static ArmIO instance;
 
     private CANSparkMax leftArmMotor;
     private CANSparkMax rightArmMotor;
@@ -22,11 +24,11 @@ public class LiftIO implements IIO{
 
     private SparkMaxConstants leftArmConstants = Constants.ARM_CONSTANTS;
 
-    private boolean enabled = Constants.SHOOTER_ENABLED;
+    private boolean enabled = Constants.ARM_ENABLED;
 
-    public static LiftIO getInstance() {
+    public static ArmIO getInstance() {
         if (instance == null) {
-            instance = new LiftIO();
+            instance = new ArmIO();
         }
         return instance;
     }
@@ -34,7 +36,7 @@ public class LiftIO implements IIO{
     /**
      * Initiates the Lift Output 
      */
-    private LiftIO() {
+    private ArmIO() {
         if (!enabled) return;
 
         // Initiate new arm motor objects
@@ -70,7 +72,7 @@ public class LiftIO implements IIO{
 
     /**
      * Set the position of the Lift Arm
-     * @param speed in rpm
+     * @param setPoint in revolutions
      */
     public void setArmPosition(double setPoint) {
         if (!enabled) return;
