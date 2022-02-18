@@ -8,7 +8,7 @@ import frc.robot.Constants;
 import frc.util.pid.SparkMaxConstants;
 import frc.util.pid.SparkMaxPID;
 
-public class ShooterIO implements IIO{
+public class ShooterIO implements IIO {
 
     private static ShooterIO instance;
 
@@ -19,10 +19,8 @@ public class ShooterIO implements IIO{
     private RelativeEncoder rightWheelEncoder;
 
     private SparkMaxPID leftWheelPidController;
-    private SparkMaxPID rightWheelPidController;
 
-    private SparkMaxConstants leftWheelConstants = Constants.LEFT_WHEEL_CONSTANTS;
-    private SparkMaxConstants rightWheelConstants = Constants.RIGHT_WHEEL_CONSTANTS;
+    private SparkMaxConstants leftWheelConstants = Constants.SHOOTER_WHEEL_CONSTANTS;
 
     private boolean enabled = Constants.SHOOTER_ENABLED;
 
@@ -34,45 +32,49 @@ public class ShooterIO implements IIO{
     }
 
     /**
-     * Initiates the Climber Output 
+     * Initiates the Shooter Output 
      */
     private ShooterIO() {
         if (!enabled) return;
 
-        this.leftWheelMotor = new CANSparkMax(Constants.wheelID, MotorType.kBrushless);
-        this.rightWheelMotor = new CANSparkMax(Constants.turretID, MotorType.kBrushless);
+        // Initiate new arm motor objects
+        this.leftWheelMotor = new CANSparkMax(Constants.leftShooterWheelID, MotorType.kBrushless);
+        this.rightWheelMotor = new CANSparkMax(Constants.rightShooterWheelID, MotorType.kBrushless);
 
+        // Get motor encoder
         this.leftWheelEncoder = leftWheelMotor.getEncoder();
         this.rightWheelEncoder = rightWheelMotor.getEncoder();
 
+        // Restore motor controllers to factory defaults
         this.leftWheelMotor.restoreFactoryDefaults();
         this.rightWheelMotor.restoreFactoryDefaults();
         
+        // Set motor controllers Idle Mode [Brake/Coast]
         this.leftWheelMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.rightWheelMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
+        // Set Wheel PID
         this.leftWheelPidController = new SparkMaxPID(leftWheelMotor);
-        this.rightWheelPidController = new SparkMaxPID(rightWheelMotor);
-        
         this.leftWheelPidController.setConstants(leftWheelConstants);
-        this.rightWheelPidController.setConstants(rightWheelConstants);
 
-        // Before running code on robot, check motor direction
+        // Inversion state of shooter wheels
         this.leftWheelMotor.setInverted(false);
-        this.rightWheelMotor.setInverted(true);
 
+        // right wheel to copy left wheel inversly
+        this.rightWheelMotor.follow(leftWheelMotor, true);
+
+        // Send out settings to 
         this.leftWheelMotor.burnFlash();
         this.rightWheelMotor.burnFlash();
     }
 
     /**
      * Set the speed of the Shooter Wheel Motor
-     * @param speed speed in rpm
+     * @param speed in rpm
      */
     public void setWheelSpeed(double speed) {
         if (!enabled) return;
         this.leftWheelPidController.setVelocity(speed);
-        this.rightWheelPidController.setVelocity(speed);
     }
 
     /**
