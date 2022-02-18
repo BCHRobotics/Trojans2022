@@ -1,38 +1,51 @@
 package frc.util.math;
 
+
 public class Trajectory {
-    //call theoDistance with input distance to return distance w air resistance accounted
-    public static double theoDistance(double distance){
-        double c1 = Math.pow(distance,2)*0.0378;
-        double c2 = 1.15*distance + c1 ;
-        return c2 + 0.0397;
+
+    //call setShootingAngle to calculate for the nessessary shooter angle
+    private static double setShootingAngle(double distance, double height){
+
+        //calculate theoretical distance using given distance
+        double theoDistanceC1 = Math.pow(distance,2)*0.0378;
+        double theoDistanceC2 = 1.15*distance + theoDistanceC1 ;
+        double theoDistance = theoDistanceC2 + 0.0397;
+
+        //calculate S value using theoretical distance
+        double sValue = (0.0679*Math.pow(theoDistance,2))+(2.38*theoDistance)-89.6;
+
+        //calculate Shooting angle in degrees using theoretical Distance, height and Svalue
+        double angleC1 = Math.tan(Math.toRadians(sValue))* theoDistance - (2*height);
+        double angleC2 = angleC1/(-1*theoDistance);
+        double angle = Math.atan((angleC2));
+        return Math.toDegrees(angle);
+
     }
 
-	//call sValue with input distance (theoDist) to output angle of approach value 
-    public static double sValue(double distance) {
+    //call setVelocityShooter to calculate he nessessary ball exit velocity using limelight distance and height
+    private static double setVelocityShooter(double distance, double height){
 
-        return (0.0679*Math.pow(distance,2))+(2.38*distance)-89.6;
+        //calculate for theoretical distance with limelight distance
+        double theoDistanceC1 = Math.pow(distance,2)*0.0378;
+        double theoDistanceC2 = 1.15*distance + theoDistanceC1 ;
+        double theoDistance = theoDistanceC2 + 0.0397;
+
+        //calculate S value using theoretical distance
+        double sValue = (0.0679*Math.pow(theoDistance,2))+(2.38*theoDistance)-89.6;
+
+        //calculate Shooting angle in degrees using theoretical Distance, height and Svalue
+        double angleC1 = Math.tan(Math.toRadians(sValue))* theoDistance - (2*height);
+        double angleC2 = angleC1/(-1*theoDistance);
+        double angle = Math.toDegrees(Math.atan((angleC2)));
+
+        //calculate for exit velocity using theoDistance height and angle
+        double velocityC1 = -9.81*Math.pow(theoDistance,2);
+        double velocityC2 = (Math.pow(Math.tan(Math.toRadians(angle)),2)+ 1) * velocityC1;
+        double velocityC3 = (2*height - 2* theoDistance * Math.tan(Math.toRadians(angle)));
+        double velocity = velocityC2/velocityC3;
+
+        return Math.sqrt(velocity);
+        
     }
-
-	// call angle with input theoDistance, height, and sValue to return the shooting angle
-    public static double angle(double distance, double height, double sValue) {
-
-        double t1 = Math.tan(Math.toRadians(sValue))* distance - (2*height);
-        double t2 = t1/(-1*distance);
-        double t3 = Math.atan((t2));
-        return Math.toDegrees(t3);
-    }  
-
-    // call velocity with input theoDistance, shooting angle, and height to return exit velocity value
-    public static double velocity(double distance, double angle, double height) {
-
-        double t1 = -9.81*Math.pow(distance,2);
-        double t12 = (Math.pow(Math.tan(Math.toRadians(angle)),2)+ 1) * t1;
-        double t2 = (2*height - 2* distance * Math.tan(Math.toRadians(angle)));
-        double t22 = t12/t2;
-        return Math.sqrt(t22);
-    }
-
-    
     
 }
