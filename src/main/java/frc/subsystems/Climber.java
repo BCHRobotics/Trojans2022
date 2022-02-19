@@ -10,7 +10,7 @@ public class Climber extends Subsystem {
     private ArmIO armIO;
 
     private double climberWinchPosition;
-    private double climberArmPosition;
+    private double robotArmPosition;
 
     public static Climber getInstance() {
         if (instance == null) {
@@ -34,7 +34,7 @@ public class Climber extends Subsystem {
     @Override
     public void calculate() {
         this.winchIO.setWinchExtension(climberWinchPosition);
-        this.armIO.setArmPosition(climberArmPosition);
+        this.armIO.setArmPosition(robotArmPosition);
     }
 
     @Override
@@ -48,17 +48,16 @@ public class Climber extends Subsystem {
      * 
      * @param position in motor revolutions
      */
-    public void setShooterWheelSpeed(double position) {
+    public void setClimberWinchPosition(double position) {
         this.climberWinchPosition = position;
     }
 
     /**
-     * Set the position of the climber arms
+     * Set the position of the robot arms
      * 
      * @param position in motor revolutions
      */
-    public void setShooterArmPosition(double position) {
-        this.climberArmPosition = position;
+    public void setRobotArmPosition(double position) {
+        this.robotArmPosition = position;
     }
-    
 }

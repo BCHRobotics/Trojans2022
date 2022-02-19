@@ -1,29 +1,36 @@
 package frc.teleop;
 
+import frc.imaging.Limelight;
+import frc.imaging.Limelight.LimelightTargetType;
 import frc.io.DriverInput;
+import frc.robot.Constants;
 import frc.subsystems.Shooter;
+import frc.subsystems.Climber;
 import frc.subsystems.Drive;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
+import frc.util.math.Trajectory;
 
 public class TeleopOperator extends TeleopComponent {
 
-    
     private static TeleopOperator instance;
 
     private Controller operatorController;
+    private Trajectory trajectoy;
     private DriverInput driverInput;
+    private Limelight limelight;
 
     private enum OperatorMode {
-        DRIVE, SHOOT
+        AUTOMATIC, OVERRIDE
     }
 
-    private OperatorMode operatorMode = OperatorMode.SHOOT;
+    private OperatorMode operatorMode = OperatorMode.OVERRIDE;
 
     private Drive drive;
-
     private Shooter shooter;
+    private Climber climber;
+
     /**
      * Get the instance of the TeleopOperator, if none create a new instance
      * 
@@ -36,90 +43,113 @@ public class TeleopOperator extends TeleopComponent {
         return instance;
     }
 
-
-
     private TeleopOperator() {
-        this.shooter = Shooter.getInstance();
         this.driverInput = DriverInput.getInstance();
 
-
-        this.driverInput = DriverInput.getInstance();
         this.drive = Drive.getInstance();
+        this.shooter = Shooter.getInstance();
+        this.climber = Climber.getInstance();
+
+        this.trajectoy = new Trajectory();
+        this.limelight = Limelight.getInstance();
+
         this.operatorController = driverInput.getDriverController();
-
     }
-
 
     @Override
     public void firstCycle() {
-        this.operatorController = driverInput.getOperatorController();
-        this.shooter.firstCycle();
-
         this.drive.firstCycle();
+        this.shooter.firstCycle();
+        this.climber.firstCycle();
+
+        this.limelight.setLedMode(0);
+        this.limelight.setLimelightState(LimelightTargetType.UPPER_HUB);
     }
 
     @Override
     public void calculate() {
-
-        System.out.println("Teleop Operator Calculate!");
-
         switch (operatorMode) {
-            case SHOOT:
-                shootMode();
+            case AUTOMATIC:
+                auotmaticMode();
                 break;
-            case DRIVE:
+            case OVERRIDE:
+                manualMode();
+                break;
             default:
-                driveMode();
+                auotmaticMode();
                 break;
         }
 
         if (operatorController.getModeSwitchButtonsPressed()) {
-            if (operatorMode == OperatorMode.DRIVE) operatorMode = OperatorMode.SHOOT;
-            if (operatorMode == OperatorMode.SHOOT) operatorMode = OperatorMode.DRIVE;
+            if (operatorMode == OperatorMode.AUTOMATIC)
+                operatorMode = OperatorMode.OVERRIDE;
+            if (operatorMode == OperatorMode.OVERRIDE)
+                operatorMode = OperatorMode.AUTOMATIC;
         }
 
-        double speed = 0.75;
-
-        if (operatorController.getLeftBumper()) speed = 0.5;
-        if (operatorController.getRightBumper()) speed = 1.0;
-
-        drive.setOutput(
-            operatorController.getJoystick(Side.RIGHT, Axis.Y) * speed, 
-            operatorController.getJoystick(Side.RIGHT, Axis.X) * speed
-        );
-
         this.drive.calculate();
+        this.shooter.calculate();
+        this.climber.calculate();
+    }
 
-        shooter.calculate();
+    private void auotmaticMode() {
+        double distance = this.limelight.getTargetDistance();
+        double height = Constants.TARGET_HEIGHT - Constants.SHOOTER_HEIGHT;
+
+        trajectoy.setDistance(distance);
+        trajectoy.setHeight(height);
+
+        double angle = trajectoy.getAngle();
+        double velocity = trajectoy.getVelocity();
+
+        double shooterWheelRPM = (velocity*60)/(Math.PI*0.1016);
+        double climberArmRevolutions = (angle/360) * Constants.liftArmGearReduction;
+
+        if (operatorController.getYButton()) {
+            climber.setRobotArmPosition(climberArmRevolutions);
+            shooter.setShooterWheelSpeed(shooterWheelRPM);
+        } else {
+            climber.setRobotArmPosition(65);
+            shooter.setShooterWheelSpeed(1200);
+        }
+
+        double kP = -0.1;
+        double seekError = limelight.getTargetX() * kP;
+
+        if (operatorController.getAButton()) {
+            drive.setOutput(0, seekError);
+        }
     }
 
     /**
-     * Climb mode for operator controller
+     * Manual override mode for operator controller
      */
-    private void shootMode() {
+    private void manualMode() {
+        // Set shooter wheel speed constant
+        final double shooterWheelSpeed = 6000;
 
-        System.out.println("Shoot Mode!");
-
-        double speed = 6000;
-        double rotations = 60;
+        // Set Lift arm position constant
+        final double liftArmRotations = 65.625;
         
-        shooter.setShooterWheelSpeed(operatorController.getJoystick(Side.LEFT, Axis.Y) * speed);
-        shooter.setShooterArmPosition(operatorController.getJoystick(Side.RIGHT, Axis.Y) * rotations);
+        // Set Climber winch position constant
+        final double climberWinchRotations = 24;
 
-    }
+        // Activate Shooter based on Y button and constants multiplyer
+        if (operatorController.getYButton()) {
+            shooter.setShooterWheelSpeed(shooterWheelSpeed);
+        }
 
-    /**
-     * Drive mode for operator controller
-     */
-    private void driveMode() {
-        System.out.println("Drive Mode!");
+        // Activate Lift based on joystick and constants multiplyer
+        climber.setRobotArmPosition(operatorController.getJoystick(Side.LEFT, Axis.Y) * liftArmRotations);
 
-
+        // Activate Climber based on joystick and constants multiplyer
+        climber.setClimberWinchPosition(operatorController.getJoystick(Side.RIGHT, Axis.Y) * climberWinchRotations);
     }
 
     @Override
-    public void disable(){
+    public void disable() {
         this.drive.disable();
-        shooter.disable();
+        this.shooter.disable();
+        this.climber.disable();
     }
 }

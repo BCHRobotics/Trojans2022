@@ -3,7 +3,6 @@ package frc.robot;
 import frc.util.pid.SparkMaxConstants;
 
 public class Constants {
-    
     public static final boolean USING_DASHBOARD = true;
     public static final double CONTROLLER_DEADZONE = 0.1;
     public static final double WHEEL_DIAMETER = 6;
@@ -64,5 +63,9 @@ public class Constants {
     public static final double LIMELIGHT_HEIGHT = 0.25; // Height in meters
     public static final double LIMELIGHT_ANGLE = 45; // Angle in degrees
     public static final double TARGET_HEIGHT = 2.64; // Height in meters
+    public static final double SHOOTER_HEIGHT = 0.50; // Height in meteres
 
+    // Set shooter wheel speed constant
+    public static final double liftArmGearReduction = 525;
+    public static final double climberWinchRotations = 24;
 }
