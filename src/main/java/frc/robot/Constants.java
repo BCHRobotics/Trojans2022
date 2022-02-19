@@ -58,6 +58,11 @@ public class Constants {
     public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 1000, 0);
     
     //Auto directory
-    public static final String rootDirectory = "csv/";
+    public static final String ROOT_DIRECTORY = "csv/";
+
+    // Limlight constants
+    public static final double LIMELIGHT_HEIGHT = 0.25; // Height in meters
+    public static final double LIMELIGHT_ANGLE = 45; // Angle in degrees
+    public static final double TARGET_HEIGHT = 2.64; // Height in meters
 
 }

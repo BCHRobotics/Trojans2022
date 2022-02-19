@@ -26,7 +26,7 @@ public class AutoBuilder {
     }
 
     private AutoBuilder(){
-       writer = new CSVWriter(Constants.rootDirectory);
+       writer = new CSVWriter(Constants.ROOT_DIRECTORY);
        driveIO = DriveIO.getInstance();
     }
 

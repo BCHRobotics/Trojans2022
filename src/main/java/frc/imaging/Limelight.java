@@ -3,6 +3,7 @@ package frc.imaging;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class Limelight {
     private static Limelight instance;
@@ -18,7 +19,7 @@ public class Limelight {
     }
 
     public enum LimelightTargetType {
-        POWER_PORT, LOADING_BAY
+        UPPER_HUB, LOADING_BAY, POWER_PORT
     }
 
     public Limelight() {
@@ -38,11 +39,11 @@ public class Limelight {
         LimelightTarget desiredTarget = new LimelightTarget(this.currentTarget);
         SmartDashboard.putString("LIMELIGHT_TARGET", this.currentTarget.toString());
 
-        if (currentTarget == LimelightTargetType.POWER_PORT) {
+        if (currentTarget == LimelightTargetType.UPPER_HUB) {
 
-            desiredTarget.setX(getVisionTargetDistance());
+            desiredTarget.setX(getTargetDistance());
 
-            desiredTarget.setY(getVisionTargetDistance());
+            desiredTarget.setY(getTargetDistance());
             
             desiredTarget.setTargetFound(getTargetExists());
 
@@ -78,10 +79,27 @@ public class Limelight {
     }
 
     /**
-     * Get the distance to the target (untested from 1114)
+     * Get the distance to the target by using SOH CAH TOA
      * @return distance to target
      */
-    public double getVisionTargetDistance() { 
+    public double getTargetDistance() { 
+        double a1 = Constants.LIMELIGHT_ANGLE; // Limelight mount angle
+        double a2 = this.getTargetY(); // Limelight measured angle to target
+        double aR = (a1+a2) * (Math.PI/180); // Total anlge in Radians
+        double h1 = Constants.LIMELIGHT_HEIGHT; // Limelight lens Height;
+        double h2 = Constants.TARGET_HEIGHT; // Known Height of Target
+
+        double distance = (h2-h1)/Math.tan(aR);
+        
+        SmartDashboard.putNumber("Distance", distance);
+        return distance;
+    }
+
+    /**
+     * Get the distance to the target (untested from 1114) by using Target Area
+     * @return distance to target
+     */
+    public double getTargetDistanceFromArea() { 
         double x = this.getTargetArea();
         double distance;
         if (x == 0 || x > 12.0) {
