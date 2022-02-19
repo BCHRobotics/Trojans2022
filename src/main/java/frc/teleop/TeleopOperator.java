@@ -100,20 +100,19 @@ public class TeleopOperator extends TeleopComponent {
 
         System.out.println("Shoot Mode!");
 
-
         double speed = 6000;
+        double rotations = 60;
         
         shooter.setShooterWheelSpeed(operatorController.getJoystick(Side.LEFT, Axis.Y) * speed);
-        
+        shooter.setShooterArmPosition(operatorController.getJoystick(Side.RIGHT, Axis.Y) * rotations);
 
-        
     }
 
     /**
      * Drive mode for operator controller
      */
     private void driveMode() {
-        System.out.println("Shoot Mode!");
+        System.out.println("Drive Mode!");
 
 
     }
