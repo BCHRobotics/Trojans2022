@@ -28,16 +28,16 @@ public class TeleopOperator extends TeleopComponent {
     private double velocity;
     private double shooterWheelRPM;
     private double climberArmRevolutions;
-    private double kP = -0.1;
-    private double minOutput = 0.05;
     private double tx;
     private double seekError;
+    private double kP = -0.1;
+    private double minOutput = 0.05;
 
     private enum OperatorMode {
-        AUTOMATIC, OVERRIDE
+        SHOOT, CLIMB
     }
 
-    private OperatorMode operatorMode = OperatorMode.OVERRIDE;
+    private OperatorMode operatorMode = OperatorMode.SHOOT;
 
     private Drive drive;
     private Shooter shooter;
@@ -81,22 +81,22 @@ public class TeleopOperator extends TeleopComponent {
     @Override
     public void calculate() {
         switch (operatorMode) {
-            case AUTOMATIC:
-                auotmaticMode();
+            case SHOOT:
+                shootMode();
                 break;
-            case OVERRIDE:
-                manualMode();
+            case CLIMB:
+                climbMode();
                 break;
             default:
-                auotmaticMode();
+                shootMode();
                 break;
         }
 
         if (operatorController.getModeSwitchButtonsPressed()) {
-            if (operatorMode == OperatorMode.AUTOMATIC)
-                operatorMode = OperatorMode.OVERRIDE;
-            if (operatorMode == OperatorMode.OVERRIDE)
-                operatorMode = OperatorMode.AUTOMATIC;
+            if (operatorMode == OperatorMode.SHOOT)
+                operatorMode = OperatorMode.CLIMB;
+            if (operatorMode == OperatorMode.CLIMB)
+                operatorMode = OperatorMode.SHOOT;
         }
 
         this.drive.calculate();
@@ -104,7 +104,7 @@ public class TeleopOperator extends TeleopComponent {
         this.climber.calculate();
     }
 
-    private void auotmaticMode() {
+    private void shootMode() {
         this.distance = this.limelight.getTargetDistance();
         this.height = Constants.TARGET_HEIGHT - Constants.SHOOTER_HEIGHT;
 
@@ -141,20 +141,12 @@ public class TeleopOperator extends TeleopComponent {
     /**
      * Manual override mode for operator controller
      */
-    private void manualMode() {
-        // Set shooter wheel speed constant
-        final double shooterWheelSpeed = 5500;
-
+    private void climbMode() {
         // Set Lift arm position constant
         final double liftArmRotations = 65.625;
 
         // Set Climber winch position constant
         final double climberWinchRotations = 24;
-
-        // Activate Shooter based on Y button and constants multiplyer
-        if (operatorController.getYButton()) {
-            this.shooter.setShooterWheelSpeed(shooterWheelSpeed);
-        }
 
         // Activate Lift based on joystick and constants multiplyer
         this.climber.setRobotArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y) * liftArmRotations);
