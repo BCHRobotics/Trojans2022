@@ -40,8 +40,8 @@ public class ShooterIO implements IIO {
         if (!enabled) return;
 
         // Initiate new arm motor objects
-        this.leftWheelMotor = new CANSparkMax(Constants.leftShooterWheelID, MotorType.kBrushless);
-        this.rightWheelMotor = new CANSparkMax(Constants.rightShooterWheelID, MotorType.kBrushless);
+        this.leftWheelMotor = new CANSparkMax(Constants.LEFT_SHOOTER_WHEEL_ID, MotorType.kBrushless);
+        this.rightWheelMotor = new CANSparkMax(Constants.RIGHT_SHOOTER_WHEEL_ID, MotorType.kBrushless);
 
         // Get motor encoder
         this.leftWheelEncoder = leftWheelMotor.getEncoder();

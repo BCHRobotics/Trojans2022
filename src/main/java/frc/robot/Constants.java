@@ -10,30 +10,30 @@ public class Constants {
     public static final double PATH_TURN_P = 6;
 
     // CAN ID(s) for Drivetrain
-    public static final int driveL1ID = 10;
-    public static final int driveR1ID = 11;
-    public static final int driveL2ID = 12;
-    public static final int driveR2ID = 13;
+    public static final int DRIVE_LEFT1_ID = 10;
+    public static final int DRIVE_RIGHT1_ID = 11;
+    public static final int DRIVE_LEFT2_ID = 12;
+    public static final int DRIVE_RIGHT2_ID = 13;
 
     // CAN ID(s) for Intake / Stager
-    public static final int intakeRollerID = 20;
-    public static final int stagerRollerID = 21;
-    public static final int feederRollerID = 22;
+    public static final int INTKAE_ROLLER_ID = 20;
+    public static final int STAGER_ROLLER_ID = 21;
+    public static final int FEEDER_ROLLER_ID = 22;
 
     // CAN ID(s) for Shooter
-    public static final int leftShooterWheelID = 30;
-    public static final int rightShooterWheelID = 31;
+    public static final int LEFT_SHOOTER_WHEEL_ID = 30;
+    public static final int RIGHT_SHOOTER_WHEEL_ID = 31;
 
     // CAN ID(s) for Arm
-    public static final int leftArmID = 40;
-    public static final int rightArmID = 41;
+    public static final int LEFT_ARM_ID = 40;
+    public static final int RIGHT_ARM_ID = 41;
 
     // CAN ID(s) for Winch
-    public static final int leftWinchID = 50;
-    public static final int rightWinchID = 51;
+    public static final int LEFT_WINCH_ID = 50;
+    public static final int RIGHT_WINCH_ID = 51;
 
     // CSV Test version
-    public static int version = 2;
+    public static final int VERSION = 2;
 
     // Subsytems toggle logic
     public static final boolean SHOOTER_ENABLED = true;
@@ -66,6 +66,6 @@ public class Constants {
     public static final double SHOOTER_HEIGHT = 0.50; // Height in meteres
 
     // Set shooter wheel speed constant
-    public static final double liftArmGearReduction = 525;
-    public static final double climberWinchRotations = 24;
+    public static final double LIFT_ARM_GEAR_REDUCTION = 525;
+    public static final double CLIMBER_WINCH_ROTATIONS = 24;
 }

@@ -1,12 +1,12 @@
 package frc.subsystems;
 
-import frc.io.subsystems.WinchIO;
+import frc.io.subsystems.ClimberIO;
 import frc.io.subsystems.ArmIO;
 
 public class Climber extends Subsystem {
     private static Climber instance;
 
-    private WinchIO winchIO;
+    private ClimberIO winchIO;
     private ArmIO armIO;
 
     private double climberWinchPosition;
@@ -20,7 +20,7 @@ public class Climber extends Subsystem {
     }
 
     private Climber() {
-        this.winchIO = WinchIO.getInstance();
+        this.winchIO = ClimberIO.getInstance();
         this.armIO = ArmIO.getInstance();
 
         firstCycle();

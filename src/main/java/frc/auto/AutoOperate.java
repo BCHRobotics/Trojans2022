@@ -68,7 +68,8 @@ public class AutoOperate extends AutoComponent {
                 return;
             }
         } catch (Exception e) {
-            this.disable();
+            System.err.println("Autonomous Drive Mode Failed!");
+            e.printStackTrace();
             return;
         }
     }

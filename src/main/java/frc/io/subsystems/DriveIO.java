@@ -52,8 +52,8 @@ public class DriveIO implements IIO {
     }
 
     private void initMainMotors() {
-        this.driveL1 = new CANSparkMax(Constants.driveL1ID, MotorType.kBrushless); 
-        this.driveR1 = new CANSparkMax(Constants.driveR1ID, MotorType.kBrushless);
+        this.driveL1 = new CANSparkMax(Constants.DRIVE_LEFT1_ID, MotorType.kBrushless); 
+        this.driveR1 = new CANSparkMax(Constants.DRIVE_RIGHT1_ID, MotorType.kBrushless);
 
         this.driveL1Encoder = driveL1.getEncoder();
         this.driveR1Encoder = driveR1.getEncoder();
@@ -78,8 +78,8 @@ public class DriveIO implements IIO {
     }
 
     private void initFollowMotors() {
-        this.driveL2 = new CANSparkMax(Constants.driveL2ID, MotorType.kBrushless);  
-        this.driveR2 = new CANSparkMax(Constants.driveR2ID, MotorType.kBrushless);
+        this.driveL2 = new CANSparkMax(Constants.DRIVE_LEFT2_ID, MotorType.kBrushless);  
+        this.driveR2 = new CANSparkMax(Constants.DRIVE_RIGHT2_ID, MotorType.kBrushless);
         
         this.driveL2Encoder = driveL2.getEncoder();
         this.driveR2Encoder = driveR2.getEncoder();

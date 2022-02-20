@@ -10,9 +10,9 @@ import frc.robot.Constants;
 import frc.util.pid.SparkMaxConstants;
 import frc.util.pid.SparkMaxPID;
 
-public class WinchIO implements IIO{
+public class ClimberIO implements IIO{
 
-    private static WinchIO instance;
+    private static ClimberIO instance;
 
     private CANSparkMax leftWinchMotor;
     private CANSparkMax rightWinchMotor;
@@ -26,9 +26,9 @@ public class WinchIO implements IIO{
 
     private boolean enabled = Constants.WINCH_ENABLED;
 
-    public static WinchIO getInstance() {
+    public static ClimberIO getInstance() {
         if (instance == null) {
-            instance = new WinchIO();
+            instance = new ClimberIO();
         }
         return instance;
     }
@@ -36,12 +36,12 @@ public class WinchIO implements IIO{
     /**
      * Initiates the Winch Output 
      */
-    private WinchIO() {
+    private ClimberIO() {
         if (!enabled) return;
 
         // Initiate new Winch motor objects
-        this.leftWinchMotor = new CANSparkMax(Constants.leftWinchID, MotorType.kBrushless);
-        this.rightWinchMotor = new CANSparkMax(Constants.rightWinchID, MotorType.kBrushless);
+        this.leftWinchMotor = new CANSparkMax(Constants.LEFT_WINCH_ID, MotorType.kBrushless);
+        this.rightWinchMotor = new CANSparkMax(Constants.RIGHT_WINCH_ID, MotorType.kBrushless);
 
         // Get motor encoder
         this.leftWinchEncoder = leftWinchMotor.getEncoder();

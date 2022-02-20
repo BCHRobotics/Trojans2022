@@ -35,9 +35,9 @@ public class IntakeIO implements IIO{
         if (!enabled) return;
 
         // Initiate new motor objects
-        this.intakeMotor = new CANSparkMax(Constants.leftWinchID, MotorType.kBrushless);
-        this.stagerMotor = new CANSparkMax(Constants.rightWinchID, MotorType.kBrushless);
-        this.feederMotor = new CANSparkMax(Constants.rightWinchID, MotorType.kBrushed);
+        this.intakeMotor = new CANSparkMax(Constants.INTKAE_ROLLER_ID, MotorType.kBrushless);
+        this.stagerMotor = new CANSparkMax(Constants.STAGER_ROLLER_ID, MotorType.kBrushless);
+        this.feederMotor = new CANSparkMax(Constants.FEEDER_ROLLER_ID, MotorType.kBrushed);
 
         // Get motor encoder
         this.intakeEncoder = intakeMotor.getEncoder();

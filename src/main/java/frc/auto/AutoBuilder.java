@@ -35,7 +35,6 @@ public class AutoBuilder {
     }
     
     public void recordData() {
-        System.out.println("Made it to recordData()!");
         try {
             currentTime = System.currentTimeMillis();
             timer = currentTime - startTime;

@@ -115,7 +115,7 @@ public class TeleopOperator extends TeleopComponent {
         this.velocity = trajectoy.getVelocity();
 
         this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.1016);
-        this.climberArmRevolutions = (this.angle / 360) * Constants.liftArmGearReduction;
+        this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
 
         if (this.operatorController.getYButton()) {
             this.climber.setRobotArmPosition(this.climberArmRevolutions);

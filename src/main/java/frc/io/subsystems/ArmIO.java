@@ -40,8 +40,8 @@ public class ArmIO implements IIO{
         if (!enabled) return;
 
         // Initiate new arm motor objects
-        this.leftArmMotor = new CANSparkMax(Constants.leftArmID, MotorType.kBrushless);
-        this.rightArmMotor = new CANSparkMax(Constants.rightArmID, MotorType.kBrushless);
+        this.leftArmMotor = new CANSparkMax(Constants.LEFT_ARM_ID, MotorType.kBrushless);
+        this.rightArmMotor = new CANSparkMax(Constants.RIGHT_ARM_ID, MotorType.kBrushless);
 
         // Get motor encoder
         this.leftArmEncoder = leftArmMotor.getEncoder();

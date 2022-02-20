@@ -1,14 +1,11 @@
 package frc.io.subsystems;
 
-public class IO implements IIO{
+import java.util.ArrayList;
 
+public class IO {
+
+    public ArrayList<IIO> subsystems;
     private static IO instance;
-
-    private DriveIO driveIO;
-    private IntakeIO intakeIO;
-    private ShooterIO shooterIO;
-    private ArmIO armIO;
-    private WinchIO winchIO;
 
     public static IO getInstance() {
         if(instance == null) instance = new IO();
@@ -16,38 +13,31 @@ public class IO implements IIO{
     }
 
     private IO() {
-        this.driveIO = DriveIO.getInstance();
-        this.intakeIO = IntakeIO.getInstance();
-        this.shooterIO = ShooterIO.getInstance();
-        this.armIO = ArmIO.getInstance();
-        this.winchIO = WinchIO.getInstance();
+        this.subsystems = new ArrayList<>();
+
+        this.subsystems.add(DriveIO.getInstance());
+        this.subsystems.add(IntakeIO.getInstance());
+        this.subsystems.add(ShooterIO.getInstance());
+        this.subsystems.add(ArmIO.getInstance());
+        this.subsystems.add(ClimberIO.getInstance());
     }
 
-    @Override
     public void updateInputs() {
-        this.driveIO.updateInputs();
-        this.intakeIO.updateInputs();
-        this.shooterIO.updateInputs();
-        this.armIO.updateInputs();
-        this.winchIO.updateInputs();
+        for (IIO io : this.subsystems) {
+            io.updateInputs();
+        }
     }
 
-    @Override
     public void resetInputs() {
-        this.driveIO.resetInputs();
-        this.intakeIO.resetInputs();
-        this.shooterIO.resetInputs();
-        this.armIO.resetInputs();
-        this.winchIO.resetInputs();
+        for (IIO io : subsystems) {
+            io.resetInputs();
+        }
     }
 
-    @Override
     public void stopAllOutputs() {
-        this.driveIO.stopAllOutputs();
-        this.intakeIO.stopAllOutputs();
-        this.shooterIO.stopAllOutputs();
-        this.armIO.stopAllOutputs();
-        this.winchIO.stopAllOutputs();
+        for (IIO io : subsystems) {
+            io.stopAllOutputs();
+        }
     }
 
 }
