@@ -1,7 +1,5 @@
 package frc.teleop;
 
-import frc.imaging.Limelight;
-import frc.imaging.Limelight.LimelightTargetType;
 import frc.io.DriverInput;
 import frc.robot.Constants;
 import frc.subsystems.Shooter;
@@ -10,6 +8,8 @@ import frc.subsystems.Drive;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
+import frc.util.imaging.Limelight;
+import frc.util.imaging.Limelight.LimelightTargetType;
 import frc.util.math.Trajectory;
 
 public class TeleopOperator extends TeleopComponent {
@@ -114,6 +114,7 @@ public class TeleopOperator extends TeleopComponent {
         this.angle = trajectoy.getAngle();
         this.velocity = trajectoy.getVelocity();
 
+        // Converts velocity into RPM: [(Velocity x 60<seconds>) / (PI * Diameter<meters>)]
         this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.1016);
         this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
 

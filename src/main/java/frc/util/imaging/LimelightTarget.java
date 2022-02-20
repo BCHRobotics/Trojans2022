@@ -1,6 +1,6 @@
-package frc.imaging;
+package frc.util.imaging;
 
-import frc.imaging.Limelight.LimelightTargetType;
+import frc.util.imaging.Limelight.LimelightTargetType;
 
 public class LimelightTarget {
     
