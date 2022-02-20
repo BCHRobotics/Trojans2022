@@ -55,7 +55,7 @@ public class AutoBuilder {
     public void convertData() {
         try {
             System.out.println("Made it to convertData()!");
-            writer.setFileName("test" + Constants.version);
+            writer.setFileName("test" + Constants.VERSION);
             writer.setHeader("time,leftMotor,rightMotor");
             writer.importData(data);
             writer.output();
