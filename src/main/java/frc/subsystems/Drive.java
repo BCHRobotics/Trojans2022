@@ -17,6 +17,7 @@ public class Drive extends Subsystem {
 
     // states
     private DriveState currentState = DriveState.POSITION;
+
     private double leftOut;
     private double rightOut;
 
@@ -36,32 +37,34 @@ public class Drive extends Subsystem {
     }
 
     private Drive() {
-        this.driveIO = DriveIO.getInstance();
-
         this.firstCycle();
     }
 
     @Override
     public void firstCycle() {
-
+        
     }
 
     @Override
     public void calculate() {
         SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
+        this.driveIO = DriveIO.getInstance();
 
         switch (currentState) {
             case OUTPUT:
-            case VELOCITY:
                 this.driveIO.setDriveLeft(this.leftOut);
                 this.driveIO.setDriveRight(this.rightOut);
                 break;
+            case VELOCITY:
+                disable();
+                break;
             case POSITION:
-            System.out.println("Made it to Drive.java");
-                System.out.println(posLeft);
+                System.out.println("Made it to Drive.java");
+                System.out.println(this.posLeft);
                 this.driveIO.setDriveLeftPos(this.posLeft);
-                System.out.println(posRight);
+                System.out.println(this.posRight);
                 this.driveIO.setDriveRightPos(this.posRight);
+                break;
             default:
                 disable();
                 break;
@@ -73,6 +76,10 @@ public class Drive extends Subsystem {
         this.driveIO.stopAllOutputs();
     }
 
+    public void resetPosition() {
+        this.driveIO.resetInputs();
+    }
+
     /**
      * Sets output to drive
      * @param y percent output [-1 to 1] for forward movement
@@ -80,6 +87,8 @@ public class Drive extends Subsystem {
      */
     public void setOutput(double y, double turn) {
         this.currentState = DriveState.OUTPUT;
+        System.out.println(y);
+        System.out.println(turn);
 
         this.leftOut = (y + turn) * Constants.MAX_OUTPUT;
         this.rightOut =  (y - turn) * Constants.MAX_OUTPUT;
@@ -87,11 +96,11 @@ public class Drive extends Subsystem {
 
     public void setDriveLeft(double position) {
         this.currentState = DriveState.POSITION;
-        this.posLeft = 30;
+        this.posLeft = position;
     }
 
     public void setDriveRight(double position) {
         this.currentState = DriveState.POSITION;
-        this.posRight = 30;
+        this.posRight = position;
     }
 }

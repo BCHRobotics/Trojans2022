@@ -1,11 +1,11 @@
 package frc.io.subsystems;
 
-public class IO implements IIO{
+import java.util.ArrayList;
 
+public class IO {
+
+    public ArrayList<IIO> subsystems;
     private static IO instance;
-
-    private DriveIO driveIO;
-    private ShooterIO shooterIO;
 
     public static IO getInstance() {
         if(instance == null) instance = new IO();
@@ -13,26 +13,31 @@ public class IO implements IIO{
     }
 
     private IO() {
-        this.driveIO = DriveIO.getInstance();
-        this.shooterIO = ShooterIO.getInstance();
+        this.subsystems = new ArrayList<>();
+
+        this.subsystems.add(DriveIO.getInstance());
+        this.subsystems.add(IntakeIO.getInstance());
+        this.subsystems.add(ShooterIO.getInstance());
+        this.subsystems.add(ArmIO.getInstance());
+        this.subsystems.add(ClimberIO.getInstance());
     }
 
-    @Override
     public void updateInputs() {
-        this.driveIO.updateInputs();
-        this.shooterIO.updateInputs();
+        for (IIO io : this.subsystems) {
+            io.updateInputs();
+        }
     }
 
-    @Override
     public void resetInputs() {
-        this.driveIO.resetInputs();
-        this.shooterIO.resetInputs();
+        for (IIO io : subsystems) {
+            io.resetInputs();
+        }
     }
 
-    @Override
     public void stopAllOutputs() {
-        this.driveIO.stopAllOutputs();
-        this.shooterIO.stopAllOutputs();
+        for (IIO io : subsystems) {
+            io.stopAllOutputs();
+        }
     }
 
 }

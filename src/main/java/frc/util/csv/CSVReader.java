@@ -16,7 +16,7 @@ public class CSVReader {
     private static List<List<Double>> records = new ArrayList<>();
 
     public static List<List<Double>> convertToArrayList(String fileName) throws FileNotFoundException {
-        path = new String(path = Constants.rootDirectory + fileName + fileType);
+        path = new String(path = Constants.ROOT_DIRECTORY + fileName + fileType);
         System.out.println(path);
         try (Scanner scanner = new Scanner(new File(path));) {
             scanner.nextLine();

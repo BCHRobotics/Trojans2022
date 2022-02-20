@@ -8,7 +8,6 @@ public class Shooter extends Subsystem {
     private ShooterIO shooterIO;
 
     private double shooterWheelSpeed;
-    private double shooterTurretPosition;
 
     public static Shooter getInstance() {
         if (instance == null) {
@@ -31,7 +30,6 @@ public class Shooter extends Subsystem {
     @Override
     public void calculate() {
         this.shooterIO.setWheelSpeed(shooterWheelSpeed);
-        this.shooterIO.setTurretPosition(shooterTurretPosition);
     }
 
     @Override
@@ -39,12 +37,12 @@ public class Shooter extends Subsystem {
         this.shooterIO.stopAllOutputs();
     }
 
+    /**
+     * Set the speed of the shooter wheels
+     * 
+     * @param speed in rpm
+     */
     public void setShooterWheelSpeed(double speed) {
         this.shooterWheelSpeed = speed;
     }
-
-    public void setShooterTurretPosition(double position) {
-        this.shooterTurretPosition = position;
-    }
-    
 }

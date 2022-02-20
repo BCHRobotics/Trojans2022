@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
 import frc.imaging.Limelight;
-import frc.io.Dashboard;
 import frc.io.subsystems.DriveIO;
 import frc.io.subsystems.IO;
 import frc.io.subsystems.ShooterIO;
@@ -31,14 +30,15 @@ public class Robot extends TimedRobot {
     private IO robotIO;
     private TeleopControl teleopControl;
     private AutoControl autoControl;
-    private Dashboard dashboard;
 
     private Drive drive;
     private Shooter shooter;
 
-    private boolean pushToDashboard = true;
     public static boolean teleopInitialized = false;
+
     private static boolean isRecording = false;
+    private static boolean stopedRecording = false;
+    private static boolean vectorButton = false;
 
     
     private AutoBuilder autoBuilder;
@@ -51,13 +51,10 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
 
-        if (this.pushToDashboard) Constants.pushValues();
-
         this.robotIO = IO.getInstance();
         ShooterIO.getInstance();
         this.teleopControl = TeleopControl.getInstance();
         this.autoControl = AutoControl.getInstance();
-        this.dashboard = Dashboard.getInstance();
         this.autoBuilder = AutoBuilder.getInstance();
 
         this.drive = Drive.getInstance();
@@ -113,7 +110,7 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {
         this.autoControl.runCycle();
         this.robotIO.updateInputs();
-        this.dashboard.updateAll();
+        SmartDashboard.updateValues();
     }
 
     /** This function is called once when teleop is enabled. */
@@ -132,7 +129,7 @@ public class Robot extends TimedRobot {
         }
         this.robotIO.updateInputs();
         this.teleopControl.runCycle();
-        this.dashboard.updateAll();
+        SmartDashboard.updateValues();
     }
 
     /** This function is called once when the robot is disabled. */
@@ -147,7 +144,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         this.robotIO.updateInputs();
-        this.dashboard.updateAll();
+        SmartDashboard.updateValues();
     }
 
     /** This function is called once when test mode is enabled. */
@@ -156,45 +153,44 @@ public class Robot extends TimedRobot {
         this.robotIO.resetInputs();
         this.drive.firstCycle();
         this.shooter.firstCycle();
-
-        if (this.pushToDashboard) Constants.pushValues();
+        this.teleopControl.initialize();
         
         SmartDashboard.putBoolean("Recording", false);
+        SmartDashboard.putBoolean("Record Vector", false);
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        this.dashboard.updateAll();
+        SmartDashboard.updateValues();
+        this.robotIO.updateInputs();
 
-        // try {
-        //     if(SmartDashboard.getBoolean("Recording", true)){
-        //         if (isRecording == false) {
-        //             this.autoBuilder.setStartRecording();
-        //             isRecording = true;
-        //         } 
-        //         this.autoBuilder.recordData();
-        //     } else {
-        //         this.autoBuilder.convertData();
-        //         isRecording = false;
-        //     }
-        // } catch (Exception e) {
-        //     return;
-        // }
-
-        /*
-        shooter.firstCycle();
-        shooter.setShooterTurretPosition(30);
-        shooter.calculate();
-        */
-
-        /*
-        drive.setDriveLeft(30);
-        drive.setDriveRight(30);
-        drive.calculate();
-        */
-        DriveIO driveIO = DriveIO.getInstance();
-        driveIO.setDriveLeftPos(30);
-        driveIO.setDriveRightPos(30);
+        try {
+            if(SmartDashboard.getBoolean("Recording", false) == true){
+                this.teleopControl.runCycle();
+                if (isRecording == false) {
+                    this.autoBuilder.setStartRecording();
+                    this.autoBuilder.recordData();
+                    isRecording = true;
+                    stopedRecording = false;
+                }
+                vectorButton = SmartDashboard.getBoolean("Record Vector", false);
+                if (vectorButton == true){
+                    this.autoBuilder.recordData();
+                    vectorButton = false;
+                    SmartDashboard.putBoolean("Record Vector", false);
+                }
+                
+            } else {
+                this.autoBuilder.convertData();
+                isRecording = false;
+                if (stopedRecording == false) {
+                    this.robotIO.resetInputs();
+                    stopedRecording = true;
+                }
+            }
+        } catch (Exception e) {
+            return;
+        }
     }
 }

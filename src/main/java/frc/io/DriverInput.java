@@ -65,9 +65,7 @@ public class DriverInput {
         return this.driver.getYButton() || this.operator.getYButton();
     }
 
-        // ********************************
 	// AUTO SELECTION CONTROLS
-	// ********************************
 
 	public boolean getResumeAutoButton() {
 		return driver.getYButton();
