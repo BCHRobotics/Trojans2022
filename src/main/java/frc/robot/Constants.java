@@ -10,19 +10,19 @@ public class Constants {
     public static final double PATH_TURN_P = 6;
 
     // CAN ID(s) for Drivetrain
-    public static final int DRIVE_LEFT1_ID = 10;
-    public static final int DRIVE_RIGHT1_ID = 11;
-    public static final int DRIVE_LEFT2_ID = 12;
-    public static final int DRIVE_RIGHT2_ID = 13;
+    public static final int DRIVE_LEFT1_ID = 11;//10
+    public static final int DRIVE_RIGHT1_ID = 15;//11
+    public static final int DRIVE_LEFT2_ID = 12;//12
+    public static final int DRIVE_RIGHT2_ID = 16;//13
 
     // CAN ID(s) for Intake / Stager
-    public static final int INTKAE_ROLLER_ID = 20;
-    public static final int STAGER_ROLLER_ID = 21;
-    public static final int FEEDER_ROLLER_ID = 22;
+    public static final int INTKAE_ROLLER_ID = 20; //20
+    public static final int STAGER_ROLLER_ID = 21; //21
+    public static final int FEEDER_ROLLER_ID = 30; //22
 
     // CAN ID(s) for Shooter
-    public static final int LEFT_SHOOTER_WHEEL_ID = 30;
-    public static final int RIGHT_SHOOTER_WHEEL_ID = 31;
+    public static final int LEFT_SHOOTER_WHEEL_ID = 22;//30
+    public static final int RIGHT_SHOOTER_WHEEL_ID = 57;//31
 
     // CAN ID(s) for Arm
     public static final int LEFT_ARM_ID = 40;

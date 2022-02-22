@@ -30,7 +30,7 @@ public class TeleopOperator extends TeleopComponent {
     private double climberArmRevolutions;
     private double tx;
     private double seekError;
-    private double kP = -0.1;
+    private double kP = 0.085;
     private double minOutput = 0.05;
 
     private enum OperatorMode {
@@ -65,7 +65,7 @@ public class TeleopOperator extends TeleopComponent {
         this.trajectoy = new Trajectory();
         this.limelight = Limelight.getInstance();
 
-        this.operatorController = driverInput.getDriverController();
+        this.operatorController = driverInput.getOperatorController();
     }
 
     @Override
@@ -120,7 +120,9 @@ public class TeleopOperator extends TeleopComponent {
 
         if (this.operatorController.getYButton()) {
             this.climber.setRobotArmPosition(this.climberArmRevolutions);
+            System.out.println(this.climberArmRevolutions);
             this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
+            System.out.println(this.shooterWheelRPM);
         } else {
             this.climber.setRobotArmPosition(65.625);
             this.shooter.setShooterWheelSpeed(1200);
@@ -130,7 +132,7 @@ public class TeleopOperator extends TeleopComponent {
         this.tx = this.limelight.getTargetX();
 
         if (this.tx > 1.0)
-            this.seekError = (tx * this.kP) - this.minOutput;
+            this.seekError = (tx * this.kP);
         else if (this.tx < 1.0)
             this.seekError = (tx * this.kP) + this.minOutput;
 
