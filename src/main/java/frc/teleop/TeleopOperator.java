@@ -11,6 +11,7 @@ import frc.util.devices.Controller.Side;
 import frc.util.imaging.Limelight;
 import frc.util.imaging.Limelight.LimelightTargetType;
 import frc.util.math.Trajectory;
+import frc.util.pid.PIDF;
 
 public class TeleopOperator extends TeleopComponent {
 
@@ -32,6 +33,8 @@ public class TeleopOperator extends TeleopComponent {
     private double seekError;
     private double kP = 0.085;
     private double minOutput = 0.05;
+
+    private PIDF limelightPID;
 
     private enum OperatorMode {
         SHOOT, CLIMB
@@ -65,7 +68,7 @@ public class TeleopOperator extends TeleopComponent {
         this.trajectoy = new Trajectory();
         this.limelight = Limelight.getInstance();
 
-        this.operatorController = driverInput.getOperatorController();
+        this.operatorController = driverInput.getDriverController();
     }
 
     @Override
@@ -76,6 +79,11 @@ public class TeleopOperator extends TeleopComponent {
 
         this.limelight.setLedMode(0);
         this.limelight.setLimelightState(LimelightTargetType.UPPER_HUB);
+
+        this.limelightPID = new PIDF(Constants.LIMELIGHT_ROTATE);
+        this.limelightPID.setMinDoneCycles(10);
+        this.limelightPID.setMaxOutput(0.2);
+        this.limelightPID.setIRange(10);
     }
 
     @Override
@@ -129,6 +137,25 @@ public class TeleopOperator extends TeleopComponent {
         }
 
         // Algorithim to hunt for target and latch on to it
+        if (this.operatorController.getAButton()) {
+            this.limelightSeek();
+        }
+
+    }
+
+    public void limelightSeek() {
+        this.tx = this.limelight.getTargetX();
+
+        if (this.tx < 2 && this.tx > -2) return;
+
+        this.limelightPID.setMinMaxOutput(-0.4, 0.4);
+        this.limelightPID.setDesiredValue(0);
+        
+        double output = this.limelightPID.calcPID(this.tx);
+        this.drive.setOutput(0, -output);
+    }
+
+    public void oldLimelightSeek() {
         this.tx = this.limelight.getTargetX();
 
         if (this.tx > 1.0)

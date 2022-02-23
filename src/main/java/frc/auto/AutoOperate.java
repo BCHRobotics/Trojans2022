@@ -63,6 +63,7 @@ public class AutoOperate extends AutoComponent {
                 data.remove(0);
             }
             if(data.size() <= 0) {
+                data.clear();
                 this.drive.resetPosition();
                 this.disable();
                 return;

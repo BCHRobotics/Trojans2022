@@ -101,15 +101,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        this.autoControl.initialize();
         this.robotIO.resetInputs();
+        this.autoControl.initialize();
     }
 
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
-        this.autoControl.runCycle();
         this.robotIO.updateInputs();
+        this.autoControl.runCycle();
         SmartDashboard.updateValues();
     }
 
@@ -135,6 +135,7 @@ public class Robot extends TimedRobot {
     /** This function is called once when the robot is disabled. */
     @Override
     public void disabledInit() {
+        this.robotIO.resetInputs();
         //this.robotIO.stopAllOutputs();
         this.autoControl.disable();
         this.teleopControl.disable();

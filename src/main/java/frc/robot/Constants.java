@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.util.pid.PIDConstants;
 import frc.util.pid.SparkMaxConstants;
 
 public class Constants {
@@ -33,7 +34,7 @@ public class Constants {
     public static final int RIGHT_WINCH_ID = 51;
 
     // CSV Test version
-    public static final int VERSION = 2;
+    public static final int VERSION = 1;
 
     // Subsytems toggle logic
     public static final boolean SHOOTER_ENABLED = true;
@@ -53,8 +54,8 @@ public class Constants {
     public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
 
     // Drive PID Constants
-    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 1000, 0);
-    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 1000, 0);
+    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 5000, 1000, 0);
+    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 5000, 1000, 0);
     
     //Auto directory
     public static final String ROOT_DIRECTORY = "csv/";
@@ -68,4 +69,7 @@ public class Constants {
     // Set shooter wheel speed constant
     public static final double LIFT_ARM_GEAR_REDUCTION = 525;
     public static final double CLIMBER_WINCH_ROTATIONS = 24;
+
+    // EXPERIMENTAL PID TUNING
+    public static final PIDConstants LIMELIGHT_ROTATE = new PIDConstants(0.125, 0.001, 1, 4);
 }
