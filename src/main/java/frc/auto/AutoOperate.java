@@ -33,9 +33,11 @@ public class AutoOperate extends AutoComponent {
 
     @Override
     public void firstCycle(){
+        data.clear();
         this.drive.firstCycle();
         startTime = System.currentTimeMillis();
         try {
+            System.out.println("Made it to firstCycle");
             data = CSVReader.convertToArrayList("test" + Constants.VERSION);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -56,28 +58,27 @@ public class AutoOperate extends AutoComponent {
         currentTime = System.currentTimeMillis() - startTime;
 
         try {
-            if(currentTime < data.get(0).get(0).longValue()) {
+            if(data.size() <= 0) {
+                this.drive.resetPosition();
+                this.disable();
+                data.clear();
+                return;
+            }
+            if(currentTime < data.get(0).get(0).longValue() * 0.25) {
                 this.drive.setDriveLeft(data.get(0).get(1));
                 this.drive.setDriveRight(data.get(0).get(2));
             } else {
                 data.remove(0);
             }
-            if(data.size() <= 0) {
-                data.clear();
-                this.drive.resetPosition();
-                this.disable();
-                return;
-            }
         } catch (Exception e) {
             System.err.println("Autonomous Drive Mode Failed!");
-            e.printStackTrace();
+            //e.printStackTrace();
             return;
         }
     }
 
     @Override
     public void disable() {
-        this.drive.calculate();
         this.drive.disable();
     }
     

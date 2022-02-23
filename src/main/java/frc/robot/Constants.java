@@ -34,7 +34,7 @@ public class Constants {
     public static final int RIGHT_WINCH_ID = 51;
 
     // CSV Test version
-    public static final int VERSION = 1;
+    public static final int VERSION = 11;
 
     // Subsytems toggle logic
     public static final boolean SHOOTER_ENABLED = true;
@@ -54,8 +54,8 @@ public class Constants {
     public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
 
     // Drive PID Constants
-    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 5000, 1000, 0);
-    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 5000, 1000, 0);
+    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
+    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
     
     //Auto directory
     public static final String ROOT_DIRECTORY = "csv/";

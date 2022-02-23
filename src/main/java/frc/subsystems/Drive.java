@@ -42,13 +42,12 @@ public class Drive extends Subsystem {
 
     @Override
     public void firstCycle() {
-        
+        this.driveIO = DriveIO.getInstance();
     }
 
     @Override
     public void calculate() {
         SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
-        this.driveIO = DriveIO.getInstance();
 
         switch (currentState) {
             case OUTPUT:
