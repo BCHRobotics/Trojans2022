@@ -13,6 +13,7 @@ public class AutoOperate extends AutoComponent {
     private static List<List<Double>> data = new ArrayList<>();
     private static long startTime;
     private static long currentTime;
+    private AutoSelecter selecter;
     private Drive drive;
 
     /**
@@ -29,6 +30,7 @@ public class AutoOperate extends AutoComponent {
 
     private AutoOperate() {
         this.drive = Drive.getInstance();
+        this.selecter = AutoSelecter.getInstance();
     }
 
     @Override
@@ -38,7 +40,7 @@ public class AutoOperate extends AutoComponent {
         startTime = System.currentTimeMillis();
         try {
             System.out.println("Made it to firstCycle");
-            data = CSVReader.convertToArrayList("test" + Constants.VERSION);
+            data = CSVReader.convertToArrayList(selecter.getFileName());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;

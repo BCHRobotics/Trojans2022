@@ -22,6 +22,15 @@ public class CSVWriter {
         this.filePath = directory + fileName + ".csv";
     }
 
+    public void deleteCopy() {
+        File duplicate = new File(this.filePath);
+        try {
+            duplicate.delete();
+        } catch (Exception e) {
+            return;
+        }
+    }
+
     public void setHeader(String inputHeaders){
         headers = inputHeaders;
     }

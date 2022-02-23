@@ -35,6 +35,7 @@ public class Constants {
 
     // CSV Test version
     public static final int VERSION = 11;
+    public static final String TEACH_MODE_FILE_NAME = "record";
 
     // Subsytems toggle logic
     public static final boolean SHOOTER_ENABLED = true;
