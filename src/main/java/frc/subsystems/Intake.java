@@ -10,6 +10,7 @@ public class Intake extends Subsystem {
     private double intakeSpeed;
     private double stagerSpeed;
     private double feederSpeed;
+    private boolean intakeState;
 
     public static Intake getInstance() {
         if (instance == null) {
@@ -34,6 +35,7 @@ public class Intake extends Subsystem {
         this.intakeIO.setIntakeSpeed(intakeSpeed);
         this.intakeIO.setStagerSpeed(stagerSpeed);
         this.intakeIO.setFeederSpeed(feederSpeed);
+        this.intakeIO.setIntakeState(intakeState);
     }
 
     @Override
@@ -66,5 +68,15 @@ public class Intake extends Subsystem {
      */
     public void setFeederSpeed(double speed) {
         this.feederSpeed = speed;
+    }
+
+    /**
+     * Set the position of the intake
+     * 
+     * @param state as a boolean value
+     * { FALSE: Raised | TRUE: Lowered }
+     */
+    public void setIntakeState(boolean state) {
+        this.intakeState = state;
     }
 }

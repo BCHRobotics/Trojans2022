@@ -35,12 +35,13 @@ public class TeleopOperator extends TeleopComponent {
     private double minOutput = 0.05;
 
     private PIDF limelightPID;
+    private boolean shooterToggle;
 
     private enum OperatorMode {
         SHOOT, CLIMB
     }
 
-    private OperatorMode operatorMode = OperatorMode.SHOOT;
+    private OperatorMode operatorMode = OperatorMode.CLIMB;
 
     private Drive drive;
     private Shooter shooter;
@@ -68,7 +69,7 @@ public class TeleopOperator extends TeleopComponent {
         this.trajectoy = new Trajectory();
         this.limelight = Limelight.getInstance();
 
-        this.operatorController = driverInput.getDriverController();
+        this.operatorController = driverInput.getOperatorController();
     }
 
     @Override
@@ -101,10 +102,13 @@ public class TeleopOperator extends TeleopComponent {
         }
 
         if (operatorController.getModeSwitchButtonsPressed()) {
-            if (operatorMode == OperatorMode.SHOOT)
+            if (operatorMode == OperatorMode.SHOOT) {
                 operatorMode = OperatorMode.CLIMB;
-            if (operatorMode == OperatorMode.CLIMB)
+                this.firstCycle();
+            } else if (operatorMode == OperatorMode.CLIMB) {
                 operatorMode = OperatorMode.SHOOT;
+                this.firstCycle();
+            }
         }
 
         this.drive.calculate();
@@ -126,21 +130,25 @@ public class TeleopOperator extends TeleopComponent {
         this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.1016);
         this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
 
-        if (this.operatorController.getYButton()) {
-            this.climber.setRobotArmPosition(this.climberArmRevolutions);
-            System.out.println(this.climberArmRevolutions);
-            this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
-            System.out.println(this.shooterWheelRPM);
-        } else {
-            this.climber.setRobotArmPosition(65.625);
-            this.shooter.setShooterWheelSpeed(1200);
-        }
-
         // Algorithim to hunt for target and latch on to it
         if (this.operatorController.getAButton()) {
             this.limelightSeek();
         }
 
+        // Algorithim to calculate and aim shooter from limelight value
+        if (this.operatorController.getXButton()) {
+            this.climber.setRobotArmPosition(this.climberArmRevolutions);
+            System.out.println(this.climberArmRevolutions);
+            //this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
+            System.out.println(this.shooterWheelRPM);
+        } else {
+            this.climber.setRobotArmPosition(65.625);
+            //this.shooter.setShooterWheelSpeed(1200);
+        }
+
+        this.shooter.setShooterWheelSpeed(this.operatorController.getJoystick(Side.LEFT, Axis.Y)*0.8);
+
+        this.climber.setClimberWinchPosition(0);
     }
 
     public void limelightSeek() {
@@ -176,14 +184,13 @@ public class TeleopOperator extends TeleopComponent {
         final double liftArmRotations = 65.625;
 
         // Set Climber winch position constant
-        final double climberWinchRotations = 24;
+        final double climberWinchRotations = 183.35;
 
         // Activate Lift based on joystick and constants multiplyer
         this.climber.setRobotArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y) * liftArmRotations);
 
         // Activate Climber based on joystick and constants multiplyer
-        this.climber.setClimberWinchPosition(
-                this.operatorController.getJoystick(Side.RIGHT, Axis.Y) * climberWinchRotations);
+        this.climber.setClimberWinchPosition(this.operatorController.getJoystick(Side.RIGHT, Axis.Y) * climberWinchRotations);
     }
 
     @Override

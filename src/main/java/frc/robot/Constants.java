@@ -11,27 +11,27 @@ public class Constants {
     public static final double PATH_TURN_P = 6;
 
     // CAN ID(s) for Drivetrain
-    public static final int DRIVE_LEFT1_ID = 11;//10
-    public static final int DRIVE_RIGHT1_ID = 15;//11
-    public static final int DRIVE_LEFT2_ID = 12;//12
-    public static final int DRIVE_RIGHT2_ID = 16;//13
+    public static final int DRIVE_LEFT1_ID = 10;//11;//10
+    public static final int DRIVE_RIGHT1_ID = 11;//15;//11
+    public static final int DRIVE_LEFT2_ID = 12;//12;//12
+    public static final int DRIVE_RIGHT2_ID = 13;//16;//13
 
     // CAN ID(s) for Intake / Stager
     public static final int INTKAE_ROLLER_ID = 20; //20
     public static final int STAGER_ROLLER_ID = 21; //21
-    public static final int FEEDER_ROLLER_ID = 30; //22
+    public static final int FEEDER_ROLLER_ID = 22; //22
 
     // CAN ID(s) for Shooter
-    public static final int LEFT_SHOOTER_WHEEL_ID = 22;//30
-    public static final int RIGHT_SHOOTER_WHEEL_ID = 57;//31
+    public static final int LEFT_SHOOTER_WHEEL_ID = 30;//30
+    public static final int RIGHT_SHOOTER_WHEEL_ID = 31;//31
 
     // CAN ID(s) for Arm
-    public static final int LEFT_ARM_ID = 40;
-    public static final int RIGHT_ARM_ID = 41;
+    public static final int LEFT_ARM_ID = 40;//40
+    public static final int RIGHT_ARM_ID = 41;//41
 
     // CAN ID(s) for Winch
-    public static final int LEFT_WINCH_ID = 50;
-    public static final int RIGHT_WINCH_ID = 51;
+    public static final int LEFT_WINCH_ID = 50;//50
+    public static final int RIGHT_WINCH_ID = 51;//51
 
     // CSV Test version
     public static final int VERSION = 11;
@@ -52,7 +52,7 @@ public class Constants {
     public static final SparkMaxConstants ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
     
     // Winch PID Constants
-    public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
+    public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
 
     // Drive PID Constants
     public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
@@ -70,6 +70,10 @@ public class Constants {
     // Set shooter wheel speed constant
     public static final double LIFT_ARM_GEAR_REDUCTION = 525;
     public static final double CLIMBER_WINCH_ROTATIONS = 24;
+
+    // Pneumatic channels
+    public static final int LEFT_INTAKE_ARM = 0;
+    public static final int RIGHT_INTAKE_ARM = 1;
 
     // EXPERIMENTAL PID TUNING
     public static final PIDConstants LIMELIGHT_ROTATE = new PIDConstants(0.125, 0.001, 1, 4);

@@ -4,6 +4,9 @@ package frc.io.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 
 // Import required Classes
 import frc.robot.Constants;
@@ -19,7 +22,11 @@ public class IntakeIO implements IIO{
     private RelativeEncoder intakeEncoder;
     private RelativeEncoder stagerEncoder;
 
-    private boolean enabled = Constants.INTAKE_ENABLED;
+    private Compressor compressor;
+    private Solenoid leftIntakeArm;
+    private Solenoid rightIntakeArm;
+
+    private boolean enabled = Constants.INTAKE_ENABLED; 
 
     public static IntakeIO getInstance() {
         if (instance == null) {
@@ -33,6 +40,14 @@ public class IntakeIO implements IIO{
      */
     private IntakeIO() {
         if (!enabled) return;
+
+        // Initiate Pneumatic systems
+        this.compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+        this.leftIntakeArm = new Solenoid(0, PneumaticsModuleType.CTREPCM, Constants.LEFT_INTAKE_ARM);
+        this.rightIntakeArm = new Solenoid(0, PneumaticsModuleType.CTREPCM, Constants.RIGHT_INTAKE_ARM);
+
+        // Enable compressor
+        this.compressor.enabled();
 
         // Initiate new motor objects
         this.intakeMotor = new CANSparkMax(Constants.INTKAE_ROLLER_ID, MotorType.kBrushless);
@@ -89,6 +104,17 @@ public class IntakeIO implements IIO{
     public void setFeederSpeed(double speed) {
         if (!enabled) return;
         this.feederMotor.set(speed);
+    }
+
+    /**
+     * Set the position of the intake
+     * @param state boolean state of intake. 
+     * { FALSE: Raised | TRUE: Lowered }
+     */
+    public void setIntakeState(boolean state) {
+        if (!enabled) return;
+        this.leftIntakeArm.set(state);
+        this.rightIntakeArm.set(state);
     }
 
     /**

@@ -65,6 +65,8 @@ public class ShooterIO implements IIO {
         // right wheel to copy left wheel inversly
         this.rightWheelMotor.follow(leftWheelMotor, true);
 
+        //this.leftWheelMotor.restoreFactoryDefaults();
+
         // Send out settings to 
         this.leftWheelMotor.burnFlash();
         this.rightWheelMotor.burnFlash();
@@ -77,6 +79,7 @@ public class ShooterIO implements IIO {
     public void setWheelSpeed(double speed) {
         if (!enabled) return;
         this.leftWheelPidController.setVelocity(speed);
+        //this.leftWheelMotor.set(speed);
     }
 
     /**

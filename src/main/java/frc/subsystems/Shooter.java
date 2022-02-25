@@ -45,4 +45,5 @@ public class Shooter extends Subsystem {
     public void setShooterWheelSpeed(double speed) {
         this.shooterWheelSpeed = speed;
     }
+
 }

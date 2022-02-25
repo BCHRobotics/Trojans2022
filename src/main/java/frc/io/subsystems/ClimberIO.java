@@ -65,6 +65,8 @@ public class ClimberIO implements IIO{
         // Set right Winch to copy left Winch inversly
         this.rightWinchMotor.follow(leftWinchMotor, true);
 
+        //this.leftWinchMotor.restoreFactoryDefaults();
+
         // Send out settings to controller
         this.leftWinchMotor.burnFlash();
         this.rightWinchMotor.burnFlash();
@@ -76,6 +78,7 @@ public class ClimberIO implements IIO{
      */
     public void setWinchExtension(double setPoint) {
         if (!enabled) return;
+        //this.leftWinchMotor.set(setPoint);
         this.leftWinchPidController.setPosition(setPoint);
     }
 
