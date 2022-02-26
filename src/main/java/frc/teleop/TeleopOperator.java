@@ -1,5 +1,6 @@
 package frc.teleop;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.DriverInput;
 import frc.robot.Constants;
 import frc.subsystems.Shooter;
@@ -85,6 +86,7 @@ public class TeleopOperator extends TeleopComponent {
         this.limelightPID.setMinDoneCycles(10);
         this.limelightPID.setMaxOutput(0.2);
         this.limelightPID.setIRange(10);
+        SmartDashboard.putNumber("SHOOTER VAL", 0);
     }
 
     @Override
@@ -146,8 +148,8 @@ public class TeleopOperator extends TeleopComponent {
             //this.shooter.setShooterWheelSpeed(1200);
         }
 
-        this.shooter.setShooterWheelSpeed(this.operatorController.getJoystick(Side.LEFT, Axis.Y)*0.8);
-
+        //this.shooter.setShooterWheelSpeed(this.operatorController.getJoystick(Side.LEFT, Axis.Y)*0.8);
+        this.shooter.setShooterWheelSpeed(SmartDashboard.getNumber("SHOOTER VAL", 0));
         this.climber.setClimberWinchPosition(0);
     }
 
@@ -161,19 +163,6 @@ public class TeleopOperator extends TeleopComponent {
         
         double output = this.limelightPID.calcPID(this.tx);
         this.drive.setOutput(0, -output);
-    }
-
-    public void oldLimelightSeek() {
-        this.tx = this.limelight.getTargetX();
-
-        if (this.tx > 1.0)
-            this.seekError = (tx * this.kP);
-        else if (this.tx < 1.0)
-            this.seekError = (tx * this.kP) + this.minOutput;
-
-        if (this.operatorController.getAButton()) {
-            this.drive.setOutput(0, this.seekError);
-        }
     }
 
     /**
