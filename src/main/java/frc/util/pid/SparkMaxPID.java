@@ -8,7 +8,7 @@ public class SparkMaxPID {
     private SparkMaxPIDController pidController;
 
     private int slot;
-    private boolean smartMotion = false;
+    private boolean smartMotion = true;
 
     public SparkMaxPID(CANSparkMax motor) {
         pidController = motor.getPIDController();

@@ -43,6 +43,11 @@ public class Intake extends Subsystem {
         this.intakeIO.stopAllOutputs();
     }
 
+    public void resetPosition() {
+        this.intakeIO.getIntakeEncoder().setPosition(0);
+        this.intakeIO.getFeederEncoder().setPosition(0);
+    }
+
     /**
      * Set the speed of the intake
      * 

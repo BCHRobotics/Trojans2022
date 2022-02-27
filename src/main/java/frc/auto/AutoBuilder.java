@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import frc.io.subsystems.DriveIO;
+import frc.io.subsystems.IntakeIO;
 import frc.robot.Constants;
 import frc.util.csv.CSVWriter;
 
@@ -17,6 +18,7 @@ public class AutoBuilder {
     private static long timer;
 
     private static DriveIO driveIO;
+    private static IntakeIO intakeIO;
 
     public static AutoBuilder getInstance() {
         if (instance == null) {
@@ -44,6 +46,9 @@ public class AutoBuilder {
             rows.add((double)timer);
             rows.add((double)driveIO.getDriveL1Encoder().getPosition());
             rows.add((double)driveIO.getDriveR1Encoder().getPosition());
+            // rows.add(intakeIO.getIntakeState() ? (double)1.0 : (double)0.0);
+            // rows.add((double)intakeIO.getIntakePercent());
+            // rows.add((double)intakeIO.getStagerPercent());
             data.add(rows);
         } catch (Exception e) {
             System.err.println(e);
@@ -56,8 +61,8 @@ public class AutoBuilder {
         try {
             System.out.println("Made it to convertData()!");
             writer.setFileName(Constants.TEACH_MODE_FILE_NAME);
-            writer.deleteCopy();
-            writer.setHeader("time,leftMotor,rightMotor");
+            //writer.deleteCopy();
+            writer.setHeader("time,leftDrive,rightDrive");//,intakeArms,intakeRollers,stagerRollers
             writer.importData(data);
             writer.output();
         } catch (Exception e) {

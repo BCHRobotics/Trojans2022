@@ -20,13 +20,16 @@ public class IntakeIO implements IIO{
     private CANSparkMax feederMotor;
 
     private RelativeEncoder intakeEncoder;
-    private RelativeEncoder stagerEncoder;
+    private RelativeEncoder feederEncoder;
 
     private Compressor compressor;
-    private Solenoid leftIntakeArm;
-    private Solenoid rightIntakeArm;
+    private Solenoid intakeArmRaised;
+    private Solenoid intakeArmLowered;
 
     private boolean enabled = Constants.INTAKE_ENABLED; 
+    private boolean intakeState = false;
+    private double intakeSpeed;
+    private double stagerSpeed;
 
     public static IntakeIO getInstance() {
         if (instance == null) {
@@ -43,20 +46,20 @@ public class IntakeIO implements IIO{
 
         // Initiate Pneumatic systems
         this.compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
-        this.leftIntakeArm = new Solenoid(0, PneumaticsModuleType.CTREPCM, Constants.LEFT_INTAKE_ARM);
-        this.rightIntakeArm = new Solenoid(0, PneumaticsModuleType.CTREPCM, Constants.RIGHT_INTAKE_ARM);
+        this.intakeArmRaised = new Solenoid(0, PneumaticsModuleType.CTREPCM, Constants.INTAKE_RAISED);
+        this.intakeArmLowered = new Solenoid(0, PneumaticsModuleType.CTREPCM, Constants.INTAKE_LOWERED);
 
         // Enable compressor
         this.compressor.enabled();
 
         // Initiate new motor objects
         this.intakeMotor = new CANSparkMax(Constants.INTKAE_ROLLER_ID, MotorType.kBrushless);
-        this.stagerMotor = new CANSparkMax(Constants.STAGER_ROLLER_ID, MotorType.kBrushless);
-        this.feederMotor = new CANSparkMax(Constants.FEEDER_ROLLER_ID, MotorType.kBrushed);
+        this.stagerMotor = new CANSparkMax(Constants.STAGER_ROLLER_ID, MotorType.kBrushed);
+        this.feederMotor = new CANSparkMax(Constants.FEEDER_ROLLER_ID, MotorType.kBrushless);
 
         // Get motor encoder
         this.intakeEncoder = intakeMotor.getEncoder();
-        this.stagerEncoder = stagerMotor.getEncoder();
+        this.feederEncoder = feederMotor.getEncoder();
 
         // Restore motor controllers to factory defaults
         this.intakeMotor.restoreFactoryDefaults();
@@ -64,8 +67,8 @@ public class IntakeIO implements IIO{
         this.feederMotor.restoreFactoryDefaults();
         
         // Set motor controllers Idle Mode [Brake/Coast]
-        this.intakeMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        this.stagerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        this.intakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.stagerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.feederMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         // Inversion state of motors
@@ -85,6 +88,7 @@ public class IntakeIO implements IIO{
      */
     public void setIntakeSpeed(double speed) {
         if (!enabled) return;
+        this.intakeSpeed = speed;
         this.intakeMotor.set(speed);
     }
 
@@ -94,7 +98,8 @@ public class IntakeIO implements IIO{
      */
     public void setStagerSpeed(double speed) {
         if (!enabled) return;
-        this.stagerMotor.set(speed);
+        this.stagerSpeed = speed;
+        this.stagerMotor.set(-speed);
     }
 
     /**
@@ -113,8 +118,36 @@ public class IntakeIO implements IIO{
      */
     public void setIntakeState(boolean state) {
         if (!enabled) return;
-        this.leftIntakeArm.set(state);
-        this.rightIntakeArm.set(state);
+        this.intakeState = state;
+        this.intakeArmRaised.set(!state);
+        this.intakeArmLowered.set(state);
+    }
+
+    /**
+     * Get the state of the intake arms
+     * @return { FALSE: Raised | TRUE: Lowered }
+     */
+    public Boolean getIntakeState() {
+        if (!enabled) return null;
+        return this.intakeState;
+    }
+
+    /**
+     * Get the percent output of the intake
+     * @return
+     */
+    public double getIntakePercent() {
+        if (!enabled) return 0.0;
+        return this.intakeSpeed;
+    }
+    
+    /**
+     * Get the percent output of the intake
+     * @return
+     */
+    public double getStagerPercent() {
+        if (!enabled) return 0.0;
+        return this.stagerSpeed;
     }
 
     /**
@@ -130,9 +163,9 @@ public class IntakeIO implements IIO{
      * Get the reference to the Stager encoder
      * @return CANEncoder reference
      */
-    public RelativeEncoder getStagerEncoder() {
+    public RelativeEncoder getFeederEncoder() {
         if (!enabled) return null;
-        return this.stagerMotor.getEncoder();
+        return this.feederMotor.getEncoder();
     }
 
     /**
@@ -142,7 +175,7 @@ public class IntakeIO implements IIO{
     public void resetInputs() {
         if (!enabled) return;
         this.intakeEncoder.setPosition(0);
-        this.stagerEncoder.setPosition(0);
+        this.feederEncoder.setPosition(0);
     }
 
     /**

@@ -57,6 +57,7 @@ public class ClimberIO implements IIO{
 
         // Set left Winch PID
         this.leftWinchPidController = new SparkMaxPID(leftWinchMotor);
+        this.leftWinchPidController.activateSmartMotion();
         this.leftWinchPidController.setConstants(leftWinchConstants);
 
         // Inversion state of left Winch
@@ -64,8 +65,6 @@ public class ClimberIO implements IIO{
 
         // Set right Winch to copy left Winch inversly
         this.rightWinchMotor.follow(leftWinchMotor, true);
-
-        //this.leftWinchMotor.restoreFactoryDefaults();
 
         // Send out settings to controller
         this.leftWinchMotor.burnFlash();
@@ -78,7 +77,6 @@ public class ClimberIO implements IIO{
      */
     public void setWinchExtension(double setPoint) {
         if (!enabled) return;
-        //this.leftWinchMotor.set(setPoint);
         this.leftWinchPidController.setPosition(setPoint);
     }
 

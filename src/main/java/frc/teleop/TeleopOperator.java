@@ -173,7 +173,7 @@ public class TeleopOperator extends TeleopComponent {
         final double liftArmRotations = 65.625;
 
         // Set Climber winch position constant
-        final double climberWinchRotations = 183.35;
+        final double climberWinchRotations = 120;
 
         // Activate Lift based on joystick and constants multiplyer
         this.climber.setRobotArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y) * liftArmRotations);

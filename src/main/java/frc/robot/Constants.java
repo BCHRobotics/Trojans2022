@@ -35,7 +35,7 @@ public class Constants {
 
     // CSV Test version
     public static final int VERSION = 11;
-    public static final String TEACH_MODE_FILE_NAME = "record";
+    public static final String TEACH_MODE_FILE_NAME = "record3";
 
     // Subsytems toggle logic
     public static final boolean SHOOTER_ENABLED = true;
@@ -71,10 +71,10 @@ public class Constants {
     public static final double LIFT_ARM_GEAR_REDUCTION = 525;
     public static final double CLIMBER_WINCH_ROTATIONS = 24;
 
-    // Pneumatic channels
-    public static final int LEFT_INTAKE_ARM = 0;
-    public static final int RIGHT_INTAKE_ARM = 1;
+    // Pneumatic control module channels
+    public static final int INTAKE_LOWERED = 0;
+    public static final int INTAKE_RAISED = 1;
 
-    // EXPERIMENTAL PID TUNING
+    // Limelight Drive PID TUNING
     public static final PIDConstants LIMELIGHT_ROTATE = new PIDConstants(0.125, 0.001, 1, 4);
 }
