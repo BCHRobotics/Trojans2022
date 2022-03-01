@@ -77,6 +77,10 @@ public class ClimberIO implements IIO{
      */
     public void setWinchExtension(double setPoint) {
         if (!enabled) return;
+        if (setPoint < 0) {
+            this.leftWinchMotor.disable();
+            return;
+        }
         this.leftWinchPidController.setPosition(setPoint);
     }
 

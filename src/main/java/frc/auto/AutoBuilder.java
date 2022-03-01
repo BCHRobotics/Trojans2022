@@ -46,9 +46,9 @@ public class AutoBuilder {
             rows.add((double)timer);
             rows.add((double)driveIO.getDriveL1Encoder().getPosition());
             rows.add((double)driveIO.getDriveR1Encoder().getPosition());
-            // rows.add(intakeIO.getIntakeState() ? (double)1.0 : (double)0.0);
-            // rows.add((double)intakeIO.getIntakePercent());
-            // rows.add((double)intakeIO.getStagerPercent());
+            rows.add(intakeIO.getIntakeState() == true ? (double)1.0 : (double)0.0);
+            rows.add((double)intakeIO.getIntakePercent());
+            rows.add((double)intakeIO.getStagerPercent());
             data.add(rows);
         } catch (Exception e) {
             System.err.println(e);

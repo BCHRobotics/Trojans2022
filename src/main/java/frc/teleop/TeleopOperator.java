@@ -6,6 +6,7 @@ import frc.robot.Constants;
 import frc.subsystems.Shooter;
 import frc.subsystems.Climber;
 import frc.subsystems.Drive;
+import frc.subsystems.Intake;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
@@ -31,12 +32,13 @@ public class TeleopOperator extends TeleopComponent {
     private double shooterWheelRPM;
     private double climberArmRevolutions;
     private double tx;
-    private double seekError;
-    private double kP = 0.085;
-    private double minOutput = 0.05;
+    private boolean shootState;
+
+    private long previousTime;
+    private long currentTime;
+    private long feederDelay = 800;
 
     private PIDF limelightPID;
-    private boolean shooterToggle;
 
     private enum OperatorMode {
         SHOOT, CLIMB
@@ -47,6 +49,7 @@ public class TeleopOperator extends TeleopComponent {
     private Drive drive;
     private Shooter shooter;
     private Climber climber;
+    private Intake intake;
 
     /**
      * Get the instance of the TeleopOperator, if none create a new instance
@@ -66,6 +69,7 @@ public class TeleopOperator extends TeleopComponent {
         this.drive = Drive.getInstance();
         this.shooter = Shooter.getInstance();
         this.climber = Climber.getInstance();
+        this.intake = Intake.getInstance();
 
         this.trajectoy = new Trajectory();
         this.limelight = Limelight.getInstance();
@@ -78,6 +82,7 @@ public class TeleopOperator extends TeleopComponent {
         this.drive.firstCycle();
         this.shooter.firstCycle();
         this.climber.firstCycle();
+        this.intake.firstCycle();
 
         this.limelight.setLedMode(0);
         this.limelight.setLimelightState(LimelightTargetType.UPPER_HUB);
@@ -116,41 +121,63 @@ public class TeleopOperator extends TeleopComponent {
         this.drive.calculate();
         this.shooter.calculate();
         this.climber.calculate();
+        this.intake.calculate();
     }
 
     private void shootMode() {
-        this.distance = this.limelight.getTargetDistance();
-        this.height = Constants.TARGET_HEIGHT - Constants.SHOOTER_HEIGHT;
-
-        this.trajectoy.setDistance(this.distance);
-        this.trajectoy.setHeight(this.height);
-
-        this.angle = trajectoy.getAngle();
-        this.velocity = trajectoy.getVelocity();
-
-        // Converts velocity into RPM: [(Velocity x 60<seconds>) / (PI * Diameter<meters>)]
-        this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.1016);
-        this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
-
+        this.currentTime = System.currentTimeMillis();
+        this.previousTime = this.currentTime;
+        
         // Algorithim to hunt for target and latch on to it
         if (this.operatorController.getAButton()) {
+            this.distance = this.limelight.getTargetDistance();
+            this.height = Constants.TARGET_HEIGHT - Constants.SHOOTER_HEIGHT;
             this.limelightSeek();
+
+            this.trajectoy.setDistance(this.distance);
+            this.trajectoy.setHeight(this.height);
+
+            this.angle = trajectoy.getAngle();
+            this.velocity = trajectoy.getVelocity();
+
+            // Converts velocity into RPM: [(Velocity x 60<seconds>) / (PI * Diameter<meters>)]
+            this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.115062);
+            this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
+
+            this.climber.setRobotArmPosition(this.climberArmRevolutions);
+            this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
+            this.intake.setStagerSpeed(1);
+            this.intake.setFeederSpeed(0);
+
+            this.shootState = true;
+        } else if (this.operatorController.getYButton()) {
+            this.shootState = false;
+        } else if (this.operatorController.getXButton()) {
+            this.shootState = true;
+            this.previousTime = this.currentTime;
+            this.intake.setStagerSpeed(0);
+            this.intake.setFeederSpeed(1);
+            this.intake.setFeederState(true);
+        } else {
+            if (!this.shootState) {
+                this.shooter.setShooterWheelSpeed(1400);
+                this.climber.setRobotArmPosition(0);
+                this.intake.setFeederState(false);
+            }
+        }
+
+        if (this.shootState && (this.currentTime >= (previousTime + feederDelay))) {
+            this.intake.setStagerSpeed(0);
+            this.intake.setFeederSpeed(0);
+            this.intake.setFeederState(false);
+            this.shootState = false;
         }
 
         // Algorithim to calculate and aim shooter from limelight value
-        if (this.operatorController.getXButton()) {
-            this.climber.setRobotArmPosition(this.climberArmRevolutions);
-            System.out.println(this.climberArmRevolutions);
-            //this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
-            System.out.println(this.shooterWheelRPM);
-        } else {
-            this.climber.setRobotArmPosition(65.625);
-            //this.shooter.setShooterWheelSpeed(1200);
-        }
 
         //this.shooter.setShooterWheelSpeed(this.operatorController.getJoystick(Side.LEFT, Axis.Y)*0.8);
-        this.shooter.setShooterWheelSpeed(SmartDashboard.getNumber("SHOOTER VAL", 0));
-        this.climber.setClimberWinchPosition(0);
+        //this.shooter.setShooterWheelSpeed(SmartDashboard.getNumber("SHOOTER VAL", 0));
+        //this.climber.setClimberWinchPosition(0);
     }
 
     public void limelightSeek() {
