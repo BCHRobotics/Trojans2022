@@ -84,14 +84,13 @@ public class TeleopOperator extends TeleopComponent {
         this.climber.firstCycle();
         this.intake.firstCycle();
 
-        this.limelight.setLedMode(0);
+        this.limelight.setLedMode(1);
         this.limelight.setLimelightState(LimelightTargetType.UPPER_HUB);
 
         this.limelightPID = new PIDF(Constants.LIMELIGHT_ROTATE);
         this.limelightPID.setMinDoneCycles(10);
         this.limelightPID.setMaxOutput(0.2);
         this.limelightPID.setIRange(10);
-        SmartDashboard.putNumber("SHOOTER VAL", 0);
     }
 
     @Override
@@ -130,6 +129,7 @@ public class TeleopOperator extends TeleopComponent {
         
         // Algorithim to hunt for target and latch on to it
         if (this.operatorController.getAButton()) {
+            this.limelight.setLedMode(3);
             this.distance = this.limelight.getTargetDistance();
             this.height = Constants.TARGET_HEIGHT - Constants.SHOOTER_HEIGHT;
             this.limelightSeek();
@@ -149,6 +149,9 @@ public class TeleopOperator extends TeleopComponent {
             this.intake.setStagerSpeed(1);
             this.intake.setFeederSpeed(0);
 
+            
+            SmartDashboard.putNumber("SHOOTER SETPOINT", 0);
+
             this.shootState = true;
         } else if (this.operatorController.getYButton()) {
             this.shootState = false;
@@ -161,6 +164,7 @@ public class TeleopOperator extends TeleopComponent {
         } else {
             if (!this.shootState) {
                 this.shooter.setShooterWheelSpeed(1400);
+                this.limelight.setLedMode(1);
                 this.climber.setRobotArmPosition(0);
                 this.intake.setFeederState(false);
             }

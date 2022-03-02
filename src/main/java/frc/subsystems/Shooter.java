@@ -1,5 +1,6 @@
 package frc.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.ShooterIO;
 
 public class Shooter extends Subsystem {
@@ -30,6 +31,8 @@ public class Shooter extends Subsystem {
     @Override
     public void calculate() {
         this.shooterIO.setWheelSpeed(shooterWheelSpeed);
+        SmartDashboard.putNumber("SHOOTER LEFT ENCODER", this.shooterIO.getLeftWheelEncoder().getVelocity());
+        SmartDashboard.putNumber("SHOOTER RIGHT ENCODER", this.shooterIO.getRightWheelEncoder().getVelocity());
     }
 
     @Override
