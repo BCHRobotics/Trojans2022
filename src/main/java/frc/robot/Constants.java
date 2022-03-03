@@ -79,6 +79,9 @@ public class Constants {
     public static final int FEEDER_RAISED = 6;
     public static final int FEEDER_LOWERED = 7;
 
+    //shooter angle
+    public static final int ANGLE = 70;
+
     // Limelight Drive PID TUNING
     public static final PIDConstants LIMELIGHT_ROTATE = new PIDConstants(0.125, 0.001, 1, 4);
 }
