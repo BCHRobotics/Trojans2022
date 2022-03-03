@@ -43,7 +43,7 @@ public class AutoOperate extends AutoComponent {
         startTime = System.currentTimeMillis();
         try {
             System.out.println("Made it to firstCycle");
-            data = CSVReader.convertToArrayList(Constants.TEACH_MODE_FILE_NAME);
+            data = CSVReader.convertToArrayList(AutoSelecter.getInstance().getFileName());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;

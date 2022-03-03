@@ -43,18 +43,29 @@ public class TeleopDriver extends TeleopComponent {
     public void firstCycle() {
         this.drive.firstCycle();
         this.intake.firstCycle();
-        SmartDashboard.putNumber("Intake Motor Speed", 0);
+        SmartDashboard.putNumber("Intake Motor Speed", 0.8);
     }
 
     @Override
     public void calculate() {
         
-        double speed = 0.65;
+        double speed = 0.75;
+
+        speed -= (this.driverController.getLeftTriggerAxis() * 0.25);
+        speed += (this.driverController.getRightTriggerAxis() * 0.25);
+
+        SmartDashboard.putNumber("Drive Output", speed);
 
         this.drive.setOutput(
             driverController.getJoystick(Side.LEFT, Axis.Y) * speed, 
             driverController.getJoystick(Side.RIGHT, Axis.X) * speed
         );
+
+        if (driverController.getLeftBumper()) {
+            this.drive.brake(true);
+        } else {
+            this.drive.brake(false);
+        }
 
         if (driverController.getRightBumper()) {
             this.intake.setIntakeState(this.intakeToggle);

@@ -2,6 +2,7 @@ package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.DriverInput;
+import frc.io.subsystems.ShooterIO;
 import frc.robot.Constants;
 import frc.subsystems.Shooter;
 import frc.subsystems.Climber;
@@ -91,6 +92,13 @@ public class TeleopOperator extends TeleopComponent {
         this.limelightPID.setMinDoneCycles(10);
         this.limelightPID.setMaxOutput(0.2);
         this.limelightPID.setIRange(10);
+
+        SmartDashboard.putBoolean("Intake State", false);
+        SmartDashboard.putNumber("Intake Rollers", 0);
+        SmartDashboard.putNumber("Stager Rollers", 0);
+        SmartDashboard.putNumber("Feeder Belt", 0);
+        SmartDashboard.putBoolean("Feeder State", false);
+        SmartDashboard.putNumber("Shooter Wheels", 0);
     }
 
     @Override
@@ -119,8 +127,17 @@ public class TeleopOperator extends TeleopComponent {
 
         this.drive.calculate();
         this.shooter.calculate();
-        this.climber.calculate();
+        //this.climber.calculate();
         this.intake.calculate();
+    }
+
+    private void testShootMode() {
+        this.intake.setIntakeState(SmartDashboard.getBoolean("Intake State", false));
+        this.intake.setIntakeSpeed(SmartDashboard.getNumber("Intake Rollers", 0));
+        this.intake.setStagerSpeed(SmartDashboard.getNumber("Stager Rollers", 0));
+        this.intake.setFeederSpeed(SmartDashboard.getNumber("Feeder Belt", 0));
+        this.intake.setFeederState(SmartDashboard.getBoolean("Feeder State", false));
+        this.shooter.setShooterWheelSpeed(SmartDashboard.getNumber("Shooter Wheels", 0));
     }
 
     private void shootMode() {
@@ -144,7 +161,7 @@ public class TeleopOperator extends TeleopComponent {
             this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.115062);
             this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
 
-            this.climber.setRobotArmPosition(this.climberArmRevolutions);
+            this.climber.setRobotArmPosition(0);//this.climberArmRevolutions
             this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
             this.intake.setStagerSpeed(1);
             this.intake.setFeederSpeed(0);
@@ -186,7 +203,7 @@ public class TeleopOperator extends TeleopComponent {
 
     public void limelightSeek() {
         this.tx = this.limelight.getTargetX();
-
+        SmartDashboard.putNumber("Limelight X", this.tx);
         if (this.tx < 2 && this.tx > -2) return;
 
         this.limelightPID.setMinMaxOutput(-0.4, 0.4);

@@ -102,4 +102,8 @@ public class Drive extends Subsystem {
         this.currentState = DriveState.POSITION;
         this.posRight = position;
     }
+
+    public void brake(boolean mode) {
+        this.driveIO.brakeMode(mode);
+    }
 }

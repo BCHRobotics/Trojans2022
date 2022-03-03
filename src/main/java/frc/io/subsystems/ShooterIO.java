@@ -60,7 +60,7 @@ public class ShooterIO implements IIO {
         this.leftWheelPidController.setConstants(leftWheelConstants);
 
         // Inversion state of shooter wheels
-        this.leftWheelMotor.setInverted(false);
+        this.leftWheelMotor.setInverted(true);
 
         // right wheel to copy left wheel inversly
         this.rightWheelMotor.follow(leftWheelMotor, true);

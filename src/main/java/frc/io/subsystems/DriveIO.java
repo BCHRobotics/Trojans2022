@@ -119,14 +119,15 @@ public class DriveIO implements IIO {
         this.driveR1PidController.setPosition(position);
     }
 
-    public void brakeMode() {
-        if (SmartDashboard.getBoolean("Brake Mode", false)) {
+    public void brakeMode(boolean mode) {
+        if (mode) {
             this.driveL1.setIdleMode(CANSparkMax.IdleMode.kBrake);
             this.driveR1.setIdleMode(CANSparkMax.IdleMode.kBrake);
         } else {
             this.driveL1.setIdleMode(CANSparkMax.IdleMode.kCoast);
             this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);
         }
+        SmartDashboard.putBoolean("Brake Mode", mode);
     }
 
     //#region EncoderPositions

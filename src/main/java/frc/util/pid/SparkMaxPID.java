@@ -45,13 +45,13 @@ public class SparkMaxPID {
         pidController.setIZone(c.kIz, c.slot);
         pidController.setFF(c.kFF, c.slot);
         pidController.setOutputRange(c.kMinOutput, c.kMaxOutput, c.slot);
-
-        if (smartMotion) {
-            pidController.setSmartMotionMinOutputVelocity(c.minVel, c.slot);
-            pidController.setSmartMotionMaxVelocity(c.maxVel, c.slot);
-            pidController.setSmartMotionMaxAccel(c.maxAcc, c.slot);
-            pidController.setSmartMotionAllowedClosedLoopError(c.allowedErr, c.slot);
-        }
+        pidController.setSmartMotionMinOutputVelocity(c.minVel, c.slot);
+        pidController.setSmartMotionMaxVelocity(c.maxVel, c.slot);
+        pidController.setSmartMotionMaxAccel(c.maxAcc, c.slot);
+        pidController.setSmartMotionAllowedClosedLoopError(c.allowedErr, c.slot);
+        // if (smartMotion) {
+            
+        // }
     }
 
     public SparkMaxConstants getConstants(int slot) {
@@ -79,7 +79,7 @@ public class SparkMaxPID {
     }
 
     public void setVelocity(double speed){
-        pidController.setReference(speed, CANSparkMax.ControlType.kVelocity, this.slot);
+        pidController.setReference(speed, CANSparkMax.ControlType.kSmartVelocity, this.slot);
     }
 
 }

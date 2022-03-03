@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.util.pid.PIDConstants;
 import frc.util.pid.SparkMaxConstants;
 
@@ -46,7 +47,7 @@ public class Constants {
     public static final boolean MINI_BOT = false;
 
     // Shooter PID Constants
-    public static final SparkMaxConstants SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(6e-5, 0, 0, 0, 0.000015, -1, 1, 0, 0, 6000, 3000, 0);
+    public static final SparkMaxConstants SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.0002, 0, 0, 0, 0.00019, -1, 1, 0, 0, 6000, 3000, 0.5);
     
     // Lift PID Constants
     public static final SparkMaxConstants ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
@@ -62,8 +63,8 @@ public class Constants {
     public static final String ROOT_DIRECTORY = "csv/";
 
     // Limlight constants
-    public static final double LIMELIGHT_HEIGHT = 0.25; // Height in meters
-    public static final double LIMELIGHT_ANGLE = 45; // Angle in degrees
+    public static final double LIMELIGHT_HEIGHT = 1; // Height in meters
+    public static final double LIMELIGHT_ANGLE = 25; // Angle in degrees
     public static final double TARGET_HEIGHT = 2.64; // Height in meters
     public static final double SHOOTER_HEIGHT = 0.50; // Height in meteres
 

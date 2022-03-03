@@ -73,17 +73,16 @@ public class IntakeIO implements IIO{
         // Restore motor controllers to factory defaults
         this.intakeMotor.restoreFactoryDefaults();
         this.stagerMotor.restoreFactoryDefaults();
-        this.feederMotor.restoreFactoryDefaults();
         
         // Set motor controllers Idle Mode [Brake/Coast]
         this.intakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.stagerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        this.feederMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        this.feederMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         // Inversion state of motors
         this.intakeMotor.setInverted(false);
-        this.stagerMotor.setInverted(false);
-        this.feederMotor.setInverted(false);
+        this.stagerMotor.setInverted(true);
+        this.feederMotor.setInverted(true);
 
         // Send out settings to controller
         this.intakeMotor.burnFlash();
@@ -108,7 +107,7 @@ public class IntakeIO implements IIO{
     public void setStagerSpeed(double speed) {
         if (!enabled) return;
         this.stagerSpeed = speed;
-        this.stagerMotor.set(-speed);
+        this.stagerMotor.set(speed);
     }
 
     /**
