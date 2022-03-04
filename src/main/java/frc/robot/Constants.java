@@ -81,6 +81,7 @@ public class Constants {
 
     //shooter angle
     public static final int ANGLE = 66;
+    public static final double ANGLE_LIMIT = 40;
 
     // Limelight Drive PID TUNING
     public static final PIDConstants LIMELIGHT_ROTATE = new PIDConstants(0.125, 0.001, 1, 4);

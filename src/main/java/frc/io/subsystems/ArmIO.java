@@ -5,7 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Import required Classes
 import frc.robot.Constants;
 import frc.util.pid.SparkMaxConstants;
@@ -46,7 +46,7 @@ public class ArmIO implements IIO{
         this.leftArmMotor = new CANSparkMax(Constants.LEFT_ARM_ID, MotorType.kBrushless);
         this.rightArmMotor = new CANSparkMax(Constants.RIGHT_ARM_ID, MotorType.kBrushless);
 
-        this.armLimitSwitch = new DigitalInput(8);
+        this.armLimitSwitch = new DigitalInput(9);
 
         // Get motor encoder
         this.leftArmEncoder = leftArmMotor.getEncoder();
@@ -82,9 +82,10 @@ public class ArmIO implements IIO{
      */
     public void setArmPosition(double setPoint) {
         if (!enabled) return;
-        if (this.armLimitSwitch.get()) {
-            this.leftArmEncoder.setPosition(setPoint);
-            this.rightArmEncoder.setPosition(setPoint);
+        SmartDashboard.putBoolean("Limit switch", this.armLimitSwitch.get());
+        if (!this.armLimitSwitch.get()) {
+            this.leftArmEncoder.setPosition(Constants.ANGLE_LIMIT);
+            this.rightArmEncoder.setPosition(Constants.ANGLE_LIMIT);
         } else {
             this.leftArmPidController.setPosition(setPoint);
         }

@@ -42,7 +42,7 @@ public class TeleopOperator extends TeleopComponent {
     private long feederDelay = 800;
 
     private final double armClimb = 0;
-    private final double armShoot = 40; //-13
+    private final double armShoot = Constants.ANGLE_LIMIT; //-13
 
     private PIDF limelightPID;
 
@@ -107,6 +107,7 @@ public class TeleopOperator extends TeleopComponent {
         SmartDashboard.putBoolean("Arm State", false);
         SmartDashboard.putNumber("Arm pos", 0);
         SmartDashboard.putNumber("Drive Rotate", 0);
+        SmartDashboard.putNumber("Distance", 0);
     }
 
     @Override
@@ -161,10 +162,10 @@ public class TeleopOperator extends TeleopComponent {
         
         // Algorithim to hunt for target and latch on to it
         
-        if (this.operatorController.getAButton()) {
-            this.drive.lockPosition(true);
+        /*if (this.operatorController.getAButton()) {
+            this.drive.lockPosition(false);
             this.limelight.setLedMode(3);
-            this.limelightSeek();
+            //this.limelightSeek();
             this.distance = this.limelight.getTargetDistance();
             this.height = Constants.TARGET_HEIGHT - Constants.SHOOTER_HEIGHT;
 
@@ -177,6 +178,18 @@ public class TeleopOperator extends TeleopComponent {
             // Converts velocity into RPM: [(Velocity x 60<seconds>) / (PI * Diameter<meters>)]
             this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.115062);
             //this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
+
+            this.climber.setRobotArmPosition(this.armShoot);
+            this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
+            this.intake.setStagerSpeed(1);
+
+            this.feedRoll = true;
+
+            this.shootState = true;
+            this.shootLatch = true;
+        } else */
+        if (this.operatorController.getLeftBumper()) {
+            this.shooterWheelRPM = 3200;
 
             this.climber.setRobotArmPosition(this.armShoot);
             this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
@@ -225,13 +238,13 @@ public class TeleopOperator extends TeleopComponent {
         }
 
         if (feedRoll) {
-            this.intake.setFeederSpeed(0.6);
+            this.intake.setFeederSpeed(0.7);
         } else {
             this.intake.setFeederSpeed(0);
         }
         
-        // this.shooterWheelRPM = SmartDashboard.getNumber("Shooter Wheels", 0);
-        // this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
+        this.shooterWheelRPM = SmartDashboard.getNumber("Shooter Wheels", 0);
+        this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
 
         // Algorithim to calculate and aim shooter from limelight value
 
@@ -255,13 +268,12 @@ public class TeleopOperator extends TeleopComponent {
     public void limelightSeek() {
         this.tx = this.limelight.getTargetX();
         SmartDashboard.putNumber("Limelight X", this.tx);
-        if (this.tx < 2 && this.tx > -2) return;
 
         double conversion = 9;
         double driveRevolutions = (this.tx / conversion);
 
-        this.drive.setDriveLeft(10);
-        this.drive.setDriveRight(-10);
+        this.drive.setDriveLeft(driveRevolutions);
+        this.drive.setDriveRight(-driveRevolutions);
     }
 
     /**
