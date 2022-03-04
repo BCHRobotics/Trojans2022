@@ -34,12 +34,13 @@ public class TeleopOperator extends TeleopComponent {
     private double climberArmRevolutions;
     private double tx;
     private boolean shootState;
+    private boolean feedRoll;
 
     private long previousTime;
     private long currentTime;
     private long feederDelay = 800;
 
-    private final double armClimb = 0;
+    private final double armClimb = 25;
     private final double armShoot = 0;
 
     private PIDF limelightPID;
@@ -137,7 +138,7 @@ public class TeleopOperator extends TeleopComponent {
         this.drive.calculate();
     }
 
-    private void shootMode() {
+    private void testShootMode() {
         this.intake.setIntakeState(SmartDashboard.getBoolean("Intake State", false));
         this.intake.setIntakeSpeed(SmartDashboard.getNumber("Intake Rollers", 0));
         this.intake.setStagerSpeed(SmartDashboard.getNumber("Stager Rollers", 0));
@@ -145,7 +146,7 @@ public class TeleopOperator extends TeleopComponent {
         this.intake.setFeederState(SmartDashboard.getBoolean("Feeder State", false));
         this.shooter.setShooterWheelSpeed(SmartDashboard.getNumber("Shooter Wheels", 0));
         this.drive.setDriveLeft(SmartDashboard.getNumber("Drive Rotate", 0));
-        this.drive.setDriveLeft(-SmartDashboard.getNumber("Drive Rotate", 0));
+        this.drive.setDriveRight(-SmartDashboard.getNumber("Drive Rotate", 0));
         if (SmartDashboard.getBoolean("Arm State", false)) {
             this.climber.setRobotArmPosition(this.armShoot);
         } else {
@@ -154,7 +155,7 @@ public class TeleopOperator extends TeleopComponent {
         this.climber.setRobotArmPosition(SmartDashboard.getNumber("Arm pos", 0));
     }
 
-    private void testShootMode() {
+    private void shootMode() {
         this.currentTime = System.currentTimeMillis();
         
         // Algorithim to hunt for target and latch on to it
@@ -178,25 +179,34 @@ public class TeleopOperator extends TeleopComponent {
             this.climber.setRobotArmPosition(this.armShoot);
             this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
             this.intake.setStagerSpeed(1);
-            this.intake.setFeederSpeed(0);
+
+            this.feedRoll = true;
 
             this.shootState = true;
         } else if (this.operatorController.getYButton()) {
             this.shootState = false;
+            this.feedRoll = false;
         } else if (this.operatorController.getXButton()) {
             this.shootState = true;
             this.previousTime = this.currentTime;
             this.intake.setStagerSpeed(0);
-            this.intake.setFeederSpeed(1);
             this.intake.setFeederState(true);
+            this.feedRoll = true;
         } else {
             if (!this.shootState) {
                 this.previousTime = this.currentTime;
-                this.shooter.setShooterWheelSpeed(1400);
+                this.shooter.setShooterWheelSpeed(1000);
                 this.limelight.setLedMode(1);
                 this.climber.setRobotArmPosition(0);
                 this.intake.setFeederState(false);
+                this.feedRoll = false;
             }
+        }
+
+        if (feedRoll) {
+            this.intake.setFeederSpeed(0.4);
+        } else {
+            this.intake.setFeederSpeed(0);
         }
 
         if (this.shootState && (this.currentTime >= (previousTime + feederDelay))) {
@@ -246,6 +256,8 @@ public class TeleopOperator extends TeleopComponent {
 
         // Activate Lift based on joystick and constants multiplyer
         this.climber.setRobotArmPosition(this.armClimb);
+
+        this.shooter.setShooterWheelSpeed(0);
 
         // Activate Climber based on joystick and constants multiplyer
         this.climber.setClimberWinchPosition(this.operatorController.getJoystick(Side.RIGHT, Axis.Y) * climberWinchRotations);

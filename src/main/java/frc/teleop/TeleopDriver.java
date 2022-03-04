@@ -68,13 +68,10 @@ public class TeleopDriver extends TeleopComponent {
         }
 
         if (driverController.getRightBumper()) {
-            this.intake.setIntakeState(this.intakeToggle);
-            this.intakeToggle = !this.intakeToggle;
-        }
-
-        if (driverController.getAButton()) {
+            this.intake.setIntakeState(true);
             intakeControl(1);
         } else {
+            this.intake.setIntakeState(false);
             intakeControl(0);
         }
 

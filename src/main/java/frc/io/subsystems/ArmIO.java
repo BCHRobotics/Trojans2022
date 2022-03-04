@@ -52,8 +52,8 @@ public class ArmIO implements IIO{
         this.rightArmMotor.restoreFactoryDefaults();
         
         // Set motor controllers Idle Mode [Brake/Coast]
-        this.leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        this.rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        this.leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
         // Set Arm PID
         this.leftArmPidController = new SparkMaxPID(leftArmMotor);
@@ -61,7 +61,7 @@ public class ArmIO implements IIO{
         this.leftArmPidController.setConstants(leftArmConstants);
 
         // Inversion state of left arm
-        this.leftArmMotor.setInverted(false);
+        this.leftArmMotor.setInverted(true);
 
         // Set right arm to copy left arm inversly
         this.rightArmMotor.follow(leftArmMotor, true);
