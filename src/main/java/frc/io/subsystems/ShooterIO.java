@@ -25,6 +25,7 @@ public class ShooterIO implements IIO {
     private SparkMaxConstants leftWheelConstants = Constants.SHOOTER_WHEEL_CONSTANTS;
 
     private boolean enabled = Constants.SHOOTER_ENABLED;
+    private double inputSpeed;
 
     public static ShooterIO getInstance() {
         if (instance == null) {
@@ -78,8 +79,13 @@ public class ShooterIO implements IIO {
      */
     public void setWheelSpeed(double speed) {
         if (!enabled) return;
+        this.inputSpeed = speed;
         this.leftWheelPidController.setVelocity(speed);
         //this.leftWheelMotor.set(speed);
+    }
+
+    public double getInputWheelSpeed() {
+        return this.inputSpeed;
     }
 
     /**

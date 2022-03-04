@@ -80,7 +80,6 @@ public class TeleopDriver extends TeleopComponent {
     }
 
     public void intakeControl(double speed) {
-        this.intake.setStagerSpeed(speed);
         this.intake.setIntakeSpeed(speed);
     }
 

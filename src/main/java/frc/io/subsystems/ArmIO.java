@@ -61,7 +61,7 @@ public class ArmIO implements IIO{
         this.leftArmPidController.setConstants(leftArmConstants);
 
         // Inversion state of left arm
-        this.leftArmMotor.setInverted(true);
+        this.leftArmMotor.setInverted(false);
 
         // Set right arm to copy left arm inversly
         this.rightArmMotor.follow(leftArmMotor, true);

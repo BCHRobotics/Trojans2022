@@ -24,6 +24,8 @@ public class Drive extends Subsystem {
     private double posLeft;
     private double posRight;
 
+    private boolean shooterLock;
+
     /**
      * Get the instance of the Drive, if none create a new instance
      * 
@@ -49,6 +51,10 @@ public class Drive extends Subsystem {
     @Override
     public void calculate() {
         SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
+
+        if (this.shooterLock) {
+            this.currentState = DriveState.POSITION;
+        }
 
         switch (currentState) {
             case OUTPUT:
@@ -78,6 +84,10 @@ public class Drive extends Subsystem {
 
     public void resetPosition() {
         this.driveIO.resetInputs();
+    }
+
+    public void lockPosition(boolean state) {
+        this.shooterLock = state;
     }
 
     /**

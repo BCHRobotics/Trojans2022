@@ -36,6 +36,7 @@ public class IntakeIO implements IIO{
 
     private double intakeSpeed;
     private double stagerSpeed;
+    private double feederSpeed;
 
     public static IntakeIO getInstance() {
         if (instance == null) {
@@ -113,6 +114,7 @@ public class IntakeIO implements IIO{
      */
     public void setFeederSpeed(double speed) {
         if (!enabled) return;
+        this.feederSpeed = speed;
         this.feederMotor.set(speed);
     }
 
@@ -174,6 +176,15 @@ public class IntakeIO implements IIO{
     public double getStagerPercent() {
         if (!enabled) return 0.0;
         return this.stagerSpeed;
+    }
+
+    /**
+     * Get the percent output of the feeder
+     * @return motor perecentage in decimal
+     */
+    public double getFeederPercent() {
+        if (!enabled) return 0.0;
+        return this.feederSpeed;
     }
 
     /**

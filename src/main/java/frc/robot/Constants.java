@@ -36,7 +36,7 @@ public class Constants {
 
     // CSV Test version
     public static final int VERSION = 11;
-    public static final String TEACH_MODE_FILE_NAME = "record3";
+    public static final String TEACH_MODE_FILE_NAME = "record9";
 
     // Subsytems toggle logic
     public static final boolean SHOOTER_ENABLED = true;
@@ -47,7 +47,7 @@ public class Constants {
     public static final boolean MINI_BOT = false;
 
     // Shooter PID Constants
-    public static final SparkMaxConstants SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.0002, 0, 0, 0, 0.00019, -1, 1, 0, 0, 6000, 3000, 0.5);
+    public static final SparkMaxConstants SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.0004, 0, 0, 0, 0.00019, -1, 1, 0, 0, 6000, 3000, 0.5);
     
     // Lift PID Constants
     public static final SparkMaxConstants ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
