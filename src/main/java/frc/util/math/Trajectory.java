@@ -20,12 +20,12 @@ public class Trajectory {
     
     // Return angle after calculations
     public double getAngle() {
-        return angle;
+        return this.angle;
     }
     
     // Reutrn velocity after calculations
     public double getVelocity() {
-        return calculateVelocity(this.distance, this.height, angle);
+        return calculateVelocity(this.distance, this.height, this.angle);
     }
     
     //call setShootingAngle to calculate for the nessessary shooter angle

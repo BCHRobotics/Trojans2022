@@ -20,7 +20,6 @@ public class IntakeIO implements IIO{
     private CANSparkMax feederMotor;
 
     private RelativeEncoder intakeEncoder;
-    private RelativeEncoder stagerEncoder;
 
     private Compressor compressor;
 
@@ -63,16 +62,14 @@ public class IntakeIO implements IIO{
 
         // Initiate new motor objects
         this.intakeMotor = new CANSparkMax(Constants.INTKAE_ROLLER_ID, MotorType.kBrushless);
-        this.stagerMotor = new CANSparkMax(Constants.STAGER_ROLLER_ID, MotorType.kBrushless);
+        this.stagerMotor = new CANSparkMax(Constants.STAGER_ROLLER_ID, MotorType.kBrushed);
         this.feederMotor = new CANSparkMax(Constants.FEEDER_ROLLER_ID, MotorType.kBrushed);
 
         // Get motor encoder
         this.intakeEncoder = intakeMotor.getEncoder();
-        this.stagerEncoder = stagerMotor.getEncoder();
 
         // Restore motor controllers to factory defaults
         this.intakeMotor.restoreFactoryDefaults();
-        this.stagerMotor.restoreFactoryDefaults();
         
         // Set motor controllers Idle Mode [Brake/Coast]
         this.intakeMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -189,22 +186,12 @@ public class IntakeIO implements IIO{
     }
 
     /**
-     * Get the reference to the Stager encoder
-     * @return CANEncoder reference
-     */
-    public RelativeEncoder getStagerEncoder() {
-        if (!enabled) return null;
-        return this.stagerMotor.getEncoder();
-    }
-
-    /**
      * Reset the state of the inputs
      */
     @Override
     public void resetInputs() {
         if (!enabled) return;
         this.intakeEncoder.setPosition(0);
-        this.stagerEncoder.setPosition(0);
     }
 
     /**

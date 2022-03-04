@@ -47,7 +47,6 @@ public class Intake extends Subsystem {
 
     public void resetPosition() {
         this.intakeIO.getIntakeEncoder().setPosition(0);
-        this.intakeIO.getStagerEncoder().setPosition(0);
     }
 
     /**

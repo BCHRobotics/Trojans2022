@@ -73,7 +73,7 @@ public class TeleopDriver extends TeleopComponent {
         }
 
         if (driverController.getAButton()) {
-            intakeControl(SmartDashboard.getNumber("Intake Motor Speed",0));
+            intakeControl(1);
         } else {
             intakeControl(0);
         }

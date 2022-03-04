@@ -43,6 +43,7 @@ public class Drive extends Subsystem {
     @Override
     public void firstCycle() {
         this.driveIO = DriveIO.getInstance();
+        this.resetPosition();
     }
 
     @Override

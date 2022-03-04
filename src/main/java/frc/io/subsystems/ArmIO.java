@@ -77,6 +77,7 @@ public class ArmIO implements IIO{
      */
     public void setArmPosition(double setPoint) {
         if (!enabled) return;
+        
         this.leftArmPidController.setPosition(setPoint);
     }
 
