@@ -4,6 +4,7 @@ package frc.io.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 // Import required Classes
 import frc.robot.Constants;
@@ -24,6 +25,8 @@ public class ArmIO implements IIO{
 
     private SparkMaxConstants leftArmConstants = Constants.ARM_CONSTANTS;
 
+    private DigitalInput armLimitSwitch;
+
     private boolean enabled = Constants.ARM_ENABLED;
 
     public static ArmIO getInstance() {
@@ -42,6 +45,8 @@ public class ArmIO implements IIO{
         // Initiate new arm motor objects
         this.leftArmMotor = new CANSparkMax(Constants.LEFT_ARM_ID, MotorType.kBrushless);
         this.rightArmMotor = new CANSparkMax(Constants.RIGHT_ARM_ID, MotorType.kBrushless);
+
+        this.armLimitSwitch = new DigitalInput(8);
 
         // Get motor encoder
         this.leftArmEncoder = leftArmMotor.getEncoder();
@@ -77,8 +82,12 @@ public class ArmIO implements IIO{
      */
     public void setArmPosition(double setPoint) {
         if (!enabled) return;
-        
-        this.leftArmPidController.setPosition(setPoint);
+        if (this.armLimitSwitch.get()) {
+            this.leftArmEncoder.setPosition(setPoint);
+            this.rightArmEncoder.setPosition(setPoint);
+        } else {
+            this.leftArmPidController.setPosition(setPoint);
+        }
     }
 
     /**
