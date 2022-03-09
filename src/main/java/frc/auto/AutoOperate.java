@@ -16,7 +16,6 @@ public class AutoOperate extends AutoComponent {
     private static List<List<Double>> data = new ArrayList<>();
     private static long startTime;
     private static long currentTime;
-    private AutoSelecter selecter;
     private Drive drive;
     private Intake intake;
     private Shooter shooter;
@@ -51,7 +50,7 @@ public class AutoOperate extends AutoComponent {
         startTime = System.currentTimeMillis();
         try {
             System.out.println("Made it to firstCycle");
-            data = CSVReader.convertToArrayList(Constants.TEACH_MODE_FILE_NAME);//AutoSelecter.getInstance().getFileName()
+            data = CSVReader.convertToArrayList(AutoSelecter.getInstance().getFileName());//AutoSelecter.getInstance().getFileName()
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -81,7 +80,7 @@ public class AutoOperate extends AutoComponent {
                 data.clear();
                 return;
             }
-            if(currentTime < data.get(0).get(0).longValue() * 0.40) {
+            if(currentTime < data.get(0).get(0).longValue() * 0.35) {
                 this.drive.setDriveLeft(data.get(0).get(1));
                 this.drive.setDriveRight(data.get(0).get(2));
                 this.intake.setIntakeState(data.get(0).get(3) == 1.0 ? true : false);

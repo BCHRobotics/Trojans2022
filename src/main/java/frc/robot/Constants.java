@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.util.pid.PIDConstants;
 import frc.util.pid.SparkMaxConstants;
 
 public class Constants {
@@ -47,7 +46,8 @@ public class Constants {
     public static final boolean MINI_BOT = false;
 
     // Shooter PID Constants
-    public static final SparkMaxConstants SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.0004, 0, 0, 0, 0.00019, -1, 1, 0, 0, 6000, 3000, 0.5);
+    public static final SparkMaxConstants LEFT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.0005, 0, 0, 0, 0.00019, -1, 1, 0, 0, 6000, 3000, 0.5);
+    public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.00049, 0, 0, 0, 0.00019, -1, 1, 0, 0, 6000, 3000, 0.5);
     
     // Lift PID Constants
     public static final SparkMaxConstants ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
@@ -63,8 +63,8 @@ public class Constants {
     public static final String ROOT_DIRECTORY = "csv/";
 
     // Limlight constants
-    public static final double LIMELIGHT_HEIGHT = 1; // Height in meters
-    public static final double LIMELIGHT_ANGLE = 25; // Angle in degrees
+    public static final double LIMELIGHT_HEIGHT = 1.0668; // Height in meters
+    public static final double LIMELIGHT_ANGLE = 20; // Angle in degrees
     public static final double TARGET_HEIGHT = 2.64; // Height in meters
     public static final double SHOOTER_HEIGHT = 0.50; // Height in meteres
 
@@ -80,9 +80,6 @@ public class Constants {
     public static final int FEEDER_LOWERED = 7;
 
     //shooter angle
-    public static final int ANGLE = 66;
+    public static final int ANGLE = 60;
     public static final double ANGLE_LIMIT = 40;
-
-    // Limelight Drive PID TUNING
-    public static final PIDConstants LIMELIGHT_ROTATE = new PIDConstants(0.125, 0.001, 1, 4);
 }

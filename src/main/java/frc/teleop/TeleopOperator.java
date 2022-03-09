@@ -14,7 +14,6 @@ import frc.util.devices.Controller.Side;
 import frc.util.imaging.Limelight;
 import frc.util.imaging.Limelight.LimelightTargetType;
 import frc.util.math.Trajectory;
-import frc.util.pid.PIDF;
 
 public class TeleopOperator extends TeleopComponent {
 
@@ -36,14 +35,18 @@ public class TeleopOperator extends TeleopComponent {
     private boolean shootState;
     private boolean shootLatch;
 
+    private double kP = 0.06;
+    private double minOutput = 0.0;
+
+    final double conversionLeft = 11.2835522805; //12.51653
+    final double conversionRight = -9.4263945489; //-8.5326
+
     private long previousTime;
     private long currentTime;
     private long feederDelay = 800;
 
-    private final double armClimb = 0;
-    private final double armShoot = Constants.ANGLE_LIMIT; //40
-
-    private PIDF limelightPID;
+    private double armClimb = 0;
+    private double armShoot = Constants.ANGLE_LIMIT; //40
 
     private enum OperatorMode {
         SHOOT, CLIMB
@@ -92,21 +95,20 @@ public class TeleopOperator extends TeleopComponent {
         this.limelight.setLedMode(1);
         this.limelight.setLimelightState(LimelightTargetType.UPPER_HUB);
 
-        this.limelightPID = new PIDF(Constants.LIMELIGHT_ROTATE);
-        this.limelightPID.setMinDoneCycles(10);
-        this.limelightPID.setMaxOutput(0.2);
-        this.limelightPID.setIRange(10);
-
         SmartDashboard.putBoolean("Intake State", false);
         SmartDashboard.putNumber("Intake Rollers", 0);
         SmartDashboard.putNumber("Stager Rollers", 0);
         SmartDashboard.putNumber("Feeder Belt", 0);
         SmartDashboard.putBoolean("Feeder State", false);
-        SmartDashboard.putNumber("Shooter Wheels", 0);
+        SmartDashboard.putNumber("Shooter Wheels", 3000);
         SmartDashboard.putBoolean("Arm State", false);
-        SmartDashboard.putNumber("Arm pos", 0);
+        SmartDashboard.putNumber("Arm pos", this.armShoot);
         SmartDashboard.putNumber("Drive Rotate", 0);
         SmartDashboard.putNumber("Distance", 0);
+
+        SmartDashboard.putNumber("Limelight kP", this.kP);
+        SmartDashboard.putNumber("Limelight minOut", this.minOutput);
+
     }
 
     @Override
@@ -162,11 +164,10 @@ public class TeleopOperator extends TeleopComponent {
         this.currentTime = System.currentTimeMillis();
         
         // Algorithim to hunt for target and latch on to it
-        
-        /*if (this.operatorController.getAButton()) {
-            this.drive.lockPosition(false);
+        this.armShoot = SmartDashboard.getNumber("Arm pos", 0);
+        if (this.operatorController.getAButton()) {
             this.limelight.setLedMode(3);
-            //this.limelightSeek();
+            this.limelightSeek();
             this.distance = this.limelight.getTargetDistance();
             this.height = Constants.TARGET_HEIGHT - Constants.SHOOTER_HEIGHT;
 
@@ -177,20 +178,17 @@ public class TeleopOperator extends TeleopComponent {
             this.velocity = trajectoy.getVelocity();
 
             // Converts velocity into RPM: [(Velocity x 60<seconds>) / (PI * Diameter<meters>)]
-            this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.115062);
+            //this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.115062);
             //this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
 
             this.climber.setRobotArmPosition(this.armShoot);
             this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
             this.intake.setStagerSpeed(1);
 
-            this.feedRoll = true;
-
             this.shootState = true;
             this.shootLatch = true;
-        } else */
-        if (this.operatorController.getLeftBumper()) {
-            this.shooterWheelRPM = 4400;
+        } else if (this.operatorController.getLeftBumper()) {
+            this.shooterWheelRPM = SmartDashboard.getNumber("Shooter Wheels", 0);
 
             this.climber.setRobotArmPosition(Constants.ANGLE_LIMIT);
             this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
@@ -208,6 +206,10 @@ public class TeleopOperator extends TeleopComponent {
             this.shootState = true;
             this.shootLatch = true;
         } else if (this.operatorController.getYButton()) {
+            this.intake.setStagerSpeed(0);
+            this.intake.setFeederSpeed(0);
+            this.intake.setFeederState(false);
+            this.climber.setRobotArmPosition(Constants.ANGLE_LIMIT);
             this.shootState = false;
             this.shootLatch = false;
         } else if (this.operatorController.getXButton()) {
@@ -229,7 +231,7 @@ public class TeleopOperator extends TeleopComponent {
         } else {
             if (!this.shootState) {
                 this.previousTime = this.currentTime;
-                this.shooter.setShooterWheelSpeed(1000);
+                this.shooter.setShooterWheelSpeed(0);
                 this.limelight.setLedMode(1);
                 this.climber.setRobotArmPosition(armShoot);
                 this.intake.setFeederState(false);
@@ -237,10 +239,12 @@ public class TeleopOperator extends TeleopComponent {
             } else if (this.shootState && (this.currentTime >= (previousTime + feederDelay)) && !this.shootLatch) {
                 this.intake.setStagerSpeed(0);
                 this.intake.setFeederSpeed(0);
+                this.limelight.setLedMode(1);
                 this.intake.setFeederState(false);
                 this.climber.setRobotArmPosition(Constants.ANGLE_LIMIT);
                 this.shootState = false;
             }
+            this.drive.lockPosition(false);
         }
         
         // this.shooterWheelRPM = SmartDashboard.getNumber("Shooter Wheels", 0);
@@ -255,25 +259,36 @@ public class TeleopOperator extends TeleopComponent {
 
     public void oldLimelightSeek() {
         this.tx = this.limelight.getTargetX();
-        SmartDashboard.putNumber("Limelight X", this.tx);
-        if (this.tx < 2 && this.tx > -2) return;
-
-        this.limelightPID.setMinMaxOutput(-0.4, 0.4);
-        this.limelightPID.setDesiredValue(0);
+        double headingError = this.tx;
+        double turningAmount = 0.0;
         
-        double output = this.limelightPID.calcPID(this.tx);
-        this.drive.setOutput(0, -output);
+        SmartDashboard.putNumber("Limelight X", this.tx);
+
+        this.kP = SmartDashboard.getNumber("Limelight kP", 0);
+        this.minOutput = SmartDashboard.getNumber("Limelight minOut", 0);
+
+        if (tx > 1.0) {
+            turningAmount = (this.kP * headingError) - this.minOutput;
+        } else if (tx < 1.0) {
+            turningAmount = (this.kP * headingError) + this.minOutput;
+        }
+        
+        if (this.tx < 1 && this.tx > -1) return;
+
+        this.drive.setOutput(0, turningAmount);
     }
 
     public void limelightSeek() {
+        this.drive.lockPosition(true);
         this.tx = this.limelight.getTargetX();
         SmartDashboard.putNumber("Limelight X", this.tx);
 
-        double conversion = 9;
-        double driveRevolutions = (this.tx / conversion);
+        double driveRevolutionsLeft = (this.tx / conversionLeft);
+        double driveRevolutionsRight = (this.tx / conversionRight);
 
-        this.drive.setDriveLeft(driveRevolutions);
-        this.drive.setDriveRight(-driveRevolutions);
+        this.drive.resetPosition();
+        this.drive.setDriveLeft(driveRevolutionsLeft);
+        this.drive.setDriveRight(driveRevolutionsRight);
     }
 
     /**

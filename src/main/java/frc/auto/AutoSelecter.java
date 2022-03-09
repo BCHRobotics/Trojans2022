@@ -16,6 +16,7 @@ public class AutoSelecter {
     }
 
     private AutoSelecter() {
+        autoChooser = new SendableChooser<String>();
         autoChooser.setDefaultOption("AUTO_PATH_1", "AUTO_PATH_1");
         autoChooser.addOption("AUTO_PATH_2", "AUTO_PATH_2");
         autoChooser.addOption("AUTO_PATH_3", "AUTO_PATH_3");
