@@ -26,10 +26,10 @@ public class AutoOperate extends AutoComponent {
      * @return instance of the AutoOperator
      */
     public static AutoOperate getInstance() {
-        if (instance == null) {
-            instance = new AutoOperate();
+        if (this.instance == null) {
+            this.instance = new AutoOperate();
         }
-        return instance;
+        return this.instance;
     }
 
     private AutoOperate() {
@@ -41,15 +41,15 @@ public class AutoOperate extends AutoComponent {
 
     @Override
     public void firstCycle(){
-        data.clear();
+        this.data.clear();
         this.drive.firstCycle();
         this.intake.firstCycle();
         this.shooter.firstCycle();
         this.climber.firstCycle();
-        startTime = System.currentTimeMillis();
+        this.startTime = System.currentTimeMillis();
         try {
             System.out.println("Made it to firstCycle");
-            data = CSVReader.convertToArrayList(AutoSelecter.getInstance().getFileName());//AutoSelecter.getInstance().getFileName()
+            this.data = CSVReader.convertToArrayList(AutoSelecter.getInstance().getFileName());//AutoSelecter.getInstance().getFileName()
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
