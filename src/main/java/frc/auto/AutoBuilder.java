@@ -74,7 +74,7 @@ public class AutoBuilder {
         try {
             System.out.println("Made it to convertData()!");
             writer.setFileName(Constants.TEACH_MODE_FILE_NAME);
-            //writer.deleteCopy();
+            writer.deleteCopy();
             writer.setHeader("time,leftDrive,rightDrive,intakeArms,intakeRollers,stagerRollers,feederRollers,feederArm,armPosition,shooterWheels");
             writer.importData(data);
             writer.output();

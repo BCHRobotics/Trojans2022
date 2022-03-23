@@ -17,10 +17,11 @@ public class AutoSelecter {
 
     private AutoSelecter() {
         autoChooser = new SendableChooser<String>();
-        autoChooser.setDefaultOption("AUTO_PATH_1", "AUTO_PATH_1");
-        autoChooser.addOption("AUTO_PATH_2", "AUTO_PATH_2");
-        autoChooser.addOption("AUTO_PATH_3", "AUTO_PATH_3");
-        autoChooser.addOption("Live Record", Constants.TEACH_MODE_FILE_NAME);
+        autoChooser.setDefaultOption("2_BALL_LOW", "AUTO_PATH_1");
+        autoChooser.addOption("2_BALL_HIGH", "AUTO_PATH_2");
+        autoChooser.addOption("3_BALL_HIGH", "AUTO_PATH_3");
+        autoChooser.addOption("4_BALL_HIGH", "AUTO_PATH_4");
+        autoChooser.addOption("LIVE_RECORD", Constants.TEACH_MODE_FILE_NAME);
 
         SmartDashboard.putData("Autonomous Route", autoChooser);
     }

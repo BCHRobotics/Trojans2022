@@ -35,7 +35,7 @@ public class Constants {
 
     // CSV Test version
     public static final int VERSION = 11;
-    public static final String TEACH_MODE_FILE_NAME = "record14";
+    public static final String TEACH_MODE_FILE_NAME = "LIVE_RECORD";
 
     // Subsytems toggle logic
     public static final boolean SHOOTER_ENABLED = true;
@@ -46,9 +46,9 @@ public class Constants {
     public static final boolean MINI_BOT = false;
 
     // Shooter PID Constants
-    public static final SparkMaxConstants LEFT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.0005, 0, 0, 0, 0.00019, -1, 1, 0, 0, 6000, 3000, 0.5);
-    public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.00049, 0, 0, 0, 0.00019, -1, 1, 0, 0, 6000, 3000, 0.5);
-    
+    public static final SparkMaxConstants LEFT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000183, -1, 1, 0, 0, 6000, 3000, 0.1);
+    public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.0002, -1, 1, 0, 0, 6000, 3000, 0.1);
+
     // Lift PID Constants
     public static final SparkMaxConstants ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
     
@@ -64,7 +64,7 @@ public class Constants {
 
     // Limlight constants
     public static final double LIMELIGHT_HEIGHT = 1.0668; // Height in meters
-    public static final double LIMELIGHT_ANGLE = 20; // Angle in degrees
+    public static final double LIMELIGHT_ANGLE = 22; // Angle in degrees
     public static final double TARGET_HEIGHT = 2.64; // Height in meters
     public static final double SHOOTER_HEIGHT = 0.50; // Height in meteres
 

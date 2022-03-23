@@ -90,7 +90,8 @@ public class Limelight {
         double h2 = Constants.TARGET_HEIGHT; // Known Height of Target
 
         double distance = (h2-h1)/Math.tan(aR);
-        
+
+        distance = Math.round(distance * 100.0)/100.0;
         SmartDashboard.putNumber("Distance", distance);
         return distance;
     }
