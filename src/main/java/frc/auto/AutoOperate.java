@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.robot.Constants;
 import frc.subsystems.Climber;
 import frc.subsystems.Drive;
 import frc.subsystems.Intake;
