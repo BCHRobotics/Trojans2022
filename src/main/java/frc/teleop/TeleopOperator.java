@@ -98,12 +98,27 @@ public class TeleopOperator extends TeleopComponent {
         this.limelight.setLedMode(1);
         this.limelight.setLimelightState(LimelightTargetType.UPPER_HUB);
 
+        this.distance = 0;
+        this.height = 0;
+        this.angle = 0;
+        this.velocity = 0;
+        this.stagerSpeed = 0;
+        this.feederSpeed = 0;
+        this.feederState = false;
+        this.shooterWheelRPM = 0;
+        this.climberArmRevolutions = 0;
+        this.tx = 0;
+        this.shootState = false;
+        this.shootLatch = false;
+        this.previousTime = 0;
+        this.currentTime = 0;
+
         SmartDashboard.putBoolean("Intake State", false);
         SmartDashboard.putNumber("Intake Rollers", 0);
         SmartDashboard.putNumber("Stager Rollers", 0);
         SmartDashboard.putNumber("Feeder Belt", 0);
         SmartDashboard.putBoolean("Feeder State", false);
-        SmartDashboard.putNumber("Shooter Wheels", 3000);
+        SmartDashboard.putNumber("Shooter Wheels", 2000);
         SmartDashboard.putBoolean("Arm State", false);
         SmartDashboard.putNumber("Arm pos", this.armShoot);
         SmartDashboard.putNumber("Drive Rotate", 0);
@@ -197,7 +212,7 @@ public class TeleopOperator extends TeleopComponent {
             this.shootState = true;
             this.shootLatch = true;
         } else if (this.operatorController.getLeftTriggerAxis() > 0.5) {
-            this.shooterWheelRPM = 1260;
+            this.shooterWheelRPM = 1100;
 
             this.stagerSpeed = 0;
 
@@ -251,7 +266,7 @@ public class TeleopOperator extends TeleopComponent {
         
         // this.shooterWheelRPM = SmartDashboard.getNumber("Shooter Wheels", 0);
         // this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
-    }
+    } 
 
     private void oldLimelightSeek() {
         this.tx = this.limelight.getTargetX();
@@ -288,10 +303,10 @@ public class TeleopOperator extends TeleopComponent {
     }
 
     private double calculateShooterWheelRPM(double setDistance) {
-        final double a = 64.1;
-        final double b = 215;
-        final double c = 2237;
-        double output  = (a*Math.pow(setDistance, 2)) - (b*setDistance) + c;
+        final double a = 24;
+        final double b = 14.4;
+        final double c = 1908;
+        double output  = (a*Math.pow(setDistance, 2)) + (b*setDistance) + c;
         return output;
     }
 
@@ -310,10 +325,6 @@ public class TeleopOperator extends TeleopComponent {
 
         // Activate Climber based on joystick and constants multiplyer
         this.climber.setClimberWinchPosition(this.operatorController.getJoystick(Side.RIGHT, Axis.Y) * climberWinchRotations);
-    }
-
-    private double calculateRPM() {
-        return 0.0;
     }
 
     @Override

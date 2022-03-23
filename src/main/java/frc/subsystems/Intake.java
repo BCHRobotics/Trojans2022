@@ -87,6 +87,16 @@ public class Intake extends Subsystem {
     }
 
     /**
+     * Returns the position of the intake
+     * 
+     * @param state as a boolean value
+     * { FALSE: Raised | TRUE: Lowered }
+     */
+    public boolean getIntakeState() {
+        return this.intakeState;
+    }
+
+    /**
      * Set the position of the feeder
      * 
      * @param state as a boolean value
