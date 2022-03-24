@@ -25,6 +25,7 @@ public class Drive extends Subsystem {
     private double posRight;
 
     private boolean shooterLock;
+    private boolean brakeLock;
 
     /**
      * Get the instance of the Drive, if none create a new instance
@@ -86,8 +87,20 @@ public class Drive extends Subsystem {
         this.driveIO.resetInputs();
     }
 
-    public void lockPosition(boolean state) {
+    public void setLockPosition(boolean state) {
         this.shooterLock = state;
+    }
+
+    public boolean getLockPosition() {
+        return this.shooterLock;
+    }
+
+    public void setBrakeMode(boolean state) {
+        this.brakeLock = state;
+    }
+
+    public boolean getBrakeMode() {
+        return this.brakeLock;
     }
 
     /**

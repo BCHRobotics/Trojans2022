@@ -63,10 +63,10 @@ public class Constants {
     public static final String ROOT_DIRECTORY = "csv/";
 
     // Limlight constants
-    public static final double LIMELIGHT_HEIGHT = 1.0668; // Height in meters
-    public static final double LIMELIGHT_ANGLE = 22; // Angle in degrees
+    public static final double LIMELIGHT_HEIGHT = 1.0287; // Height in meters
+    public static final double LIMELIGHT_ANGLE = 23; // Angle in degrees
     public static final double TARGET_HEIGHT = 2.64; // Height in meters
-    public static final double SHOOTER_HEIGHT = 0.50; // Height in meteres
+    public static final double SHOOTER_HEIGHT = 0.6096; // Height in meteres
 
     // Set shooter wheel speed constant
     public static final double LIFT_ARM_GEAR_REDUCTION = 525;
@@ -80,6 +80,6 @@ public class Constants {
     public static final int FEEDER_LOWERED = 7;
 
     //shooter angle
-    public static final int ANGLE = 60;
-    public static final double ANGLE_LIMIT = 40;
+    public static final int ANGLE = 60; // Arm angle in degrees
+    public static final double ANGLE_LIMIT = 40; // 
 }

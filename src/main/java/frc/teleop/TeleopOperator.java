@@ -1,5 +1,7 @@
 package frc.teleop;
 
+import java.nio.file.FileSystemAlreadyExistsException;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.DriverInput;
 import frc.io.subsystems.ShooterIO;
@@ -46,7 +48,10 @@ public class TeleopOperator extends TeleopComponent {
 
     private long previousTime;
     private long currentTime;
-    private long feederDelay = 800;
+    private long feederDelay = 500; //800
+    // private long kickerDelay = 120;
+    // private boolean kickerEnabled = false;
+    // private boolean feedButtonLock = false;
 
     private double armClimb = 0;
     private double armShoot = Constants.ANGLE_LIMIT; //40
@@ -98,20 +103,7 @@ public class TeleopOperator extends TeleopComponent {
         this.limelight.setLedMode(1);
         this.limelight.setLimelightState(LimelightTargetType.UPPER_HUB);
 
-        this.distance = 0;
-        this.height = 0;
-        this.angle = 0;
-        this.velocity = 0;
-        this.stagerSpeed = 0;
-        this.feederSpeed = 0;
-        this.feederState = false;
-        this.shooterWheelRPM = 0;
-        this.climberArmRevolutions = 0;
-        this.tx = 0;
-        this.shootState = false;
-        this.shootLatch = false;
-        this.previousTime = 0;
-        this.currentTime = 0;
+        this.resetVariables();
 
         SmartDashboard.putBoolean("Intake State", false);
         SmartDashboard.putNumber("Intake Rollers", 0);
@@ -183,8 +175,12 @@ public class TeleopOperator extends TeleopComponent {
         
         // Algorithim to hunt for target and latch on to it
         this.armShoot = SmartDashboard.getNumber("Arm pos", 0);
-        if (this.operatorController.getAButton()) {
+        
+        if (this.operatorController.getRightBumper()) {
             this.limelight.setLedMode(3);
+            this.drive.setLockPosition(true);
+            this.drive.setBrakeMode(true);
+            this.drive.brake(true);
             this.limelightSeek();
             this.distance = this.limelight.getTargetDistance();
             this.height = Constants.TARGET_HEIGHT - Constants.SHOOTER_HEIGHT;
@@ -205,6 +201,23 @@ public class TeleopOperator extends TeleopComponent {
 
             this.shootState = true;
             this.shootLatch = true;
+        } else if (this.operatorController.getXButton()) {
+            // if (!this.kickerEnabled && !this.feedButtonLock) {
+            //     this.feederState = true;
+            //     this.previousTime = this.currentTime;
+            //     this.kickerEnabled = true;
+            //     this.shootState = true;
+            //     this.shootLatch = false;
+            //     this.feedButtonLock = true;
+            // } else if (this.currentTime >= (this.previousTime + this.kickerDelay)) {
+            //     this.feederState = false;
+            //     this.kickerEnabled = false;
+            // }
+
+            this.feederState = true;
+            this.previousTime = this.currentTime;
+            this.shootState = true;
+            this.shootLatch = false;
         } else if (this.operatorController.getLeftBumper()) {
             this.shooterWheelRPM = 2350;
             this.stagerSpeed = 0;
@@ -225,13 +238,7 @@ public class TeleopOperator extends TeleopComponent {
 
             this.shootState = false;
             this.shootLatch = false;
-        } else if (this.operatorController.getXButton()) {
-            this.feederState = true;
-            this.previousTime = this.currentTime;
-
-            this.shootState = true;
-            this.shootLatch = false;
-        } else if (operatorController.getRightBumper()) {
+        } else if (operatorController.getRightTriggerAxis() > 0.5) {
             this.shootState = true;
             this.shootLatch = true;
             this.stagerSpeed = 1;
@@ -249,13 +256,18 @@ public class TeleopOperator extends TeleopComponent {
                 this.stagerSpeed = 0;
                 this.feederSpeed = 0;
                 this.feederState = false;
-            } else if (this.shootState && (this.currentTime >= (previousTime + feederDelay)) && !this.shootLatch) {
+                // this.kickerEnabled = false;
+            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.feederDelay)) && !this.shootLatch) {
                 this.stagerSpeed = 0;
                 this.feederSpeed = 0;
                 this.feederState = false;
                 this.shootState = false;
+                // this.kickerEnabled = false;
+                this.drive.brake(false);
+                this.drive.setBrakeMode(false);
             }
-            this.drive.lockPosition(false);
+            // this.feedButtonLock = false;
+            this.drive.setLockPosition(false);
         }
 
         this.intake.setStagerSpeed(this.stagerSpeed);
@@ -290,7 +302,6 @@ public class TeleopOperator extends TeleopComponent {
     }
 
     private void limelightSeek() {
-        this.drive.lockPosition(true);
         this.tx = this.limelight.getTargetX();
         SmartDashboard.putNumber("Limelight X", this.tx);
 
@@ -325,6 +336,23 @@ public class TeleopOperator extends TeleopComponent {
 
         // Activate Climber based on joystick and constants multiplyer
         this.climber.setClimberWinchPosition(this.operatorController.getJoystick(Side.RIGHT, Axis.Y) * climberWinchRotations);
+    }
+
+    private void resetVariables() {
+        this.distance = 0;
+        this.height = 0;
+        this.angle = 0;
+        this.velocity = 0;
+        this.stagerSpeed = 0;
+        this.feederSpeed = 0;
+        this.feederState = false;
+        this.shooterWheelRPM = 0;
+        this.climberArmRevolutions = 0;
+        this.tx = 0;
+        this.shootState = false;
+        this.shootLatch = false;
+        this.previousTime = 0;
+        this.currentTime = 0;
     }
 
     @Override
