@@ -8,10 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
-import frc.auto.AutoSelecter;
 import frc.io.subsystems.DriveIO;
 import frc.io.subsystems.IO;
-import frc.io.subsystems.ShooterIO;
 import frc.subsystems.Drive;
 import frc.subsystems.Shooter;
 import frc.teleop.TeleopControl;
@@ -31,7 +29,6 @@ public class Robot extends TimedRobot {
     private IO robotIO;
     private TeleopControl teleopControl;
     private AutoControl autoControl;
-    private AutoSelecter autoSelecter;
 
     private Drive drive;
     private Shooter shooter;
@@ -56,7 +53,6 @@ public class Robot extends TimedRobot {
         this.robotIO.resetInputs();
         this.teleopControl = TeleopControl.getInstance();
         this.autoControl = AutoControl.getInstance();
-        this.autoSelecter = AutoSelecter.getInstance();
         this.autoBuilder = AutoBuilder.getInstance();
 
         this.drive = Drive.getInstance();

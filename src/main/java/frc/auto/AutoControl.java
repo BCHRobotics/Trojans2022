@@ -16,8 +16,9 @@ public class AutoControl {
 
     private AutoControl() {
         this.components = new ArrayList<>();
-
         this.components.add(AutoOperate.getInstance());
+
+		AutoSelecter.getInstance();
     }
 
     public void runCycle() {

@@ -49,4 +49,17 @@ public class Shooter extends Subsystem {
         this.shooterWheelSpeed = speed;
     }
 
+    /**
+     * Calculates the necessary shooter RPM value from a given distance to hit the target
+     * @param setDistance distance in meters
+     * @return
+     */
+    public double calculateShooterRPM(double setDistance) {
+        final double a = 34.822;
+        final double b = 71.927;
+        final double c = 2053.9;
+        double output  = (a*Math.pow(setDistance, 2)) - (b*setDistance) + c;
+        return output;
+    }
+
 }

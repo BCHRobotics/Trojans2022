@@ -17,8 +17,6 @@ public class TeleopDriver extends TeleopComponent {
     private Drive drive;
     private Intake intake;
 
-    private boolean intakeToggle = false;
-
      /**
      * Get the instance of the TeleopDriver, if none create a new instance
      * 
@@ -61,12 +59,9 @@ public class TeleopDriver extends TeleopComponent {
             driverController.getJoystick(Side.RIGHT, Axis.X) * speed
         );
 
-        if (!this.drive.getBrakeMode()) {
-            if (driverController.getLeftBumper()) {
-                this.drive.brake(true);
-            } else {
-                this.drive.brake(false);
-            }
+        if (!this.drive.getBrakeState()) {
+            if (driverController.getLeftBumper()) this.drive.brake(true);
+            else this.drive.brake(false);
         }
 
         if (driverController.getRightBumper()) {

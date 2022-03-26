@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.util.pid.SparkMaxConstants;
 
 public class Constants {
@@ -67,10 +66,12 @@ public class Constants {
     public static final double LIMELIGHT_ANGLE = 23; // Angle in degrees
     public static final double TARGET_HEIGHT = 2.64; // Height in meters
     public static final double SHOOTER_HEIGHT = 0.6096; // Height in meteres
+    public static final double CHASIS_LEFT_CONVERSION = 11.2835522805; // Left encoder conversion factor (90 degrees / Left encoder revolutions)
+    public static final double CHASIS_RIGHT_CONVERSION = -9.4263945489; // Right encoder conversion factor (90 degrees / Right encoder revolutions)
 
-    // Set shooter wheel speed constant
+    // Set climber arm constants
     public static final double LIFT_ARM_GEAR_REDUCTION = 525;
-    public static final double CLIMBER_WINCH_ROTATIONS = 24;
+    public static final double CLIMBER_WINCH_ROTATIONS = 120;
 
     // Pneumatic control module channels
     public static final int INTAKE_LOWERED = 0;
@@ -79,7 +80,7 @@ public class Constants {
     public static final int FEEDER_RAISED = 6;
     public static final int FEEDER_LOWERED = 7;
 
-    //shooter angle
+    // Shooter angle
     public static final int ANGLE = 60; // Arm angle in degrees
-    public static final double ANGLE_LIMIT = 40; // 
+    public static final double ANGLE_LIMIT = 40; // Arm angle in revolutions
 }

@@ -24,8 +24,8 @@ public class Drive extends Subsystem {
     private double posLeft;
     private double posRight;
 
-    private boolean shooterLock;
-    private boolean brakeLock;
+    private boolean positionMode;
+    private boolean brakeMode;
 
     /**
      * Get the instance of the Drive, if none create a new instance
@@ -53,8 +53,10 @@ public class Drive extends Subsystem {
     public void calculate() {
         SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
 
-        if (this.shooterLock) {
+        if (this.positionMode) {
             this.currentState = DriveState.POSITION;
+        } else {
+            this.currentState = DriveState.OUTPUT;
         }
 
         switch (currentState) {
@@ -63,14 +65,14 @@ public class Drive extends Subsystem {
                 this.driveIO.setDriveRight(this.rightOut);
                 break;
             case VELOCITY:
-                disable();
+                this.disable();
                 break;
             case POSITION:
                 this.driveIO.setDriveLeftPos(this.posLeft);
                 this.driveIO.setDriveRightPos(this.posRight);
                 break;
             default:
-                disable();
+                this.disable();
                 break;
         }
     }
@@ -80,24 +82,27 @@ public class Drive extends Subsystem {
         this.driveIO.stopAllOutputs();
     }
 
+    /**
+     * Reset encoders to zero position
+     */
     public void resetPosition() {
         this.driveIO.resetInputs();
     }
 
-    public void setLockPosition(boolean state) {
-        this.shooterLock = state;
+    /**
+     * Set drive position mode
+     * @param state
+     */
+    public void setPositionMode(boolean state) {
+        this.positionMode = state;
     }
 
-    public boolean getLockPosition() {
-        return this.shooterLock;
-    }
-
-    public void setBrakeMode(boolean state) {
-        this.brakeLock = state;
-    }
-
-    public boolean getBrakeMode() {
-        return this.brakeLock;
+    /**
+     * Get drive position mode
+     * @return
+     */
+    public boolean getPositionMode() {
+        return this.positionMode;
     }
 
     /**
@@ -106,23 +111,54 @@ public class Drive extends Subsystem {
      * @param turn percent output [-1 to 1] for turn movement
      */
     public void setOutput(double y, double turn) {
-        this.currentState = DriveState.OUTPUT;
-
         this.leftOut = (y + turn) * Constants.MAX_OUTPUT;
         this.rightOut =  (y - turn) * Constants.MAX_OUTPUT;
     }
 
+    /**
+     * Sets encoder position for left drive motors
+     * @param position
+     */
     public void setDriveLeft(double position) {
-        this.currentState = DriveState.POSITION;
         this.posLeft = position;
     }
 
+    /**
+     * Sets encoder position for right drive motors
+     * @param position
+     */
     public void setDriveRight(double position) {
-        this.currentState = DriveState.POSITION;
         this.posRight = position;
     }
 
-    public void brake(boolean mode) {
-        this.driveIO.brakeMode(mode);
+    /**
+     * Sets braking mode on drive motors
+     * @param state
+     */
+    public void brake(boolean state) {
+        this.brakeMode = state;
+        this.driveIO.brakeMode(state);
+    }
+
+    /**
+     * @return Drive motor brake state
+     */
+    public boolean getBrakeState() {
+        return this.brakeMode;
+    }
+
+    /**
+     * Turns drivetrain/chasis by a provided angle
+     * @param angle
+     */
+    public void seekTarget(double angle) {
+        SmartDashboard.putNumber("Limelight X", angle);
+
+        double driveRevolutionsLeft = (angle / Constants.CHASIS_LEFT_CONVERSION);
+        double driveRevolutionsRight = (angle / Constants.CHASIS_RIGHT_CONVERSION);
+
+        this.resetPosition();
+        this.setDriveLeft(driveRevolutionsLeft);
+        this.setDriveRight(driveRevolutionsRight);
     }
 }
