@@ -49,7 +49,6 @@ public class AutoOperate extends AutoComponent {
         this.climber.firstCycle();
         startTime = System.currentTimeMillis();
         try {
-            System.out.println("Made it to firstCycle");
             data = CSVReader.convertToArrayList(AutoSelecter.getInstance().getFileName());//AutoSelecter.getInstance().getFileName()
         } catch (FileNotFoundException e) {
             e.printStackTrace();

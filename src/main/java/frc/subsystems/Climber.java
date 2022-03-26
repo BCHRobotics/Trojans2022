@@ -47,6 +47,14 @@ public class Climber extends Subsystem {
         this.armIO.stopAllOutputs();
     }
 
+    public double getArmPosition() {
+        return this.armIO.getLeftArmEncoder().getPosition();
+    }
+
+    public void setPercentDown(double input) {
+        this.armIO.setPercentOut(input);
+    }
+
     /**
      * Set the position of the climber winch
      * 

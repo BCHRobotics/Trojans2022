@@ -94,6 +94,15 @@ public class ArmIO implements IIO{
         } else {
             this.leftArmPidController.setPosition(setPoint);
         }
+
+        if (this.leftArmEncoder.getPosition() >= 45) {
+            this.stopAllOutputs();
+        }
+    }
+
+    public void setPercentOut(double input) {
+        this.leftArmMotor.set(input);
+        this.rightArmMotor.set(input);
     }
 
     /**

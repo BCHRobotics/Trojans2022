@@ -4,6 +4,7 @@ import java.nio.file.FileSystemAlreadyExistsException;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.DriverInput;
+import frc.io.subsystems.ArmIO;
 import frc.io.subsystems.ShooterIO;
 import frc.robot.Constants;
 import frc.subsystems.Shooter;
@@ -174,7 +175,7 @@ public class TeleopOperator extends TeleopComponent {
         this.currentTime = System.currentTimeMillis();
         
         // Algorithim to hunt for target and latch on to it
-        this.armShoot = SmartDashboard.getNumber("Arm pos", 0);
+        // this.armShoot = SmartDashboard.getNumber("Arm pos", 0);
         
         if (this.operatorController.getRightBumper()) {
             this.limelight.setLedMode(3);
@@ -192,8 +193,8 @@ public class TeleopOperator extends TeleopComponent {
             this.velocity = trajectoy.getVelocity();
 
             // Converts velocity into RPM: [(Velocity x 60<seconds>) / (PI * Diameter<meters>)]
-            //this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.115062);
-            //this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
+            // this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.115062);
+            // this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
 
             this.stagerSpeed = 1;
             this.feederSpeed = 1;
@@ -225,7 +226,7 @@ public class TeleopOperator extends TeleopComponent {
             this.shootState = true;
             this.shootLatch = true;
         } else if (this.operatorController.getLeftTriggerAxis() > 0.5) {
-            this.shooterWheelRPM = 1100;
+            this.shooterWheelRPM = 1050;
 
             this.stagerSpeed = 0;
 
@@ -314,10 +315,10 @@ public class TeleopOperator extends TeleopComponent {
     }
 
     private double calculateShooterWheelRPM(double setDistance) {
-        final double a = 24;
-        final double b = 14.4;
-        final double c = 1908;
-        double output  = (a*Math.pow(setDistance, 2)) + (b*setDistance) + c;
+        final double a = 34.822;
+        final double b = 71.927;
+        final double c = 2053.9;
+        double output  = (a*Math.pow(setDistance, 2)) - (b*setDistance) + c;
         return output;
     }
 

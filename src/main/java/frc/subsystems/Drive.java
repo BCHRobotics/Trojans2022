@@ -66,10 +66,7 @@ public class Drive extends Subsystem {
                 disable();
                 break;
             case POSITION:
-                System.out.println("Made it to Drive.java");
-                System.out.println(this.posLeft);
                 this.driveIO.setDriveLeftPos(this.posLeft);
-                System.out.println(this.posRight);
                 this.driveIO.setDriveRightPos(this.posRight);
                 break;
             default:
@@ -110,8 +107,6 @@ public class Drive extends Subsystem {
      */
     public void setOutput(double y, double turn) {
         this.currentState = DriveState.OUTPUT;
-        System.out.println(y);
-        System.out.println(turn);
 
         this.leftOut = (y + turn) * Constants.MAX_OUTPUT;
         this.rightOut =  (y - turn) * Constants.MAX_OUTPUT;
