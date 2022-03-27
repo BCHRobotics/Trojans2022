@@ -62,7 +62,6 @@ public class ArmIO implements IIO{
 
         // Set Arm PID
         this.leftArmPidController = new SparkMaxPID(leftArmMotor);
-        this.leftArmPidController.activateSmartMotion();
         this.leftArmPidController.setConstants(leftArmConstants);
 
         // Inversion state of left arm

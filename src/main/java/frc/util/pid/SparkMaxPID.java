@@ -8,7 +8,6 @@ public class SparkMaxPID {
     private SparkMaxPIDController pidController;
 
     private int slot;
-    private boolean smartMotion = true;
 
     public SparkMaxPID(CANSparkMax motor) {
         pidController = motor.getPIDController();
@@ -28,14 +27,6 @@ public class SparkMaxPID {
         this.setConstants(constants);
     }
 
-    public void activateSmartMotion() {
-        this.smartMotion = true;
-    }
-
-    public void disableSmartMotion() {
-        this.smartMotion = false;
-    }
-
     public void setConstants(SparkMaxConstants c) {
         this.slot = c.slot;
         
@@ -49,9 +40,6 @@ public class SparkMaxPID {
         pidController.setSmartMotionMaxVelocity(c.maxVel, c.slot);
         pidController.setSmartMotionMaxAccel(c.maxAcc, c.slot);
         pidController.setSmartMotionAllowedClosedLoopError(c.allowedErr, c.slot);
-        // if (smartMotion) {
-            
-        // }
     }
 
     public SparkMaxConstants getConstants(int slot) {

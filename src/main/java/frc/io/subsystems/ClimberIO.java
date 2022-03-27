@@ -57,7 +57,6 @@ public class ClimberIO implements IIO{
 
         // Set left Winch PID
         this.leftWinchPidController = new SparkMaxPID(leftWinchMotor);
-        this.leftWinchPidController.activateSmartMotion();
         this.leftWinchPidController.setConstants(leftWinchConstants);
 
         // Inversion state of left Winch
