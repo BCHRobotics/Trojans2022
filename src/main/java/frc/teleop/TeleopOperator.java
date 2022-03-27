@@ -34,7 +34,7 @@ public class TeleopOperator extends TeleopComponent {
 
     private long previousTime;
     private long currentTime;
-    private long feederDelay = 500; //800
+    private long feederDelay = 500; // 800
     // private long kickerDelay = 120;
     // private boolean kickerEnabled = false;
     // private boolean feedButtonLock = false;
@@ -114,7 +114,7 @@ public class TeleopOperator extends TeleopComponent {
                 operatorMode = OperatorMode.SHOOT;
             }
         }
-        
+
         this.runCycle();
 
         this.shooter.calculate();
@@ -125,9 +125,9 @@ public class TeleopOperator extends TeleopComponent {
 
     private void shootMode() {
         this.currentTime = System.currentTimeMillis();
-        
+
         // Algorithim to hunt for target and latch on to it
-        
+
         if (this.operatorController.getRightBumper()) {
             this.limelight.setLedMode(3);
             this.drive.setPositionMode(true);
@@ -185,7 +185,8 @@ public class TeleopOperator extends TeleopComponent {
                 this.feederSpeed = 0;
                 this.feederState = false;
                 // this.kickerEnabled = false;
-            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.feederDelay)) && !this.shootLatch) {
+            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.feederDelay))
+                    && !this.shootLatch) {
                 this.stagerSpeed = 0;
                 this.feederSpeed = 0;
                 this.feederState = false;
@@ -196,21 +197,23 @@ public class TeleopOperator extends TeleopComponent {
             // this.feedButtonLock = false;
             this.drive.setPositionMode(false);
         }
-        
+
         this.climberArmPosition = Constants.ANGLE_LIMIT;
         // this.shooterWheelRPM = SmartDashboard.getNumber("Shooter Wheels", 0);
-    } 
+    }
 
     /**
      * Manual override mode for operator controller
      */
     private void climbMode() {
         // Activate Lift based on joystick and constants multiplyer
-        //this.climber.setRobotArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y) * Constants.ANGLE_LIMIT);
+        // this.climber.setRobotArmPosition(this.operatorController.getJoystick(Side.LEFT,
+        // Axis.Y) * Constants.ANGLE_LIMIT);
         this.climberArmPosition = 0;
 
         // Activate Climber based on joystick and constants multiplyer
-        this.climberWinchPosition = this.operatorController.getJoystick(Side.RIGHT, Axis.Y) * Constants.CLIMBER_WINCH_ROTATIONS;
+        this.climberWinchPosition = this.operatorController.getJoystick(Side.RIGHT, Axis.Y)
+                * Constants.CLIMBER_WINCH_ROTATIONS;
     }
 
     private void runCycle() {

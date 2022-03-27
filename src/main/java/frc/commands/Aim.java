@@ -1,6 +1,5 @@
 package frc.commands;
 
-
 import frc.subsystems.Drive;
 import frc.subsystems.Shooter;
 import frc.util.imaging.Limelight;
@@ -11,6 +10,8 @@ public class Aim extends Command {
     private Drive drive;
     private Shooter shooter;
     private Limelight limelight;
+
+    private Boolean isFinished;
 
     public Aim() {
         this.drive = Drive.getInstance();
@@ -24,6 +25,8 @@ public class Aim extends Command {
         this.shooter.firstCycle();
         this.limelight.setLedMode(1);
         this.limelight.setLimelightState(LimelightTargetType.UPPER_HUB);
+
+        this.isFinished = false;
     }
 
     @Override
@@ -50,15 +53,14 @@ public class Aim extends Command {
         this.drive.brake(false);
         this.shooter.setShooterWheelSpeed(0);
 
+        this.isFinished = true;
+
         this.execute();
     }
 
     @Override
     public boolean isFinished() {
-        if ((this.limelight.getTargetX() >= -0.2 || this.limelight.getTargetX() <= 0.2)) {
-
-        }
-        return false;
+        return this.isFinished;
     }
 
     @Override
