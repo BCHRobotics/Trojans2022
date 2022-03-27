@@ -1,4 +1,4 @@
-package frc.commands.shoot;
+package frc.commands.intake;
 
 import frc.commands.Command;
 import frc.subsystems.Intake;

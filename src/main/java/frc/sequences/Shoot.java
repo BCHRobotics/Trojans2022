@@ -1,6 +1,8 @@
 package frc.sequences;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.commands.intake.Collect;
+import frc.commands.intake.Stage;
 import frc.commands.shoot.*;
 
 public class Shoot extends Sequence{

@@ -3,6 +3,8 @@ package frc.teleop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.shoot.*;
 import frc.commands.climb.*;
+import frc.commands.intake.Collect;
+import frc.commands.intake.Stage;
 import frc.io.DriverInput;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;

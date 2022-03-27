@@ -1,7 +1,7 @@
 package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.commands.shoot.Collect;
+import frc.commands.intake.Collect;
 import frc.io.DriverInput;
 import frc.subsystems.Drivetrain;
 import frc.util.devices.Controller;
