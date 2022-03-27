@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.robot.Constants;
 import frc.subsystems.Climber;
 import frc.subsystems.Drivetrain;
 import frc.subsystems.Intake;
@@ -49,7 +48,7 @@ public class AutoOperate extends AutoComponent {
         this.climber.firstCycle();
         startTime = System.currentTimeMillis();
         try {
-            data = CSVReader.convertToArrayList(AutoSelecter.getInstance().getFileName());//AutoSelecter.getInstance().getFileName()
+            data = CSVReader.convertToArrayList(AutoSelecter.getInstance().getFileName());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;

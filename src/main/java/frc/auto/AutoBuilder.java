@@ -8,8 +8,6 @@ import frc.io.subsystems.DriveIO;
 import frc.io.subsystems.IntakeIO;
 import frc.io.subsystems.ShooterIO;
 import frc.robot.Constants;
-import frc.subsystems.Climber;
-import frc.subsystems.Intake;
 import frc.util.csv.CSVWriter;
 
 public class AutoBuilder {
