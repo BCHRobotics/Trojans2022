@@ -4,7 +4,7 @@ public abstract class TeleopComponent {
     
     public abstract void firstCycle();
 
-    public abstract void calculate();
+    public abstract void run();
 
     public abstract void disable();
 

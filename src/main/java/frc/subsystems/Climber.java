@@ -33,7 +33,7 @@ public class Climber extends Subsystem {
     }
 
     @Override
-    public void calculate() {
+    public void run() {
         this.winchIO.setWinchExtension(climberWinchPosition);
         this.armIO.setArmPosition(robotArmPosition);
         

@@ -11,7 +11,7 @@ import frc.robot.Constants;
 import frc.util.pid.SparkMaxConstants;
 import frc.util.pid.SparkMaxPID;
 
-public class ArmIO implements IIO{
+public class ArmIO implements IIO {
 
     private static ArmIO instance;
 
@@ -37,16 +37,17 @@ public class ArmIO implements IIO{
     }
 
     /**
-     * Initiates the Lift Output 
+     * Initiates the Lift Output
      */
     private ArmIO() {
-        if (!enabled) return;
+        if (!enabled)
+            return;
 
         // Initiate new arm motor objects
         this.leftArmMotor = new CANSparkMax(Constants.LEFT_ARM_ID, MotorType.kBrushless);
         this.rightArmMotor = new CANSparkMax(Constants.RIGHT_ARM_ID, MotorType.kBrushless);
 
-        this.armLimitSwitch = new DigitalInput(9);
+        this.armLimitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_PORT);
 
         // Get motor encoder
         this.leftArmEncoder = leftArmMotor.getEncoder();
@@ -55,7 +56,7 @@ public class ArmIO implements IIO{
         // Restore motor controllers to factory defaults
         this.leftArmMotor.restoreFactoryDefaults();
         this.rightArmMotor.restoreFactoryDefaults();
-        
+
         // Set motor controllers Idle Mode [Brake/Coast]
         this.leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -77,11 +78,14 @@ public class ArmIO implements IIO{
 
     /**
      * Set the position of the Lift Arm
+     * 
      * @param setPoint in revolutions
      */
     public void setArmPosition(double setPoint) {
         if (!enabled) return;
         if (setPoint < 0) return;
+        if (setPoint > Constants.ANGLE_LIMIT) return;
+
         SmartDashboard.putBoolean("Limit switch", this.armLimitSwitch.get());
         if (!this.armLimitSwitch.get()) {
             if (this.leftArmEncoder.getPosition() != Constants.ANGLE_LIMIT) {
@@ -94,7 +98,7 @@ public class ArmIO implements IIO{
             this.leftArmPidController.setPosition(setPoint);
         }
 
-        if (this.leftArmEncoder.getPosition() >= 45) {
+        if (this.leftArmEncoder.getPosition() > 40) {
             this.stopAllOutputs();
         }
     }
@@ -106,19 +110,23 @@ public class ArmIO implements IIO{
 
     /**
      * Get the reference to the Left Arm encoder
+     * 
      * @return CANEncoder reference
      */
     public RelativeEncoder getLeftArmEncoder() {
-        if (!enabled) return null;
+        if (!enabled)
+            return null;
         return this.leftArmMotor.getEncoder();
     }
 
     /**
      * Get the reference to the Right Arm encoder
+     * 
      * @return CANEncoder reference
      */
     public RelativeEncoder getRightArmEncoder() {
-        if (!enabled) return null;
+        if (!enabled)
+            return null;
         return this.rightArmMotor.getEncoder();
     }
 
@@ -127,7 +135,8 @@ public class ArmIO implements IIO{
      */
     @Override
     public void resetInputs() {
-        if (!enabled) return;
+        if (!enabled)
+            return;
         this.leftArmEncoder.setPosition(0);
         this.rightArmEncoder.setPosition(0);
     }
@@ -137,7 +146,8 @@ public class ArmIO implements IIO{
      */
     @Override
     public void updateInputs() {
-        if (!enabled) return;
+        if (!enabled)
+            return;
     }
 
     /**
@@ -145,7 +155,8 @@ public class ArmIO implements IIO{
      */
     @Override
     public void stopAllOutputs() {
-        if (!enabled) return;
+        if (!enabled)
+            return;
         this.leftArmMotor.disable();
         this.rightArmMotor.disable();
     }

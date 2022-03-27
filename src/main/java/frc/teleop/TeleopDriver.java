@@ -1,9 +1,9 @@
 package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.commands.shoot.Collect;
 import frc.io.DriverInput;
-import frc.subsystems.Drive;
-import frc.subsystems.Intake;
+import frc.subsystems.Drivetrain;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
@@ -11,13 +11,13 @@ import frc.util.devices.Controller.Side;
 public class TeleopDriver extends TeleopComponent {
     private static TeleopDriver instance;
 
+    private Drivetrain drivetrain;
+    private Collect collect;
+
     private Controller driverController;
     private DriverInput driverInput;
 
-    private Drive drive;
-    private Intake intake;
-
-     /**
+    /**
      * Get the instance of the TeleopDriver, if none create a new instance
      * 
      * @return instance of the TeleopDriver
@@ -31,22 +31,21 @@ public class TeleopDriver extends TeleopComponent {
 
     private TeleopDriver() {
         this.driverInput = DriverInput.getInstance();
-        this.drive = Drive.getInstance();
-        this.intake = Intake.getInstance();
+        this.drivetrain = Drivetrain.getInstance();
+        this.collect = Collect.getInstance();
         this.driverController = driverInput.getDriverController();
     }
 
-
     @Override
     public void firstCycle() {
-        this.drive.firstCycle();
-        this.intake.firstCycle();
+        this.drivetrain.firstCycle();
+        this.collect.initialize();
         SmartDashboard.putNumber("Intake Motor Speed", 0.8);
     }
 
     @Override
-    public void calculate() {
-        
+    public void run() {
+
         double speed = 0.75;
 
         speed -= (this.driverController.getLeftTriggerAxis() * 0.25);
@@ -54,35 +53,29 @@ public class TeleopDriver extends TeleopComponent {
 
         SmartDashboard.putNumber("Drive Output", speed);
 
-        this.drive.setOutput(
-            driverController.getJoystick(Side.LEFT, Axis.Y) * speed, 
-            driverController.getJoystick(Side.RIGHT, Axis.X) * speed
-        );
+        this.drivetrain.setOutput(
+                driverController.getJoystick(Side.LEFT, Axis.Y) * speed,
+                driverController.getJoystick(Side.RIGHT, Axis.X) * speed);
 
-        if (!this.drive.getBrakeState()) {
-            if (driverController.getLeftBumper()) this.drive.brake(true);
-            else this.drive.brake(false);
+        if (!this.drivetrain.getBrakeState()) {
+            if (driverController.getLeftBumper())
+                this.drivetrain.brake(true);
+            else
+                this.drivetrain.brake(false);
         }
 
-        if (driverController.getRightBumper()) {
-            this.intake.setIntakeState(true);
-            intakeControl(1);
-        } else {
-            this.intake.setIntakeState(false);
-            intakeControl(0);
-        }
+        if (driverController.getRightBumper())
+            this.collect.calculate();
+        else
+            this.collect.end();
 
-        this.drive.calculate();
-        this.intake.calculate();
-    }
-
-    public void intakeControl(double speed) {
-        this.intake.setIntakeSpeed(speed);
+        this.drivetrain.run();
+        this.collect.execute();
     }
 
     @Override
     public void disable() {
-        this.drive.disable();
+        this.drivetrain.disable();
+        this.collect.disable();
     }
-
 }

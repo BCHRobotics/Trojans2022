@@ -5,10 +5,10 @@ public abstract class Command {
     public abstract void initialize();
 
     // Called repeatedly when this Command is scheduled to run
-    public abstract void runCycle();
+    public abstract void calculate();
 
     // Called repeatedly to execute "runCycle" commands
-    protected abstract void execute();
+    public abstract void execute();
 
     // Called once after isFinished returns true
     public abstract void end();

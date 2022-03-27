@@ -1,20 +1,29 @@
-package frc.commands;
+package frc.commands.shoot;
 
-import frc.subsystems.Drive;
+import frc.commands.Command;
+import frc.subsystems.Drivetrain;
 import frc.subsystems.Shooter;
 import frc.util.imaging.Limelight;
 import frc.util.imaging.Limelight.LimelightTargetType;
 
 public class Aim extends Command {
+    private static Aim instance;
 
-    private Drive drive;
+    private Drivetrain drive;
     private Shooter shooter;
     private Limelight limelight;
 
     private Boolean isFinished;
 
-    public Aim() {
-        this.drive = Drive.getInstance();
+    public static Aim getInstance() {
+        if (instance == null) {
+            instance = new Aim();
+        }
+        return instance;
+    }
+
+    private Aim() {
+        this.drive = Drivetrain.getInstance();
         this.shooter = Shooter.getInstance();
         this.limelight = Limelight.getInstance();
     }
@@ -30,20 +39,18 @@ public class Aim extends Command {
     }
 
     @Override
-    public void runCycle() {
+    public void calculate() {
         this.limelight.setLedMode(3);
         this.drive.setPositionMode(true);
         this.drive.brake(true);
         this.drive.seekTarget(this.limelight.getTargetX());
         this.shooter.setShooterWheelSpeed(this.shooter.calculateShooterRPM(this.limelight.getTargetDistance()));
-
-        this.execute();
     }
 
     @Override
-    protected void execute() {
-        this.shooter.calculate();
-        this.drive.calculate();
+    public void execute() {
+        this.shooter.run();
+        this.drive.run();
     }
 
     @Override
@@ -54,8 +61,6 @@ public class Aim extends Command {
         this.shooter.setShooterWheelSpeed(0);
 
         this.isFinished = true;
-
-        this.execute();
     }
 
     @Override

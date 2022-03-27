@@ -32,7 +32,7 @@ public class Intake extends Subsystem {
     }
 
     @Override
-    public void calculate() {
+    public void run() {
         this.intakeIO.setIntakeSpeed(intakeSpeed);
         this.intakeIO.setStagerSpeed(stagerSpeed);
         this.intakeIO.setFeederSpeed(feederSpeed);

@@ -23,7 +23,7 @@ public class TeleopControl {
 
     public void runCycle() {
 		for (TeleopComponent t : this.components) {
-			t.calculate();
+			t.run();
 		}
 	}
 

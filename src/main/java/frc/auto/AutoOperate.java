@@ -6,7 +6,7 @@ import java.util.List;
 
 import frc.robot.Constants;
 import frc.subsystems.Climber;
-import frc.subsystems.Drive;
+import frc.subsystems.Drivetrain;
 import frc.subsystems.Intake;
 import frc.subsystems.Shooter;
 import frc.util.csv.CSVReader;
@@ -16,7 +16,7 @@ public class AutoOperate extends AutoComponent {
     private static List<List<Double>> data = new ArrayList<>();
     private static long startTime;
     private static long currentTime;
-    private Drive drive;
+    private Drivetrain drive;
     private Intake intake;
     private Shooter shooter;
     private Climber climber;
@@ -34,7 +34,7 @@ public class AutoOperate extends AutoComponent {
     }
 
     private AutoOperate() {
-        this.drive = Drive.getInstance();
+        this.drive = Drivetrain.getInstance();
         this.intake = Intake.getInstance();
         this.shooter = Shooter.getInstance();
         this.climber = Climber.getInstance();
@@ -57,12 +57,12 @@ public class AutoOperate extends AutoComponent {
     }
 
     @Override
-    public void calculate() {
+    public void run() {
         driveMode();
-        this.drive.calculate();
-        this.intake.calculate();
-        this.shooter.calculate();
-        this.climber.calculate();
+        this.drive.run();
+        this.intake.run();
+        this.shooter.run();
+        this.climber.run();
     }
 
     /**

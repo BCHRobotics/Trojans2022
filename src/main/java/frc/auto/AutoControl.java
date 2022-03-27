@@ -23,7 +23,7 @@ public class AutoControl {
 
     public void runCycle() {
 		for (AutoComponent t : this.components) {
-			t.calculate();
+			t.run();
 		}
 	}
 

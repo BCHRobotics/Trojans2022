@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.DriveIO;
 import frc.robot.Constants;
 
-public class Drive extends Subsystem {
-    private static Drive instance;
+public class Drivetrain extends Subsystem {
+    private static Drivetrain instance;
 
     public enum DriveState {
         OUTPUT, 
@@ -32,14 +32,14 @@ public class Drive extends Subsystem {
      * 
      * @return instance of the Drive
      */
-    public static Drive getInstance() {
+    public static Drivetrain getInstance() {
         if (instance == null) {
-            instance = new Drive();
+            instance = new Drivetrain();
         }
         return instance;
     }
 
-    private Drive() {
+    private Drivetrain() {
         this.firstCycle();
     }
 
@@ -50,7 +50,7 @@ public class Drive extends Subsystem {
     }
 
     @Override
-    public void calculate() {
+    public void run() {
         SmartDashboard.putString("DRIVE_STATE", this.currentState.toString());
 
         if (this.positionMode) {

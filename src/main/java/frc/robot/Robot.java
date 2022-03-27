@@ -10,7 +10,7 @@ import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
 import frc.io.subsystems.DriveIO;
 import frc.io.subsystems.IO;
-import frc.subsystems.Drive;
+import frc.subsystems.Drivetrain;
 import frc.subsystems.Shooter;
 import frc.teleop.TeleopControl;
 import frc.util.imaging.Limelight;
@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
     private TeleopControl teleopControl;
     private AutoControl autoControl;
 
-    private Drive drive;
+    private Drivetrain drive;
     private Shooter shooter;
 
     public static boolean teleopInitialized = false;
@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
         this.autoControl = AutoControl.getInstance();
         this.autoBuilder = AutoBuilder.getInstance();
 
-        this.drive = Drive.getInstance();
+        this.drive = Drivetrain.getInstance();
         this.shooter = Shooter.getInstance();
 
         Limelight.getInstance().setLedMode(1);

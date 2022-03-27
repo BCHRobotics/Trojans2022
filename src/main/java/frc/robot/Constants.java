@@ -83,4 +83,5 @@ public class Constants {
     // Shooter angle
     public static final int ANGLE = 60; // Arm angle in degrees
     public static final double ANGLE_LIMIT = 40; // Arm angle in revolutions
+    public static final int LIMIT_SWITCH_PORT = 9; // DIO port 9
 }

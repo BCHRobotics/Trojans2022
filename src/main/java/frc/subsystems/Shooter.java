@@ -29,7 +29,7 @@ public class Shooter extends Subsystem {
     }
 
     @Override
-    public void calculate() {
+    public void run() {
         this.shooterIO.setWheelSpeed(shooterWheelSpeed);
         SmartDashboard.putNumber("SHOOTER LEFT ENCODER", this.shooterIO.getLeftWheelEncoder().getVelocity());
         SmartDashboard.putNumber("SHOOTER RIGHT ENCODER", this.shooterIO.getRightWheelEncoder().getVelocity());
