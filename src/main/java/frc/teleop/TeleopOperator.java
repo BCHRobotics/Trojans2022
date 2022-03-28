@@ -33,7 +33,7 @@ public class TeleopOperator extends TeleopComponent {
     private long previousTime;
     private long currentTime;
     private final long stagerDelay = 600;
-    private final long feederDelay = 600; // 800
+    private final long feederDelay = 800; // 800
     // private long kickerDelay = 120;
     // private boolean kickerEnabled = false;
     // private boolean feedButtonLock = false;
@@ -126,13 +126,13 @@ public class TeleopOperator extends TeleopComponent {
 
             this.limelightCommand.calculate();
             this.stageCommand.calculate();
-            this.feedCommand.calculate();
 
             this.shootState = true;
             this.shootLatch = true;
         } else if (this.operatorController.getXButton()) {
             // this.launchCommand.calculate();
             this.stageCommand.end();
+            this.feedCommand.calculate();
             this.previousTime = this.currentTime;
             this.shootState = true;
             this.shootLatch = false;
@@ -177,7 +177,7 @@ public class TeleopOperator extends TeleopComponent {
         }
 
         this.climbSwing.setArmPosition(1);
-        //this.manualShootCommand.setShooterSpeed(SmartDashboard.getNumber("Shooter Wheels", 0));
+        this.manualShootCommand.setShooterSpeed(SmartDashboard.getNumber("Shooter Wheels", 0));
     }
 
     private void idleMode() {
