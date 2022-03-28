@@ -32,7 +32,8 @@ public class TeleopOperator extends TeleopComponent {
 
     private long previousTime;
     private long currentTime;
-    private long feederDelay = 500; // 800
+    private final long stagerDelay = 600;
+    private final long feederDelay = 600; // 800
     // private long kickerDelay = 120;
     // private boolean kickerEnabled = false;
     // private boolean feedButtonLock = false;
@@ -130,7 +131,8 @@ public class TeleopOperator extends TeleopComponent {
             this.shootState = true;
             this.shootLatch = true;
         } else if (this.operatorController.getXButton()) {
-            this.launchCommand.calculate();
+            // this.launchCommand.calculate();
+            this.stageCommand.end();
             this.previousTime = this.currentTime;
             this.shootState = true;
             this.shootLatch = false;
@@ -166,10 +168,11 @@ public class TeleopOperator extends TeleopComponent {
             if (!this.shootState) {
                 this.idleMode();
                 this.previousTime = this.currentTime;
-            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.feederDelay))
-                    && !this.shootLatch) {
+            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.stagerDelay + this.feederDelay)) && !this.shootLatch) {
                 this.idleMode();
                 this.shootState = false;
+            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.stagerDelay)) && !this.shootLatch) {
+                this.launchCommand.calculate();
             }
         }
 
