@@ -1,5 +1,9 @@
 package frc.robot;
 
+import com.revrobotics.ColorSensorV3;
+
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.util.pid.SparkMaxConstants;
 
 public class Constants {
@@ -84,4 +88,10 @@ public class Constants {
     public static final int ANGLE = 60; // Arm angle in degrees
     public static final double ANGLE_LIMIT = 40; // Arm angle in revolutions
     public static final int LIMIT_SWITCH_PORT = 9; // DIO port 9
+
+    // Color sensor constants
+    public static final I2C.Port I2C_PORT = I2C.Port.kOnboard;
+    public static final Color COLOR_RED = new Color(0.561, 0.232, 0.114);
+    public static final Color COLOR_BLUE = new Color(0.143, 0.427, 0.429);
+    public static final int PROXIMITY = 1800;
 }

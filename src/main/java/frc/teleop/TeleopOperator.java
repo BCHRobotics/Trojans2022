@@ -120,8 +120,14 @@ public class TeleopOperator extends TeleopComponent {
 
         // Algorithim to hunt for target and latch on to it
 
-        if (this.operatorController.getAButton()) {
+        if (this.operatorController.getYButton()) {
+            this.idleMode();
+
+            this.shootState = false;
+            this.shootLatch = false;
+        } else if (this.operatorController.getAButton() || this.shootState) {
             // TODO - AUTOMATIC SHOOT SEQUENCE
+            
         } else if (this.operatorController.getRightBumper()) {
 
             this.limelightCommand.calculate();
@@ -148,11 +154,6 @@ public class TeleopOperator extends TeleopComponent {
 
             this.shootState = true;
             this.shootLatch = true;
-        } else if (this.operatorController.getYButton()) {
-            this.idleMode();
-
-            this.shootState = false;
-            this.shootLatch = false;
         } else if (operatorController.getRightTriggerAxis() > 0.5) {
             this.stageCommand.calculate();
             this.feedCommand.calculate();

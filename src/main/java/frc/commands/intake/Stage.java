@@ -1,6 +1,14 @@
 package frc.commands.intake;
 
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorSensorV3;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.commands.Command;
+import frc.robot.Constants;
 import frc.subsystems.Intake;
 
 public class Stage extends Command{
@@ -9,6 +17,12 @@ public class Stage extends Command{
     private boolean isFinished;
 
     private Intake intake;
+    
+    private ColorSensorV3 colorSensor = new ColorSensorV3(Constants.I2C_PORT);
+    private ColorMatch colorMatch = new ColorMatch();
+    private ColorMatchResult matchResult;
+    private Color gameColor;
+    private Color detectedColor;
 
     public static Stage getInstance() {
         if (instance == null) {
@@ -25,6 +39,9 @@ public class Stage extends Command{
     public void initialize() {
         this.intake.firstCycle();
         this.isFinished = false;
+
+        this.colorMatch.addColorMatch(Constants.COLOR_RED);
+        this.colorMatch.addColorMatch(Constants.COLOR_BLUE);
     }
 
     @Override
@@ -56,5 +73,27 @@ public class Stage extends Command{
     public void disable() {
         this.intake.disable();
     }
+
+    public boolean colorMatches() {
+        this.detectedColor = this.colorSensor.getColor();
+        this.matchResult = this.colorMatch.matchClosestColor(this.detectedColor);
+
+        if (DriverStation.getAlliance() == Alliance.Blue) {
+            this.gameColor = Constants.COLOR_BLUE;
+        } else if (DriverStation.getAlliance() == Alliance.Red) {
+            this.gameColor = Constants.COLOR_RED;
+        } else {
+            this.gameColor = null;
+        }
+
+        if (this.matchResult.color == this.gameColor) {
+            return true;
+        } else return false;
+    }
     
+    public boolean cargoPresent() {
+        if (this.colorSensor.getProximity() > Constants.PROXIMITY) {
+            return true;
+        } else return false;
+    }
 }
