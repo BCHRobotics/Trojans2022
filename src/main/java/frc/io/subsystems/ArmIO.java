@@ -83,7 +83,7 @@ public class ArmIO implements IIO {
      */
     public void setArmPosition(double setPoint) {
         if (!enabled) return;
-        if (setPoint < 0) return;
+        if (setPoint < -Constants.ANGLE_LIMIT) return;
         if (setPoint > Constants.ANGLE_LIMIT) return;
 
         SmartDashboard.putBoolean("Limit switch", this.armLimitSwitch.get());
@@ -98,7 +98,7 @@ public class ArmIO implements IIO {
             this.leftArmPidController.setPosition(setPoint);
         }
 
-        if (this.leftArmEncoder.getPosition() > 40) {
+        if (this.leftArmEncoder.getPosition() > Constants.ANGLE_LIMIT) {
             this.stopAllOutputs();
         }
     }

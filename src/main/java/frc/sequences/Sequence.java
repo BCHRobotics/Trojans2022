@@ -4,9 +4,6 @@ public abstract class Sequence {
     // Called just before this Command runs the first time
     public abstract void initialize();
 
-    // Called just before calculate()
-    public abstract void startTimer();
-
     // Called repeatedly when this Command is scheduled to run
     public abstract void calculate();
 

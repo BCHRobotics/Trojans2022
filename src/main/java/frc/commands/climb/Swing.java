@@ -39,6 +39,13 @@ public class Swing extends Command {
         return this.armPosition;
     }
 
+    public boolean armReachedPosition() {
+        double armPosition = this.climber.getArmPosition() / Constants.CLIMBER_WINCH_ROTATIONS;
+        if (armPosition >= this.armPosition - 0.05 && armPosition <= this.armPosition + 0.05) {
+            return true;
+        } else return false;
+    }
+
     @Override
     public void calculate() {
         this.climber.setRobotArmPosition(this.armPosition);

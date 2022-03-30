@@ -93,5 +93,5 @@ public class Constants {
     public static final I2C.Port I2C_PORT = I2C.Port.kOnboard;
     public static final Color COLOR_RED = new Color(0.561, 0.232, 0.114);
     public static final Color COLOR_BLUE = new Color(0.143, 0.427, 0.429);
-    public static final int PROXIMITY = 1800;
+    public static final int PROXIMITY = 500;
 }

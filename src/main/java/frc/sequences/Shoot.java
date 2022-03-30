@@ -46,7 +46,6 @@ public class Shoot extends Sequence{
         this.manualShootCommand.initialize();
     }
 
-    @Override
     public void startTimer() {
         this.timer.start();
         this.isFinished = false;

@@ -51,6 +51,10 @@ public class Climber extends Subsystem {
         return this.armIO.getLeftArmEncoder().getPosition();
     }
 
+    public double getWinchPosition() {
+        return this.winchIO.getLeftWinchEncoder().getPosition();
+    }
+
     public void setPercentDown(double input) {
         this.armIO.setPercentOut(input);
     }

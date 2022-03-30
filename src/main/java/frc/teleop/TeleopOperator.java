@@ -6,6 +6,8 @@ import frc.commands.climb.*;
 import frc.commands.intake.Collect;
 import frc.commands.intake.Stage;
 import frc.io.DriverInput;
+import frc.sequences.Climb;
+import frc.sequences.Shoot;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
@@ -25,6 +27,8 @@ public class TeleopOperator extends TeleopComponent {
     private Manual manualShootCommand;
     private Lift climbLift;
     private Swing climbSwing;
+    private Shoot shootSequence;
+    private Climb climbSequence;
 
     // Auto shooting variable
     private boolean shootState;
@@ -67,6 +71,8 @@ public class TeleopOperator extends TeleopComponent {
         this.manualShootCommand = Manual.getInstance();
         this.climbLift = Lift.getInstance();
         this.climbSwing = Swing.getInstance();
+        this.shootSequence = Shoot.getInstance();
+        this.climbSequence = Climb.getInstance();
 
         this.operatorController = driverInput.getOperatorController();
     }
@@ -81,6 +87,8 @@ public class TeleopOperator extends TeleopComponent {
         this.manualShootCommand.initialize();
         this.climbLift.initialize();
         this.climbSwing.initialize();
+        this.shootSequence.initialize();
+        this.climbSequence.initialize();
         
         this.climbLift.end();
         this.climbSwing.end();
@@ -126,17 +134,18 @@ public class TeleopOperator extends TeleopComponent {
             this.shootState = false;
             this.shootLatch = false;
         } else if (this.operatorController.getAButton() || this.shootState) {
-            // TODO - AUTOMATIC SHOOT SEQUENCE
-            
+            if (!this.shootState) {
+                this.shootState = true;
+                this.shootSequence.startTimer();
+            }
+            this.shootSequence.calculate();
         } else if (this.operatorController.getRightBumper()) {
-
             this.limelightCommand.calculate();
             this.stageCommand.calculate();
 
             this.shootState = true;
             this.shootLatch = true;
         } else if (this.operatorController.getXButton()) {
-            // this.launchCommand.calculate();
             this.stageCommand.end();
             this.feedCommand.calculate();
             this.previousTime = this.currentTime;
@@ -187,6 +196,7 @@ public class TeleopOperator extends TeleopComponent {
         this.launchCommand.end();
         this.limelightCommand.end();
         this.manualShootCommand.end();
+        this.shootSequence.end();
     }
 
     /**
@@ -201,6 +211,8 @@ public class TeleopOperator extends TeleopComponent {
 
         this.climbSwing.setArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y));
         this.climbLift.setArmHeight(this.operatorController.getJoystick(Side.RIGHT, Axis.Y));
+
+        this.climbSequence.calculate();
     }
 
     private void execute() {
@@ -212,6 +224,8 @@ public class TeleopOperator extends TeleopComponent {
         this.manualShootCommand.execute();
         this.climbLift.execute();
         this.climbSwing.execute();
+        this.shootSequence.execute();
+        this.climbLift.execute();
     }
 
     @Override
@@ -224,5 +238,7 @@ public class TeleopOperator extends TeleopComponent {
         this.manualShootCommand.disable();
         this.climbLift.disable();
         this.climbSwing.disable();
+        this.shootSequence.disable();
+        this.climbSequence.disable();
     }
 }
