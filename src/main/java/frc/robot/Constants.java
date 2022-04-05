@@ -77,6 +77,9 @@ public class Constants {
     public static final double LIFT_ARM_GEAR_REDUCTION = 525;
     public static final double CLIMBER_WINCH_ROTATIONS = 120;
 
+    public static final int LEFT_EXTERNAL_ENCODER_PORT = 0;
+    public static final int RIGHT_EXTERNAL_ENCODER_PORT = 4;
+
     // Pneumatic control module channels
     public static final int INTAKE_LOWERED = 0;
     public static final int INTAKE_RAISED = 1;

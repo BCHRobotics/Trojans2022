@@ -4,8 +4,11 @@ package frc.io.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+
 // Import required Classes
 import frc.robot.Constants;
 import frc.util.pid.SparkMaxConstants;
@@ -20,6 +23,9 @@ public class ArmIO implements IIO {
 
     private RelativeEncoder leftArmEncoder;
     private RelativeEncoder rightArmEncoder;
+
+    private DutyCycleEncoder leftExternalEncoder;
+    private DutyCycleEncoder rightExternalEncoder;
 
     private SparkMaxPID leftArmPidController;
 
@@ -52,6 +58,10 @@ public class ArmIO implements IIO {
         // Get motor encoder
         this.leftArmEncoder = leftArmMotor.getEncoder();
         this.rightArmEncoder = rightArmMotor.getEncoder();
+
+        // Get external encoders
+        this.leftExternalEncoder = new DutyCycleEncoder(Constants.LEFT_EXTERNAL_ENCODER_PORT);
+        this.rightExternalEncoder = new DutyCycleEncoder(Constants.RIGHT_EXTERNAL_ENCODER_PORT);
 
         // Restore motor controllers to factory defaults
         this.leftArmMotor.restoreFactoryDefaults();
@@ -103,11 +113,6 @@ public class ArmIO implements IIO {
         }
     }
 
-    public void setPercentOut(double input) {
-        this.leftArmMotor.set(input);
-        this.rightArmMotor.set(input);
-    }
-
     /**
      * Get the reference to the Left Arm encoder
      * 
@@ -131,14 +136,42 @@ public class ArmIO implements IIO {
     }
 
     /**
+     * Get the reference to the Left Arm External encoder
+     * 
+     * @return DutyCycleEncoder reference
+     */
+    public DutyCycleEncoder getLeftExternalEncoder() {
+        if (!enabled) return null;
+        return this.leftExternalEncoder;
+    }
+
+    /**
+     * Get the reference to the Right Arm External encoder
+     * 
+     * @return DutyCycleEncoder reference
+     */
+    public DutyCycleEncoder getRightExternalEncoder() {
+        if (!enabled) return null;
+        return this.rightExternalEncoder;
+    }
+
+    /**
      * Reset the state of the inputs
      */
     @Override
     public void resetInputs() {
-        if (!enabled)
-            return;
+        if (!enabled) return;
         this.leftArmEncoder.setPosition(0);
         this.rightArmEncoder.setPosition(0);
+    }
+
+    /**
+     * Reset the position of external encoders
+     */
+    public void resetExternalEncoders() {
+        if (!enabled) return; 
+        this.leftExternalEncoder.reset();
+        this.rightExternalEncoder.reset();
     }
 
     /**
@@ -146,8 +179,7 @@ public class ArmIO implements IIO {
      */
     @Override
     public void updateInputs() {
-        if (!enabled)
-            return;
+        if (!enabled) return;
     }
 
     /**
@@ -155,8 +187,7 @@ public class ArmIO implements IIO {
      */
     @Override
     public void stopAllOutputs() {
-        if (!enabled)
-            return;
+        if (!enabled) return;
         this.leftArmMotor.disable();
         this.rightArmMotor.disable();
     }
