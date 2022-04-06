@@ -68,8 +68,8 @@ public class ArmIO implements IIO {
         this.rightArmMotor.restoreFactoryDefaults();
 
         // Set motor controllers Idle Mode [Brake/Coast]
-        this.leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        this.rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        this.rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         // Set Arm PID
         this.leftArmPidController = new SparkMaxPID(leftArmMotor);

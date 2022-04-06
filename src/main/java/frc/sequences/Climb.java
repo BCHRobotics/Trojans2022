@@ -1,5 +1,6 @@
 package frc.sequences;
 
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.climb.*;
 
@@ -11,6 +12,9 @@ public class Climb extends Sequence{
     private boolean verified;
 
     private int counter;
+
+    private double armPos;
+    private double armHeight;
 
     private Lift winchCommand;
     private Swing armCommand;
@@ -33,6 +37,9 @@ public class Climb extends Sequence{
         this.armCommand.initialize();
         this.isFinished = false;
         this.counter = 0;
+        this.verified = true;
+        this.armPos = 0;
+        this.armHeight = 0;
     }
 
     @Override
@@ -40,56 +47,59 @@ public class Climb extends Sequence{
 
         switch (this.counter) {
             case 1:
-                this.armCommand.setArmPosition(-1);
-                if (this.armCommand.armReachedPosition()) this.verified = true;
-                else this.verified = false;
+                this.armPos = -0.5;
+                this.armHeight = 1;
                 break;
             case 2:
-                this.winchCommand.setArmHeight(0);
-                if (this.winchCommand.armReachedHeight()) this.verified = true;
-                else this.verified = false;
+                this.armPos = -0.5;
+                this.armHeight = 0;
                 break;
             case 3:
-                this.armCommand.setArmPosition(0);
-                if (this.armCommand.armReachedPosition()) this.verified = true;
-                else this.verified = false;
+                this.armPos = 0;
+                this.armHeight = 0;
                 break;
             case 4:
-                this.winchCommand.setArmHeight(0.5);
-                if (this.winchCommand.armReachedHeight()) this.verified = true;
-                else this.verified = false;
+                this.armPos = 0;
+                this.armHeight = 0.5;
                 break;
             case 5:
-                this.winchCommand.setArmHeight(0.5);
-                if (this.winchCommand.armReachedHeight()) this.verified = true;
-                else this.verified = false;
+                this.armPos = 1;
+                this.armHeight = 0.5;
                 break;
             case 6:
-                this.armCommand.setArmPosition(1);
-                if (this.armCommand.armReachedPosition()) this.verified = true;
-                else this.verified = false;
+                this.armPos = 1;
+                this.armHeight = 1;
                 break;
             case 7:
-                this.winchCommand.setArmHeight(1);
-                if (this.winchCommand.armReachedHeight()) this.verified = true;
-                else this.verified = false;
+                this.armPos = 0.5;
+                this.armHeight = 1;
                 break;
             case 8:
-                this.armCommand.setArmPosition(0.7);
-                if (this.armCommand.armReachedPosition()) this.verified = true;
-                else this.verified = false;
+                this.armPos = 0;
+                this.armHeight = 0.5;
                 break;
             case 9:
-                this.winchCommand.setArmHeight(0.5);
-                this.armCommand.setArmPosition(0);
-                if (this.armCommand.armReachedPosition() && this.winchCommand.armReachedHeight()) this.verified = true;
-                else this.verified = false;
+                this.armPos = -0.5;
+                this.armHeight = 0.5;
                 break;
             case 10:
-                this.counter = 0;
+                this.armPos = -0.5;
+                this.armHeight = 0;
+                break;
+            case 11:
+                this.armPos = 0;
+                this.armHeight = 0;
+                break;
+            case 12:
+                this.counter = 3;
                 this.verified = true;
                 break;
         }
+
+        this.winchCommand.setArmHeight(this.armHeight);
+        this.armCommand.setArmPosition(this.armPos);
+        if (this.armCommand.armReachedPosition() && this.winchCommand.armReachedHeight()) this.verified = true;
+        else this.verified = false;
 
         this.winchCommand.calculate();
         this.armCommand.calculate();

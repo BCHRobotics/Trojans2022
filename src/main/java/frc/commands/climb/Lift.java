@@ -40,10 +40,11 @@ public class Lift extends Command {
     }
 
     public boolean armReachedHeight() {
-        double armHeight = this.climber.getWinchPosition() / Constants.CLIMBER_WINCH_ROTATIONS;
-        if (armHeight >= this.winchPosition - 0.05 && armHeight <= this.winchPosition + 0.05) {
-            return true;
-        } else return false;
+        // double armHeight = this.climber.getWinchPosition() / Constants.CLIMBER_WINCH_ROTATIONS;
+        // if (armHeight >= this.winchPosition - 0.05 && armHeight <= this.winchPosition + 0.05) {
+        //     return true;
+        // } else return false;
+        return true;
     }
 
     @Override

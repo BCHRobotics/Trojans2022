@@ -33,6 +33,8 @@ public class TeleopOperator extends TeleopComponent {
     // Auto shooting variable
     private boolean shootState;
     private boolean shootLatch;
+    private boolean climbLatch;
+    private boolean confirmClimb;
 
     private long previousTime;
     private long currentTime;
@@ -92,6 +94,7 @@ public class TeleopOperator extends TeleopComponent {
         
         this.climbLift.end();
         this.climbSwing.end();
+        this.climbSequence.end();
 
         SmartDashboard.putNumber("Shooter Wheels", 2000);
         SmartDashboard.putNumber("Distance", 0);
@@ -115,6 +118,7 @@ public class TeleopOperator extends TeleopComponent {
             this.firstCycle();
             if (operatorMode == OperatorMode.SHOOT) {
                 operatorMode = OperatorMode.CLIMB;
+                this.confirmClimb = true;
             } else if (operatorMode == OperatorMode.CLIMB) {
                 operatorMode = OperatorMode.SHOOT;
             }
@@ -197,6 +201,7 @@ public class TeleopOperator extends TeleopComponent {
         this.limelightCommand.end();
         this.manualShootCommand.end();
         this.shootSequence.end();
+        this.climbSequence.end();
     }
 
     /**
@@ -204,14 +209,26 @@ public class TeleopOperator extends TeleopComponent {
      */
     private void climbMode() {
         if (this.operatorController.getAButton()) {
-            // TODO - AUTOMATIC CLIMB SEQUENCE CONFIRM
+            if (this.confirmClimb) {
+                this.confirmClimb = false;
+                this.climbSequence.advance();
+            }
         } else if (this.operatorController.getBButton()) {
-            // TODO - AUTOMATIC CLIMB SEQUENCE REDO
+            if (this.confirmClimb) {
+                this.confirmClimb = false;
+                this.climbSequence.reverse();
+            }
+        } else if (this.operatorController.getXButton()) {
+            this.climbLatch = !this.climbLatch;
+        } else if (this.operatorController.getYButton()) {
+            this.confirmClimb = true;
         }
 
-        this.climbSwing.setArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y));
-        this.climbLift.setArmHeight(this.operatorController.getJoystick(Side.RIGHT, Axis.Y));
-
+        if (this.climbLatch) {
+            this.climbSwing.setArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y));
+            this.climbLift.setArmHeight(this.operatorController.getJoystick(Side.RIGHT, Axis.Y));
+        }
+        SmartDashboard.putBoolean("CLIMB CONFIRMED", this.confirmClimb);
         this.climbSequence.calculate();
     }
 
@@ -225,7 +242,7 @@ public class TeleopOperator extends TeleopComponent {
         this.climbLift.execute();
         this.climbSwing.execute();
         this.shootSequence.execute();
-        this.climbLift.execute();
+        this.climbSequence.execute();
     }
 
     @Override
