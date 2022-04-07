@@ -60,6 +60,7 @@ public class AutoBuilder {
             rows.add(intakeIO.getFeederArmState() == true ? (double)1.0 : (double)0.0);
             rows.add((double)armIO.getLeftArmEncoder().getPosition());
             rows.add((double)shooterIO.getInputWheelSpeed());
+            rows.add((double)0.0);
             data.add(rows);
         } catch (Exception e) {
             System.err.println(e);
@@ -72,7 +73,7 @@ public class AutoBuilder {
         try {
             writer.setFileName(Constants.TEACH_MODE_FILE_NAME);
             writer.deleteCopy();
-            writer.setHeader("time,leftDrive,rightDrive,intakeArms,intakeRollers,stagerRollers,feederRollers,feederArm,armPosition,shooterWheels");
+            writer.setHeader("time,leftDrive,rightDrive,intakeArms,intakeRollers,stagerRollers,feederRollers,feederArm,armPosition,shooterWheels,limelight");
             writer.importData(data);
             writer.output();
         } catch (Exception e) {
