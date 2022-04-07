@@ -92,9 +92,7 @@ public class ArmIO implements IIO {
      * @param setPoint in revolutions
      */
     public void setArmPosition(double setPoint) {
-        if (!enabled) return;
-        if (setPoint < -Constants.ANGLE_LIMIT) return;
-        if (setPoint > Constants.ANGLE_LIMIT) return;
+        if (setPoint < -Constants.ANGLE_LIMIT || setPoint > Constants.ANGLE_LIMIT || !enabled) return;
 
         SmartDashboard.putBoolean("Limit switch", this.armLimitSwitch.get());
         if (!this.armLimitSwitch.get()) {

@@ -1,6 +1,5 @@
 package frc.sequences;
 
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.climb.*;
 
