@@ -78,7 +78,7 @@ public class AutoOperate extends AutoComponent {
                 data.clear();
                 return;
             }
-            if(currentTime < data.get(0).get(0).longValue() * 0.35) {
+            if (currentTime < data.get(0).get(0).longValue() * 0.35) {
                 this.drive.setDriveLeft(data.get(0).get(1));
                 this.drive.setDriveRight(data.get(0).get(2));
                 this.intake.setIntakeState(data.get(0).get(3) == 1.0 ? true : false);

@@ -59,19 +59,19 @@ public class Constants {
     public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
 
     // Drive PID Constants
-    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 3500, 0);
-    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 3500, 0);
+    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
+    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
     
     //Auto directory
     public static final String ROOT_DIRECTORY = "csv/";
 
     // Limlight constants
-    public static final double LIMELIGHT_HEIGHT = 1.0287; // Height in meters
-    public static final double LIMELIGHT_ANGLE = 23; // Angle in degrees
+    public static final double LIMELIGHT_HEIGHT = 0.7239; // Height in meters
+    public static final double LIMELIGHT_ANGLE = 42; // Angle in degrees
     public static final double TARGET_HEIGHT = 2.64; // Height in meters
     public static final double SHOOTER_HEIGHT = 0.6096; // Height in meteres
-    public static final double CHASIS_LEFT_CONVERSION = 11.2835522805; // Left encoder conversion factor (90 degrees / Left encoder revolutions)
-    public static final double CHASIS_RIGHT_CONVERSION = -9.4263945489; // Right encoder conversion factor (90 degrees / Right encoder revolutions)
+    public static final double CHASIS_LEFT_CONVERSION = 10.617943964; // Left encoder conversion factor (90 degrees / Left encoder revolutions)
+    public static final double CHASIS_RIGHT_CONVERSION = -10.5406524386; // Right encoder conversion factor (90 degrees / Right encoder revolutions)
 
     // Set climber arm constants
     public static final double LIFT_ARM_GEAR_REDUCTION = 525;
@@ -83,9 +83,9 @@ public class Constants {
     // Pneumatic control module channels
     public static final int INTAKE_LOWERED = 0;
     public static final int INTAKE_RAISED = 1;
-
-    public static final int FEEDER_RAISED = 6;
-    public static final int FEEDER_LOWERED = 7;
+    
+    public static final int FEEDER_LOWERED = 6;
+    public static final int FEEDER_RAISED = 7;
 
     // Shooter angle
     public static final int ANGLE = 60; // Arm angle in degrees
@@ -96,5 +96,5 @@ public class Constants {
     public static final I2C.Port I2C_PORT = I2C.Port.kOnboard;
     public static final Color COLOR_RED = new Color(0.561, 0.232, 0.114);
     public static final Color COLOR_BLUE = new Color(0.143, 0.427, 0.429);
-    public static final int PROXIMITY = 500;
+    public static final int PROXIMITY = 355;
 }

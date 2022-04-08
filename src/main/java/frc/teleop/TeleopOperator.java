@@ -3,7 +3,6 @@ package frc.teleop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.shoot.*;
 import frc.commands.climb.*;
-import frc.commands.intake.Collect;
 import frc.commands.intake.Stage;
 import frc.io.DriverInput;
 import frc.sequences.Climb;
@@ -19,7 +18,6 @@ public class TeleopOperator extends TeleopComponent {
     private Controller operatorController;
     private DriverInput driverInput;
 
-    private Collect intakeCommand;
     private Stage stageCommand;
     private Poly feedCommand;
     private Fire launchCommand;
@@ -33,16 +31,13 @@ public class TeleopOperator extends TeleopComponent {
     // Auto shooting variable
     private boolean shootState;
     private boolean shootLatch;
+    private boolean shootAutomate;
     private boolean climbLatch;
     private boolean confirmClimb;
 
     private long previousTime;
     private long currentTime;
-    private final long stagerDelay = 600;
-    private final long feederDelay = 800; // 800
-    // private long kickerDelay = 120;
-    // private boolean kickerEnabled = false;
-    // private boolean feedButtonLock = false;
+    private final long stagerDelay = 800;
 
     private enum OperatorMode {
         SHOOT, CLIMB
@@ -65,7 +60,6 @@ public class TeleopOperator extends TeleopComponent {
     private TeleopOperator() {
         this.driverInput = DriverInput.getInstance();
 
-        this.intakeCommand = Collect.getInstance();
         this.stageCommand = Stage.getInstance();
         this.feedCommand = Poly.getInstance();
         this.launchCommand = Fire.getInstance();
@@ -81,7 +75,6 @@ public class TeleopOperator extends TeleopComponent {
 
     @Override
     public void firstCycle() {
-        this.intakeCommand.initialize();
         this.stageCommand.initialize();
         this.feedCommand.initialize();
         this.launchCommand.initialize();
@@ -137,12 +130,14 @@ public class TeleopOperator extends TeleopComponent {
 
             this.shootState = false;
             this.shootLatch = false;
-        } else if (this.operatorController.getAButton() || this.shootState) {
-            if (!this.shootState) {
-                this.shootState = true;
-                this.shootSequence.startTimer();
+            this.shootAutomate = false;
+        } else if (this.operatorController.getAButton() || this.shootAutomate) {
+            if (!this.shootAutomate) {
+                this.shootAutomate = true;
+                // this.shootSequence.startTimer();
             }
             this.shootSequence.calculate();
+            if (this.shootSequence.isFinished()) this.shootAutomate = false;
         } else if (this.operatorController.getRightBumper()) {
             this.limelightCommand.calculate();
             this.stageCommand.calculate();
@@ -152,6 +147,7 @@ public class TeleopOperator extends TeleopComponent {
         } else if (this.operatorController.getXButton()) {
             this.stageCommand.end();
             this.feedCommand.calculate();
+            this.launchCommand.calculate();
             this.previousTime = this.currentTime;
             this.shootState = true;
             this.shootLatch = false;
@@ -175,23 +171,24 @@ public class TeleopOperator extends TeleopComponent {
             this.shootState = true;
             this.shootLatch = true;
         } else if (this.operatorController.getBButton()) {
-            this.intakeCommand.reverse();
             this.stageCommand.reverse();
             this.feedCommand.reverse();
         } else {
             if (!this.shootState) {
                 this.idleMode();
                 this.previousTime = this.currentTime;
-            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.stagerDelay + this.feederDelay)) && !this.shootLatch) {
+            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.stagerDelay)) && !this.shootLatch) {
                 this.idleMode();
                 this.shootState = false;
-            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.stagerDelay)) && !this.shootLatch) {
-                this.launchCommand.calculate();
+                this.shootLatch = false;
             }
         }
 
         this.climbSwing.setArmPosition(1);
-        this.manualShootCommand.setShooterSpeed(SmartDashboard.getNumber("Shooter Wheels", 0));
+        //this.manualShootCommand.setShooterSpeed(SmartDashboard.getNumber("Shooter Wheels", 0));
+
+        this.stageCommand.cargoPresent();
+        this.stageCommand.colorMatches();
     }
 
     private void idleMode() {
@@ -233,7 +230,6 @@ public class TeleopOperator extends TeleopComponent {
     }
 
     private void execute() {
-        this.intakeCommand.execute();
         this.stageCommand.execute();
         this.feedCommand.execute();
         this.launchCommand.execute();
@@ -247,7 +243,6 @@ public class TeleopOperator extends TeleopComponent {
 
     @Override
     public void disable() {
-        this.intakeCommand.disable();
         this.stageCommand.disable();
         this.feedCommand.disable();
         this.launchCommand.disable();

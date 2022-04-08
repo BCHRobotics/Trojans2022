@@ -6,6 +6,7 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.commands.Command;
 import frc.robot.Constants;
@@ -75,6 +76,9 @@ public class Stage extends Command{
     }
 
     public boolean colorMatches() {
+        SmartDashboard.putNumber("Blue Value", this.colorSensor.getBlue());
+        SmartDashboard.putNumber("Red Value", this.colorSensor.getRed());
+        SmartDashboard.putNumber("Green Value", this.colorSensor.getGreen());
         this.detectedColor = this.colorSensor.getColor();
         this.matchResult = this.colorMatch.matchClosestColor(this.detectedColor);
 
@@ -86,14 +90,12 @@ public class Stage extends Command{
             this.gameColor = null;
         }
 
-        if (this.matchResult.color == this.gameColor) {
-            return true;
-        } else return false;
+        SmartDashboard.putBoolean("Color Matches", this.matchResult.color == this.gameColor);
+        return this.matchResult.color == this.gameColor;
     }
     
     public boolean cargoPresent() {
-        if (this.colorSensor.getProximity() > Constants.PROXIMITY) {
-            return true;
-        } else return false;
+        SmartDashboard.putNumber("Proximity", this.colorSensor.getProximity());
+        return this.colorSensor.getProximity() > Constants.PROXIMITY;
     }
 }

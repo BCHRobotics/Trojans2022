@@ -57,17 +57,15 @@ public class TeleopDriver extends TeleopComponent {
                 driverController.getJoystick(Side.LEFT, Axis.Y) * speed,
                 driverController.getJoystick(Side.RIGHT, Axis.X) * speed);
 
-        if (!this.drivetrain.getBrakeState()) {
+        if (!this.drivetrain.getPositionMode()) {
             if (driverController.getLeftBumper())
                 this.drivetrain.brake(true);
             else
                 this.drivetrain.brake(false);
         }
 
-        if (driverController.getRightBumper())
-            this.collect.calculate();
-        else
-            this.collect.end();
+        if (driverController.getRightBumper()) this.collect.calculate();
+        else this.collect.end();
 
         this.drivetrain.run();
         this.collect.execute();

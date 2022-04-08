@@ -57,7 +57,6 @@ public class Aim extends Command {
     public void end() {
         this.limelight.setLedMode(1);
         this.drive.setPositionMode(false);
-        this.drive.brake(false);
         this.shooter.setShooterWheelSpeed(0);
 
         this.isFinished = true;

@@ -11,12 +11,13 @@ public class Shoot extends Sequence{
 
     private Timer timer;
 
-    private Collect intakeCommand;
     private Stage stageCommand;
     private Poly feedCommand;
     private Fire launchCommand;
     private Aim limelightCommand;
     private Manual manualShootCommand;
+
+    private boolean shotLatch;
 
     public static Shoot getInstance() {
         if (instance == null) {
@@ -26,7 +27,6 @@ public class Shoot extends Sequence{
     }
 
     private Shoot() {
-        this.intakeCommand = Collect.getInstance();
         this.stageCommand = Stage.getInstance();
         this.feedCommand = Poly.getInstance();
         this.launchCommand = Fire.getInstance();
@@ -38,7 +38,6 @@ public class Shoot extends Sequence{
 
     @Override
     public void initialize() {
-        this.intakeCommand.initialize();
         this.stageCommand.initialize();
         this.feedCommand.initialize();
         this.launchCommand.initialize();
@@ -53,7 +52,9 @@ public class Shoot extends Sequence{
 
     @Override
     public void calculate() {
-        if (this.stageCommand.cargoPresent()) {
+        if (this.stageCommand.cargoPresent() || this.shotLatch) {
+            this.shotLatch = true;
+            this.startTimer();
             this.stageCommand.end();
             this.feedCommand.calculate();
 
@@ -63,9 +64,9 @@ public class Shoot extends Sequence{
                 this.manualShootCommand.setShooterSpeed(400);
             }
 
-            if (timer.hasElapsed(0.8)) {
+            if (timer.hasElapsed(5.0)) {
                 this.launchCommand.calculate();
-                if (timer.hasElapsed(1.4)) {
+                if (timer.hasElapsed(6.0)) {
                     this.end();
                 }
             } else this.launchCommand.end();
@@ -76,7 +77,6 @@ public class Shoot extends Sequence{
 
     @Override
     public void execute() {
-        this.intakeCommand.execute();
         this.stageCommand.execute();
         this.feedCommand.execute();
         this.launchCommand.execute();
@@ -86,17 +86,17 @@ public class Shoot extends Sequence{
 
     @Override
     public void end() {
-        this.timer.stop();
-        this.timer.reset();
-
-        this.isFinished = true;
-
-        this.intakeCommand.end();
         this.stageCommand.end();
         this.feedCommand.end();
         this.launchCommand.end();
         this.limelightCommand.end();
         this.manualShootCommand.end();
+
+        this.timer.stop();
+        this.timer.reset();
+
+        this.shotLatch = false;
+        this.isFinished = true;
     }
 
     @Override
@@ -109,7 +109,6 @@ public class Shoot extends Sequence{
         this.timer.stop();
         this.timer.reset();
 
-        this.intakeCommand.disable();
         this.stageCommand.disable();
         this.feedCommand.disable();
         this.launchCommand.disable();
