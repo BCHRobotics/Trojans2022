@@ -52,7 +52,7 @@ public class Shoot extends Sequence{
 
     @Override
     public void calculate() {
-        if (this.stageCommand.cargoPresent() || this.shotLatch) {
+        if (this.stageCommand.cargoPresent()) {
             this.shotLatch = true;
 
             this.stageCommand.end();
@@ -61,18 +61,19 @@ public class Shoot extends Sequence{
             if (this.stageCommand.colorMatches()) {
                 this.limelightCommand.calculate();
             } else {
-                this.manualShootCommand.setShooterSpeed(400);
+                this.manualShootCommand.setShooterSpeed(600);
             }
 
             if (this.limelightCommand.reachedSpeed()) {
                 this.launchCommand.calculate();
                 this.startTimer();
-                if (timer.hasElapsed(0.8)) {
-                    this.end();
-                }
             } else this.launchCommand.end();
         } else {
             this.stageCommand.calculate();
+        }
+
+        if (this.timer.hasElapsed(0.8) && this.shotLatch) {
+            this.end();
         }
     }
 

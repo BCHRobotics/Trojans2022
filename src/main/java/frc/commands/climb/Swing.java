@@ -40,7 +40,7 @@ public class Swing extends Command {
     }
 
     public boolean armReachedPosition() {
-        // double armPosition = this.climber.getArmPosition() / Constants.CLIMBER_WINCH_ROTATIONS;
+        // double armPosition = this.climber.getArmPosition() / Constants.ANGLE_LIMIT;
         // if (armPosition >= this.armPosition - 0.02 && armPosition <= this.armPosition + 0.02) {
         //     return true;
         // } else return false;

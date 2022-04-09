@@ -132,10 +132,10 @@ public class TeleopOperator extends TeleopComponent {
             this.shootLatch = false;
             this.shootAutomate = false;
         } else if (this.operatorController.getAButton() || this.shootAutomate) {
-            if (!this.shootAutomate) {
-                this.shootAutomate = true;
-            }
+            if (!this.shootAutomate) this.shootAutomate = true;
             this.shootSequence.calculate();
+            this.shootState = true;
+            this.previousTime = currentTime;
             if (this.shootSequence.isFinished()) this.shootAutomate = false;
         } else if (this.operatorController.getRightBumper()) {
             this.limelightCommand.calculate();
@@ -220,12 +220,16 @@ public class TeleopOperator extends TeleopComponent {
             this.confirmClimb = true;
         }
 
+        SmartDashboard.putBoolean("CLIMB CONFIRMED", this.confirmClimb);
+        SmartDashboard.putBoolean("CLIMB MANUAL", this.climbLatch);
+        this.climbSequence.calculate();
+
         if (this.climbLatch) {
             this.climbSwing.setArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y));
             this.climbLift.setArmHeight(this.operatorController.getJoystick(Side.RIGHT, Axis.Y));
+            this.climbSwing.calculate();
+            this.climbLift.calculate();
         }
-        SmartDashboard.putBoolean("CLIMB CONFIRMED", this.confirmClimb);
-        this.climbSequence.calculate();
     }
 
     private void execute() {

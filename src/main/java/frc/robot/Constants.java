@@ -51,11 +51,11 @@ public class Constants {
     public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000183, -1, 1, 0, 0, 6000, 3000, 0.1);
 
     // Lift PID Constants
-    public static final SparkMaxConstants LEFT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
-    public static final SparkMaxConstants RIGHT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
+    public static final SparkMaxConstants LEFT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 1000, 1000, 0);
+    public static final SparkMaxConstants RIGHT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 1000, 1000, 0);
     
     // Winch PID Constants
-    public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
+    public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 1500, 0);
 
     // Drive PID Constants
     public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
@@ -66,7 +66,7 @@ public class Constants {
 
     // Limlight constants
     public static final double LIMELIGHT_HEIGHT = 0.7239; // Height in meters
-    public static final double LIMELIGHT_ANGLE = 42; // Angle in degrees
+    public static final double LIMELIGHT_ANGLE = 27; // Angle in degrees
     public static final double TARGET_HEIGHT = 2.64; // Height in meters
     public static final double SHOOTER_HEIGHT = 0.6096; // Height in meteres
     public static final double CHASIS_LEFT_CONVERSION = 10.617943964; // Left encoder conversion factor (90 degrees / Left encoder revolutions)
@@ -74,7 +74,7 @@ public class Constants {
 
     // Set climber arm constants
     public static final double LIFT_ARM_GEAR_REDUCTION = 525;
-    public static final double CLIMBER_WINCH_ROTATIONS = 120;
+    public static final double CLIMBER_WINCH_ROTATIONS = 150;
 
     public static final int LEFT_EXTERNAL_ENCODER_PORT = 0;
     public static final int RIGHT_EXTERNAL_ENCODER_PORT = 4;
@@ -88,7 +88,7 @@ public class Constants {
 
     // Shooter angle
     public static final int ANGLE = 60; // Arm angle in degrees
-    public static final double ANGLE_LIMIT = 40; // Arm angle in revolutions
+    public static final double ANGLE_LIMIT = 47; // Arm angle in revolutions
     public static final int LEFT_LIMIT_SWITCH_PORT = 9; // DIO port 9
     public static final int RIGHT_LIMIT_SWITCH_PORT = 8; // DIO port 8
 

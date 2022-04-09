@@ -46,19 +46,19 @@ public class Climb extends Sequence{
 
         switch (this.counter) {
             case 1:
-                this.armPos = -0.5;
+                this.armPos = 0;
                 this.armHeight = 1;
                 break;
             case 2:
-                this.armPos = -0.5;
+                this.armPos = 0;
                 this.armHeight = 0;
                 break;
             case 3:
-                this.armPos = 0;
+                this.armPos = 0.3;
                 this.armHeight = 0;
                 break;
             case 4:
-                this.armPos = 0;
+                this.armPos = 0.3;
                 this.armHeight = 0.5;
                 break;
             case 5:
@@ -70,23 +70,23 @@ public class Climb extends Sequence{
                 this.armHeight = 1;
                 break;
             case 7:
-                this.armPos = 0.5;
+                this.armPos = 0.6;
                 this.armHeight = 1;
                 break;
             case 8:
-                this.armPos = 0;
+                this.armPos = 0.3;
                 this.armHeight = 0.5;
                 break;
             case 9:
-                this.armPos = -0.5;
+                this.armPos = 0;
                 this.armHeight = 0.5;
                 break;
             case 10:
-                this.armPos = -0.5;
+                this.armPos = 0;
                 this.armHeight = 0;
                 break;
             case 11:
-                this.armPos = 0;
+                this.armPos = 0.3;
                 this.armHeight = 0;
                 break;
             case 12:

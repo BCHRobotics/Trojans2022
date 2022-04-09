@@ -112,9 +112,13 @@ public class ArmIO implements IIO {
             if (setPoint >= this.rightArmEncoder.getPosition()) return;
         } else this.rightArmPidController.setPosition(setPoint);
 
-        if (this.leftArmEncoder.getPosition() > Constants.ANGLE_LIMIT || this.rightArmEncoder.getPosition() > Constants.ANGLE_LIMIT) {
-            this.stopAllOutputs();
-        }
+        // if (this.leftArmEncoder.getPosition() > Constants.ANGLE_LIMIT || this.rightArmEncoder.getPosition() > Constants.ANGLE_LIMIT) {
+        //     this.stopAllOutputs();
+        // }
+
+        // if (this.leftArmEncoder.getPosition() < 0 || this.rightArmEncoder.getPosition() < 0) {
+        //     this.stopAllOutputs();
+        // }
     }
 
     /**
