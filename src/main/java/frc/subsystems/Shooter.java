@@ -49,6 +49,10 @@ public class Shooter extends Subsystem {
         this.shooterWheelSpeed = speed;
     }
 
+    public double getAverageWheelSpeed() {
+        return (this.shooterIO.getLeftWheelEncoder().getVelocity() + this.shooterIO.getRightWheelEncoder().getVelocity()) / 2;
+    }
+
     /**
      * Calculates the necessary shooter RPM value from a given distance to hit the target
      * @param setDistance distance in meters

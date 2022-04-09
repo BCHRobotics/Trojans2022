@@ -1,7 +1,5 @@
 package frc.robot;
 
-import com.revrobotics.ColorSensorV3;
-
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.util.pid.SparkMaxConstants;
@@ -53,7 +51,8 @@ public class Constants {
     public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000183, -1, 1, 0, 0, 6000, 3000, 0.1);
 
     // Lift PID Constants
-    public static final SparkMaxConstants ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
+    public static final SparkMaxConstants LEFT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
+    public static final SparkMaxConstants RIGHT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0);
     
     // Winch PID Constants
     public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
@@ -90,7 +89,8 @@ public class Constants {
     // Shooter angle
     public static final int ANGLE = 60; // Arm angle in degrees
     public static final double ANGLE_LIMIT = 40; // Arm angle in revolutions
-    public static final int LIMIT_SWITCH_PORT = 9; // DIO port 9
+    public static final int LEFT_LIMIT_SWITCH_PORT = 9; // DIO port 9
+    public static final int RIGHT_LIMIT_SWITCH_PORT = 8; // DIO port 8
 
     // Color sensor constants
     public static final I2C.Port I2C_PORT = I2C.Port.kOnboard;

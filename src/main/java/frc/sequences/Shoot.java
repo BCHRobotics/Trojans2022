@@ -45,7 +45,7 @@ public class Shoot extends Sequence{
         this.manualShootCommand.initialize();
     }
 
-    public void startTimer() {
+    private void startTimer() {
         this.timer.start();
         this.isFinished = false;
     }
@@ -54,7 +54,7 @@ public class Shoot extends Sequence{
     public void calculate() {
         if (this.stageCommand.cargoPresent() || this.shotLatch) {
             this.shotLatch = true;
-            this.startTimer();
+
             this.stageCommand.end();
             this.feedCommand.calculate();
 
@@ -64,9 +64,10 @@ public class Shoot extends Sequence{
                 this.manualShootCommand.setShooterSpeed(400);
             }
 
-            if (timer.hasElapsed(5.0)) {
+            if (this.limelightCommand.reachedSpeed()) {
                 this.launchCommand.calculate();
-                if (timer.hasElapsed(6.0)) {
+                this.startTimer();
+                if (timer.hasElapsed(0.8)) {
                     this.end();
                 }
             } else this.launchCommand.end();

@@ -28,10 +28,13 @@ public class ArmIO implements IIO {
     private DutyCycleEncoder rightExternalEncoder;
 
     private SparkMaxPID leftArmPidController;
+    private SparkMaxPID rightArmPidController;
 
-    private SparkMaxConstants leftArmConstants = Constants.ARM_CONSTANTS;
+    private SparkMaxConstants leftArmConstants = Constants.LEFT_ARM_CONSTANTS;
+    private SparkMaxConstants rightArmConstants = Constants.RIGHT_ARM_CONSTANTS;
 
-    private DigitalInput armLimitSwitch;
+    private DigitalInput leftArmLimitSwitch;
+    private DigitalInput rightArmLimitSwitch;
 
     private boolean enabled = Constants.ARM_ENABLED;
 
@@ -53,7 +56,8 @@ public class ArmIO implements IIO {
         this.leftArmMotor = new CANSparkMax(Constants.LEFT_ARM_ID, MotorType.kBrushless);
         this.rightArmMotor = new CANSparkMax(Constants.RIGHT_ARM_ID, MotorType.kBrushless);
 
-        this.armLimitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_PORT);
+        this.leftArmLimitSwitch = new DigitalInput(Constants.LEFT_LIMIT_SWITCH_PORT);
+        this.rightArmLimitSwitch = new DigitalInput(Constants.RIGHT_LIMIT_SWITCH_PORT);
 
         // Get motor encoder
         this.leftArmEncoder = leftArmMotor.getEncoder();
@@ -73,13 +77,13 @@ public class ArmIO implements IIO {
 
         // Set Arm PID
         this.leftArmPidController = new SparkMaxPID(leftArmMotor);
+        this.rightArmPidController = new SparkMaxPID(rightArmMotor);
         this.leftArmPidController.setConstants(leftArmConstants);
+        this.rightArmPidController.setConstants(rightArmConstants);
 
         // Inversion state of left arm
         this.leftArmMotor.setInverted(false);
-
-        // Set right arm to copy left arm inversly
-        this.rightArmMotor.follow(leftArmMotor, true);
+        this.rightArmMotor.setInverted(true);
 
         // Send out settings to controller
         this.leftArmMotor.burnFlash();
@@ -94,19 +98,19 @@ public class ArmIO implements IIO {
     public void setArmPosition(double setPoint) {
         if (setPoint > Constants.ANGLE_LIMIT || setPoint < 0 || !enabled) return;
 
-        SmartDashboard.putBoolean("Limit switch", this.armLimitSwitch.get());
-        if (!this.armLimitSwitch.get()) {
-            if (this.leftArmEncoder.getPosition() != Constants.ANGLE_LIMIT) {
-                this.leftArmEncoder.setPosition(Constants.ANGLE_LIMIT);
-                this.rightArmEncoder.setPosition(Constants.ANGLE_LIMIT);
-            } else {
-                this.leftArmPidController.setPosition(setPoint);
-            }
-        } else {
-            this.leftArmPidController.setPosition(setPoint);
-        }
+        SmartDashboard.putBoolean("Left limit", this.leftArmLimitSwitch.get());
+        SmartDashboard.putBoolean("Right limit", this.rightArmLimitSwitch.get());
+        if (this.leftArmLimitSwitch.get()) {
+            if (this.leftArmEncoder.getPosition() != Constants.ANGLE_LIMIT) this.leftArmEncoder.setPosition(Constants.ANGLE_LIMIT);
+            else this.leftArmPidController.setPosition(setPoint);
+        } else this.leftArmPidController.setPosition(setPoint);
 
-        if (this.leftArmEncoder.getPosition() > Constants.ANGLE_LIMIT) {
+        if (this.rightArmLimitSwitch.get()) {
+            if (this.rightArmEncoder.getPosition() != Constants.ANGLE_LIMIT) this.rightArmEncoder.setPosition(Constants.ANGLE_LIMIT);
+            else this.rightArmPidController.setPosition(setPoint);
+        } else this.rightArmPidController.setPosition(setPoint);
+
+        if (this.leftArmEncoder.getPosition() > Constants.ANGLE_LIMIT || this.rightArmEncoder.getPosition() > Constants.ANGLE_LIMIT) {
             this.stopAllOutputs();
         }
     }
@@ -117,8 +121,7 @@ public class ArmIO implements IIO {
      * @return CANEncoder reference
      */
     public RelativeEncoder getLeftArmEncoder() {
-        if (!enabled)
-            return null;
+        if (!enabled) return null;
         return this.leftArmMotor.getEncoder();
     }
 
@@ -128,8 +131,7 @@ public class ArmIO implements IIO {
      * @return CANEncoder reference
      */
     public RelativeEncoder getRightArmEncoder() {
-        if (!enabled)
-            return null;
+        if (!enabled) return null;
         return this.rightArmMotor.getEncoder();
     }
 

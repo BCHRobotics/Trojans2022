@@ -14,6 +14,7 @@ public class Aim extends Command {
     private Limelight limelight;
 
     private Boolean isFinished;
+    private double shooterSpeed;
 
     public static Aim getInstance() {
         if (instance == null) {
@@ -44,7 +45,8 @@ public class Aim extends Command {
         this.drive.setPositionMode(true);
         this.drive.brake(true);
         this.drive.seekTarget(this.limelight.getTargetX());
-        this.shooter.setShooterWheelSpeed(this.shooter.calculateShooterRPM(this.limelight.getTargetDistance()));
+        this.shooterSpeed = this.shooter.calculateShooterRPM(this.limelight.getTargetDistance());
+        this.shooter.setShooterWheelSpeed(this.shooterSpeed);
     }
 
     @Override
@@ -57,14 +59,18 @@ public class Aim extends Command {
     public void end() {
         this.limelight.setLedMode(1);
         this.drive.setPositionMode(false);
-        this.shooter.setShooterWheelSpeed(0);
-
+        this.shooterSpeed = 0;
+        this.shooter.setShooterWheelSpeed(this.shooterSpeed);
         this.isFinished = true;
     }
 
     @Override
     public boolean isFinished() {
         return this.isFinished;
+    }
+
+    public boolean reachedSpeed() {
+        return this.shooter.getAverageWheelSpeed() >= this.shooterSpeed - 40;
     }
 
     @Override
