@@ -134,7 +134,6 @@ public class TeleopOperator extends TeleopComponent {
         } else if (this.operatorController.getAButton() || this.shootAutomate) {
             if (!this.shootAutomate) {
                 this.shootAutomate = true;
-                // this.shootSequence.startTimer();
             }
             this.shootSequence.calculate();
             if (this.shootSequence.isFinished()) this.shootAutomate = false;

@@ -103,11 +103,13 @@ public class ArmIO implements IIO {
         if (this.leftArmLimitSwitch.get()) {
             if (this.leftArmEncoder.getPosition() != Constants.ANGLE_LIMIT) this.leftArmEncoder.setPosition(Constants.ANGLE_LIMIT);
             else this.leftArmPidController.setPosition(setPoint);
+            if (setPoint >= this.leftArmEncoder.getPosition()) return;
         } else this.leftArmPidController.setPosition(setPoint);
 
         if (this.rightArmLimitSwitch.get()) {
             if (this.rightArmEncoder.getPosition() != Constants.ANGLE_LIMIT) this.rightArmEncoder.setPosition(Constants.ANGLE_LIMIT);
             else this.rightArmPidController.setPosition(setPoint);
+            if (setPoint >= this.rightArmEncoder.getPosition()) return;
         } else this.rightArmPidController.setPosition(setPoint);
 
         if (this.leftArmEncoder.getPosition() > Constants.ANGLE_LIMIT || this.rightArmEncoder.getPosition() > Constants.ANGLE_LIMIT) {
