@@ -10,6 +10,7 @@ import frc.sequences.Shoot;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
+import frc.util.math.Arithmetic;
 
 public class TeleopOperator extends TeleopComponent {
 
@@ -34,6 +35,9 @@ public class TeleopOperator extends TeleopComponent {
     private boolean shootAutomate;
     private boolean climbLatch;
     private boolean confirmClimb;
+
+    private double manualArmIncrement;
+    private double manualWinchIncrement;
 
     private long previousTime;
     private long currentTime;
@@ -225,8 +229,18 @@ public class TeleopOperator extends TeleopComponent {
         this.climbSequence.calculate();
 
         if (this.climbLatch) {
-            this.climbSwing.setArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y));
-            this.climbLift.setArmHeight(this.operatorController.getJoystick(Side.RIGHT, Axis.Y));
+            this.manualArmIncrement += this.operatorController.getJoystick(Side.LEFT, Axis.Y) * 0.02;
+            this.manualWinchIncrement += this.operatorController.getJoystick(Side.RIGHT, Axis.Y) * 0.02;
+
+            this.manualArmIncrement = Arithmetic.constrain(this.manualArmIncrement, 0.0, 1.0);
+            this.manualWinchIncrement = Arithmetic.constrain(this.manualWinchIncrement, 0.0, 1.0);
+
+            SmartDashboard.putNumber("Arm Swing %", this.manualArmIncrement * 100);
+            SmartDashboard.putNumber("Arm Extend %", this.manualWinchIncrement * 100);
+
+            this.climbSwing.setArmPosition(this.manualArmIncrement);
+            this.climbLift.setArmHeight(this.manualWinchIncrement);
+
             this.climbSwing.calculate();
             this.climbLift.calculate();
         }
