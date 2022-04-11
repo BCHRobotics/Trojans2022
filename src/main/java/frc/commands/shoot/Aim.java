@@ -13,7 +13,8 @@ public class Aim extends Command {
     private Shooter shooter;
     private Limelight limelight;
 
-    private Boolean isFinished;
+    private boolean isFinished;
+    private boolean colorMatches;
     private double shooterSpeed;
 
     public static Aim getInstance() {
@@ -45,7 +46,8 @@ public class Aim extends Command {
         this.drive.setPositionMode(true);
         this.drive.brake(true);
         this.drive.seekTarget(this.limelight.getTargetX());
-        this.shooterSpeed = this.shooter.calculateShooterRPM(this.limelight.getTargetDistance());
+        if (this.colorMatches) this.shooterSpeed = this.shooter.calculateShooterRPM(this.limelight.getTargetDistance());
+        else this.shooterSpeed = 600;
         this.shooter.setShooterWheelSpeed(this.shooterSpeed);
     }
 
@@ -60,7 +62,7 @@ public class Aim extends Command {
         this.limelight.setLedMode(1);
         this.drive.setPositionMode(false);
         this.shooterSpeed = 0;
-        this.shooter.setShooterWheelSpeed(this.shooterSpeed);
+        this.shooter.setShooterWheelSpeed(0);
         this.isFinished = true;
     }
 
@@ -70,7 +72,20 @@ public class Aim extends Command {
     }
 
     public boolean reachedSpeed() {
-        return this.shooter.getAverageWheelSpeed() >= this.shooterSpeed - 40;
+        if (this.colorMatches) return this.shooter.getAverageWheelSpeed() >= this.shooterSpeed - 600;
+        else return this.shooter.getAverageWheelSpeed() >= this.shooterSpeed - 30;
+    }
+
+    public boolean limelightLatched() {
+        return this.limelight.getTargetX() >= -0.15 && this.limelight.getTargetX() <= 0.15;
+    }
+
+    public void setColorMatch(boolean state) {
+        this.colorMatches = state;
+    }
+
+    public boolean getColorMatch() {
+        return this.colorMatches;
     }
 
     @Override

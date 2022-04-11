@@ -59,10 +59,10 @@ public class Shooter extends Subsystem {
      * @return
      */
     public double calculateShooterRPM(double setDistance) {
-        final double a = 34.822;
-        final double b = 71.927;
-        final double c = 2053.9;
-        double output  = (a*Math.pow(setDistance, 2)) - (b*setDistance) + c;
+        final double a = 18.8;
+        final double b = 58.5;
+        final double c = 1578;
+        double output  = (a*Math.pow(setDistance, 2)) + (b*setDistance) + c;
         return output;
     }
 

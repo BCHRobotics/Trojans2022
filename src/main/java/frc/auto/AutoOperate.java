@@ -4,7 +4,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.subsystems.Climber;
+import frc.commands.intake.Collect;
+import frc.commands.intake.Stage;
+import frc.commands.shoot.Fire;
+import frc.commands.shoot.Manual;
+import frc.commands.shoot.Poly;
+import frc.sequences.Shoot;
 import frc.subsystems.Drivetrain;
 import frc.subsystems.Intake;
 import frc.subsystems.Shooter;
@@ -16,9 +21,13 @@ public class AutoOperate extends AutoComponent {
     private static long startTime;
     private static long currentTime;
     private Drivetrain drive;
-    private Intake intake;
-    private Shooter shooter;
-    private Climber climber;
+    private Collect intake;
+    private boolean disabled;
+    // private Stage stager;
+    // private Poly feeder;
+    // private Fire launch;
+    // private Manual manualShoot;
+    private Shoot shootSequence;
 
     /**
      * Get the instance of the AutoOperator, if none create a new instance
@@ -34,18 +43,25 @@ public class AutoOperate extends AutoComponent {
 
     private AutoOperate() {
         this.drive = Drivetrain.getInstance();
-        this.intake = Intake.getInstance();
-        this.shooter = Shooter.getInstance();
-        this.climber = Climber.getInstance();
+        this.intake = Collect.getInstance();
+        // this.stager = Stage.getInstance();
+        // this.feeder = Poly.getInstance();
+        // this.launch = Fire.getInstance();
+        // this.manualShoot = Manual.getInstance();
+        this.shootSequence = Shoot.getInstance();
     }
 
     @Override
     public void firstCycle(){
         data.clear();
         this.drive.firstCycle();
-        this.intake.firstCycle();
-        this.shooter.firstCycle();
-        this.climber.firstCycle();
+        this.intake.initialize();
+        // this.stager.initialize();
+        // this.feeder.initialize();
+        // this.launch.initialize();
+        // this.manualShoot.initialize();
+        this.shootSequence.initialize();
+        this.disabled = false;
         startTime = System.currentTimeMillis();
         try {
             data = CSVReader.convertToArrayList(AutoSelecter.getInstance().getFileName());
@@ -57,11 +73,18 @@ public class AutoOperate extends AutoComponent {
 
     @Override
     public void run() {
-        driveMode();
-        this.drive.run();
-        this.intake.run();
-        this.shooter.run();
-        this.climber.run();
+        if (!this.disabled) {
+            driveMode();
+            this.drive.setPositionMode(true);
+            this.drive.brake(true);
+            this.drive.run();
+            this.intake.execute();
+            // this.stager.execute();
+            // this.feeder.execute();
+            // this.launch.execute();
+            // this.manualShoot.execute();
+            this.shootSequence.execute();
+        }
     }
 
     /**
@@ -73,21 +96,21 @@ public class AutoOperate extends AutoComponent {
         try {
             if(data.size() <= 0) {
                 this.drive.resetPosition();
-                this.intake.resetPosition();
-                this.disable();
+                this.drive.setPositionMode(false);
+                this.drive.brake(false);
                 data.clear();
+                this.disable();
                 return;
             }
             if (currentTime < data.get(0).get(0).longValue() * 0.35) {
                 this.drive.setDriveLeft(data.get(0).get(1));
                 this.drive.setDriveRight(data.get(0).get(2));
-                this.intake.setIntakeState(data.get(0).get(3) == 1.0 ? true : false);
-                this.intake.setIntakeSpeed(data.get(0).get(4));
-                this.intake.setStagerSpeed(data.get(0).get(5));
-                this.intake.setFeederSpeed(data.get(0).get(6));
-                this.intake.setFeederState(data.get(0).get(7) == 1.0 ? true : false);
-                this.climber.setRobotArmPosition(data.get(0).get(8));
-                this.shooter.setShooterWheelSpeed(data.get(0).get(9));
+                if (data.get(0).get(3) == 1.0) this.intake.calculate(); else this.intake.end();
+                // if (data.get(0).get(5) == 1.0) this.stager.calculate(); else this.stager.end();
+                // if (data.get(0).get(6) == 1.0) this.feeder.calculate(); else this.feeder.end();
+                // if (data.get(0).get(7) == 1.0) this.launch.calculate(); else this.launch.end();
+                // this.manualShoot.setShooterSpeed(data.get(0).get(9));
+                if (data.get(0).get(10) == 1.0) this.shootSequence.calculate(); else this.shootSequence.end();
             } else {
                 data.remove(0);
             }
@@ -102,8 +125,12 @@ public class AutoOperate extends AutoComponent {
     public void disable() {
         this.drive.disable();
         this.intake.disable();
-        this.shooter.disable();
-        this.climber.disable();
+        // this.stager.disable();
+        // this.feeder.disable();
+        // this.launch.disable();
+        // this.manualShoot.disable();
+        this.shootSequence.disable();
+        this.disabled = true;
     }
     
 }

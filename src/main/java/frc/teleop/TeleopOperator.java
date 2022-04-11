@@ -140,8 +140,13 @@ public class TeleopOperator extends TeleopComponent {
             this.shootSequence.calculate();
             this.shootState = true;
             this.previousTime = currentTime;
-            if (this.shootSequence.isFinished()) this.shootAutomate = false;
+            if (this.shootSequence.isFinished()) { 
+                this.shootAutomate = false;
+                this.shootSequence.end();
+                this.shootSequence.reset();
+            }
         } else if (this.operatorController.getRightBumper()) {
+            this.limelightCommand.setColorMatch(true);
             this.limelightCommand.calculate();
             this.stageCommand.calculate();
 
@@ -180,7 +185,7 @@ public class TeleopOperator extends TeleopComponent {
             if (!this.shootState) {
                 this.idleMode();
                 this.previousTime = this.currentTime;
-            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.stagerDelay)) && !this.shootLatch) {
+            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.stagerDelay)) && !this.shootLatch && !this.shootAutomate) {
                 this.idleMode();
                 this.shootState = false;
                 this.shootLatch = false;

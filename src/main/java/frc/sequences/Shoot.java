@@ -1,6 +1,7 @@
 package frc.sequences;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.intake.*;
 import frc.commands.shoot.*;
 
@@ -8,6 +9,7 @@ public class Shoot extends Sequence{
     private static Shoot instance;
 
     private boolean isFinished;
+    private boolean verified;
 
     private Timer timer;
 
@@ -15,7 +17,7 @@ public class Shoot extends Sequence{
     private Poly feedCommand;
     private Fire launchCommand;
     private Aim limelightCommand;
-    private Manual manualShootCommand;
+    // private Manual manualShootCommand;
 
     private boolean shotLatch;
 
@@ -31,7 +33,7 @@ public class Shoot extends Sequence{
         this.feedCommand = Poly.getInstance();
         this.launchCommand = Fire.getInstance();
         this.limelightCommand = Aim.getInstance();
-        this.manualShootCommand = Manual.getInstance();
+        // this.manualShootCommand = Manual.getInstance();
 
         this.timer = new Timer();
     }
@@ -42,12 +44,15 @@ public class Shoot extends Sequence{
         this.feedCommand.initialize();
         this.launchCommand.initialize();
         this.limelightCommand.initialize();
-        this.manualShootCommand.initialize();
+        // this.manualShootCommand.initialize();
     }
 
     private void startTimer() {
+        this.timer.stop();
+        this.timer.reset();
         this.timer.start();
         this.isFinished = false;
+        this.verified = true;
     }
 
     @Override
@@ -58,21 +63,23 @@ public class Shoot extends Sequence{
             this.stageCommand.end();
             this.feedCommand.calculate();
 
-            if (this.stageCommand.colorMatches()) {
-                this.limelightCommand.calculate();
-            } else {
-                this.manualShootCommand.setShooterSpeed(600);
-            }
+            if (this.stageCommand.colorMatches()) this.limelightCommand.setColorMatch(true);
+            else this.limelightCommand.setColorMatch(false);
 
-            if (this.limelightCommand.reachedSpeed()) {
-                this.launchCommand.calculate();
-                this.startTimer();
-            } else this.launchCommand.end();
+            this.limelightCommand.calculate();
+
+            if ((this.limelightCommand.limelightLatched() || !this.limelightCommand.getColorMatch())&& !this.verified) this.startTimer();
+            SmartDashboard.putBoolean("Aimed", this.limelightCommand.limelightLatched());
+
+            if (this.timer.hasElapsed(1)) this.launchCommand.calculate();
+            else this.launchCommand.end();
+
         } else {
             this.stageCommand.calculate();
+            this.limelightCommand.calculate();
         }
 
-        if (this.timer.hasElapsed(0.8) && this.shotLatch) {
+        if (this.timer.hasElapsed(1.8) && this.shotLatch) {
             this.end();
         }
     }
@@ -83,27 +90,32 @@ public class Shoot extends Sequence{
         this.feedCommand.execute();
         this.launchCommand.execute();
         this.limelightCommand.execute();
-        this.manualShootCommand.execute();
+        // this.manualShootCommand.execute();
     }
 
     @Override
     public void end() {
+        this.timer.stop();
+        this.timer.reset();
+
         this.stageCommand.end();
         this.feedCommand.end();
         this.launchCommand.end();
         this.limelightCommand.end();
-        this.manualShootCommand.end();
-
-        this.timer.stop();
-        this.timer.reset();
+        // this.manualShootCommand.end();
 
         this.shotLatch = false;
+        this.verified = false;
         this.isFinished = true;
     }
 
     @Override
     public boolean isFinished() {
         return this.isFinished;
+    }
+
+    public void reset() {
+        this.isFinished = false;
     }
 
     @Override
@@ -115,7 +127,7 @@ public class Shoot extends Sequence{
         this.feedCommand.disable();
         this.launchCommand.disable();
         this.limelightCommand.disable();
-        this.manualShootCommand.disable();
+        // this.manualShootCommand.disable();
     }
     
 }

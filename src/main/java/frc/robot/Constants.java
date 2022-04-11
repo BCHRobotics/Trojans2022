@@ -47,8 +47,8 @@ public class Constants {
     public static final boolean MINI_BOT = false;
 
     // Shooter PID Constants
-    public static final SparkMaxConstants LEFT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000178, -1, 1, 0, 0, 6000, 3000, 0.1);
-    public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000183, -1, 1, 0, 0, 6000, 3000, 0.1);
+    public static final SparkMaxConstants LEFT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000178, -1, 1, 0, 0, 6000, 4000, 0.1);
+    public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000183, -1, 1, 0, 0, 6000, 4000, 0.1);
 
     // Lift PID Constants
     public static final SparkMaxConstants LEFT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 1000, 1000, 0);
@@ -58,8 +58,8 @@ public class Constants {
     public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 1500, 0);
 
     // Drive PID Constants
-    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
-    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2500, 0);
+    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2000, 0.1);
+    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2000, 0.1);
     
     //Auto directory
     public static final String ROOT_DIRECTORY = "csv/";
@@ -88,7 +88,7 @@ public class Constants {
 
     // Shooter angle
     public static final int ANGLE = 60; // Arm angle in degrees
-    public static final double ANGLE_LIMIT = 47; // Arm angle in revolutions
+    public static final double ANGLE_LIMIT = 48; // Arm angle in revolutions
     public static final int LEFT_LIMIT_SWITCH_PORT = 9; // DIO port 9
     public static final int RIGHT_LIMIT_SWITCH_PORT = 8; // DIO port 8
 
@@ -96,5 +96,5 @@ public class Constants {
     public static final I2C.Port I2C_PORT = I2C.Port.kOnboard;
     public static final Color COLOR_RED = new Color(0.561, 0.232, 0.114);
     public static final Color COLOR_BLUE = new Color(0.143, 0.427, 0.429);
-    public static final int PROXIMITY = 355;
+    public static final int PROXIMITY = 900;
 }

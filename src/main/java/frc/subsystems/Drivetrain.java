@@ -157,8 +157,7 @@ public class Drivetrain extends Subsystem {
         double driveRevolutionsLeft = (angle / Constants.CHASIS_LEFT_CONVERSION);
         double driveRevolutionsRight = (angle / Constants.CHASIS_RIGHT_CONVERSION);
 
-        this.resetPosition();
-        this.setDriveLeft(driveRevolutionsLeft);
-        this.setDriveRight(driveRevolutionsRight);
+        this.setDriveLeft(this.driveIO.getDriveL1Encoder().getPosition() + driveRevolutionsLeft);
+        this.setDriveRight(this.driveIO.getDriveR1Encoder().getPosition() + driveRevolutionsRight);
     }
 }
