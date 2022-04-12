@@ -59,10 +59,11 @@ public class Shooter extends Subsystem {
      * @return
      */
     public double calculateShooterRPM(double setDistance) {
-        final double a = 18.8;
-        final double b = 58.5;
-        final double c = 1578;
+        final double a = 23.1;
+        final double b = 26.8;
+        final double c = 1616;
         double output  = (a*Math.pow(setDistance, 2)) + (b*setDistance) + c;
+        // double output = SmartDashboard.getNumber("Shooter Wheels", 0);
         return output;
     }
 

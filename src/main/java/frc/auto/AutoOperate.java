@@ -5,14 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import frc.commands.intake.Collect;
-import frc.commands.intake.Stage;
-import frc.commands.shoot.Fire;
 import frc.commands.shoot.Manual;
-import frc.commands.shoot.Poly;
 import frc.sequences.Shoot;
 import frc.subsystems.Drivetrain;
-import frc.subsystems.Intake;
-import frc.subsystems.Shooter;
 import frc.util.csv.CSVReader;
 
 public class AutoOperate extends AutoComponent {
@@ -23,11 +18,8 @@ public class AutoOperate extends AutoComponent {
     private Drivetrain drive;
     private Collect intake;
     private boolean disabled;
-    // private Stage stager;
-    // private Poly feeder;
-    // private Fire launch;
-    // private Manual manualShoot;
     private Shoot shootSequence;
+    // private Manual manualShoot;
 
     /**
      * Get the instance of the AutoOperator, if none create a new instance
@@ -44,11 +36,8 @@ public class AutoOperate extends AutoComponent {
     private AutoOperate() {
         this.drive = Drivetrain.getInstance();
         this.intake = Collect.getInstance();
-        // this.stager = Stage.getInstance();
-        // this.feeder = Poly.getInstance();
-        // this.launch = Fire.getInstance();
-        // this.manualShoot = Manual.getInstance();
         this.shootSequence = Shoot.getInstance();
+        // this.manualShoot = Manual.getInstance();
     }
 
     @Override
@@ -56,11 +45,8 @@ public class AutoOperate extends AutoComponent {
         data.clear();
         this.drive.firstCycle();
         this.intake.initialize();
-        // this.stager.initialize();
-        // this.feeder.initialize();
-        // this.launch.initialize();
-        // this.manualShoot.initialize();
         this.shootSequence.initialize();
+        // this.manualShoot.initialize();
         this.disabled = false;
         startTime = System.currentTimeMillis();
         try {
@@ -79,11 +65,10 @@ public class AutoOperate extends AutoComponent {
             this.drive.brake(true);
             this.drive.run();
             this.intake.execute();
-            // this.stager.execute();
-            // this.feeder.execute();
-            // this.launch.execute();
             // this.manualShoot.execute();
             this.shootSequence.execute();
+        } else {
+            this.disable();
         }
     }
 
@@ -98,19 +83,16 @@ public class AutoOperate extends AutoComponent {
                 this.drive.resetPosition();
                 this.drive.setPositionMode(false);
                 this.drive.brake(false);
-                data.clear();
                 this.disable();
+                data.clear();
                 return;
             }
             if (currentTime < data.get(0).get(0).longValue() * 0.35) {
-                this.drive.setDriveLeft(data.get(0).get(1));
-                this.drive.setDriveRight(data.get(0).get(2));
+                if (data.get(0).get(4) == 0.0) this.drive.setDriveLeft(data.get(0).get(1));
+                if (data.get(0).get(4) == 0.0) this.drive.setDriveRight(data.get(0).get(2));
                 if (data.get(0).get(3) == 1.0) this.intake.calculate(); else this.intake.end();
-                // if (data.get(0).get(5) == 1.0) this.stager.calculate(); else this.stager.end();
-                // if (data.get(0).get(6) == 1.0) this.feeder.calculate(); else this.feeder.end();
-                // if (data.get(0).get(7) == 1.0) this.launch.calculate(); else this.launch.end();
-                // this.manualShoot.setShooterSpeed(data.get(0).get(9));
-                if (data.get(0).get(10) == 1.0) this.shootSequence.calculate(); else this.shootSequence.end();
+                if (data.get(0).get(4) == 1.0) this.shootSequence.calculate(); else this.shootSequence.end();
+                // if (data.get(0).get(5) == 1.0) this.manualShoot.setShooterSpeed(1260); else this.manualShoot.end();
             } else {
                 data.remove(0);
             }
@@ -125,9 +107,6 @@ public class AutoOperate extends AutoComponent {
     public void disable() {
         this.drive.disable();
         this.intake.disable();
-        // this.stager.disable();
-        // this.feeder.disable();
-        // this.launch.disable();
         // this.manualShoot.disable();
         this.shootSequence.disable();
         this.disabled = true;

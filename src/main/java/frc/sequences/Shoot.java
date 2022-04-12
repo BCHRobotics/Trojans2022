@@ -74,7 +74,7 @@ public class Shoot extends Sequence{
             if (this.timer.hasElapsed(1)) this.launchCommand.calculate();
             else this.launchCommand.end();
 
-        } else {
+        } else if (!this.shotLatch) {
             this.stageCommand.calculate();
             this.limelightCommand.calculate();
         }

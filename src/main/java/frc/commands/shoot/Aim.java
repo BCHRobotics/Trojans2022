@@ -77,7 +77,7 @@ public class Aim extends Command {
     }
 
     public boolean limelightLatched() {
-        return this.limelight.getTargetX() >= -0.15 && this.limelight.getTargetX() <= 0.15;
+        return ((this.limelight.getTargetX() >= -0.8) && (this.limelight.getTargetX() <= 0.8));
     }
 
     public void setColorMatch(boolean state) {

@@ -47,19 +47,19 @@ public class Constants {
     public static final boolean MINI_BOT = false;
 
     // Shooter PID Constants
-    public static final SparkMaxConstants LEFT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000178, -1, 1, 0, 0, 6000, 4000, 0.1);
-    public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000183, -1, 1, 0, 0, 6000, 4000, 0.1);
+    public static final SparkMaxConstants LEFT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000546, 0, 0, 0, 0.000181, -1, 1, 0, 0, 6000, 4800, 0.1);
+    public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000179, -1, 1, 0, 0, 6000, 4800, 0.1);
 
     // Lift PID Constants
-    public static final SparkMaxConstants LEFT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 1000, 1000, 0);
-    public static final SparkMaxConstants RIGHT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 1000, 1000, 0);
+    public static final SparkMaxConstants LEFT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0); // 1000, 1000, 0
+    public static final SparkMaxConstants RIGHT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0); // 1000, 1000, 0
     
     // Winch PID Constants
-    public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 1500, 0);
+    public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 5000, 2500, 0); // 3000, 1500, 0
 
     // Drive PID Constants
-    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2000, 0.1);
-    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 2000, 0.1);
+    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 3000, 0.1);
+    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 3000, 0.1);
     
     //Auto directory
     public static final String ROOT_DIRECTORY = "csv/";
@@ -69,8 +69,8 @@ public class Constants {
     public static final double LIMELIGHT_ANGLE = 27; // Angle in degrees
     public static final double TARGET_HEIGHT = 2.64; // Height in meters
     public static final double SHOOTER_HEIGHT = 0.6096; // Height in meteres
-    public static final double CHASIS_LEFT_CONVERSION = 10.617943964; // Left encoder conversion factor (90 degrees / Left encoder revolutions)
-    public static final double CHASIS_RIGHT_CONVERSION = -10.5406524386; // Right encoder conversion factor (90 degrees / Right encoder revolutions)
+    public static final double CHASIS_LEFT_CONVERSION = 8.2996914955; // Left encoder conversion factor (90 degrees / Left encoder revolutions)
+    public static final double CHASIS_RIGHT_CONVERSION = -7.9212225920; // Right encoder conversion factor (90 degrees / Right encoder revolutions)
 
     // Set climber arm constants
     public static final double LIFT_ARM_GEAR_REDUCTION = 525;
