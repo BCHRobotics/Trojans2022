@@ -1,5 +1,6 @@
 package frc.commands.shoot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.commands.Command;
 import frc.subsystems.Drivetrain;
 import frc.subsystems.Shooter;
@@ -16,6 +17,12 @@ public class Aim extends Command {
     private boolean isFinished;
     private boolean colorMatches;
     private double shooterSpeed;
+
+    private final double aValue = -8.28e-6;
+    private final double bValue = 1.02;
+    private final double cValue = -67.6;
+    private double outputValue;
+
 
     public static Aim getInstance() {
         if (instance == null) {
@@ -49,6 +56,7 @@ public class Aim extends Command {
         if (this.colorMatches) this.shooterSpeed = this.shooter.calculateShooterRPM(this.limelight.getTargetDistance());
         else this.shooterSpeed = 600;
         this.shooter.setShooterWheelSpeed(this.shooterSpeed);
+        SmartDashboard.putNumber("Setpoint", this.shooter.calculateShooterRPM(this.limelight.getTargetDistance()));
     }
 
     @Override
@@ -72,8 +80,11 @@ public class Aim extends Command {
     }
 
     public boolean reachedSpeed() {
-        if (this.colorMatches) return this.shooter.getAverageWheelSpeed() >= this.shooterSpeed - 600;
-        else return this.shooter.getAverageWheelSpeed() >= this.shooterSpeed - 30;
+        if (this.colorMatches) {
+            this.outputValue = (this.aValue * Math.pow(this.shooterSpeed, 2)) + (this.bValue * (this.shooterSpeed)) + (this.cValue);
+            return this.shooter.getAverageWheelSpeed() >= (this.outputValue - 20);
+        }
+        else return this.shooter.getAverageWheelSpeed() >= 500;
     }
 
     public boolean limelightLatched() {

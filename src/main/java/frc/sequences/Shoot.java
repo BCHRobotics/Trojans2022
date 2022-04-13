@@ -68,10 +68,13 @@ public class Shoot extends Sequence{
 
             this.limelightCommand.calculate();
 
-            if ((this.limelightCommand.limelightLatched() || !this.limelightCommand.getColorMatch())&& !this.verified) this.startTimer();
-            SmartDashboard.putBoolean("Aimed", this.limelightCommand.limelightLatched());
-
-            if (this.timer.hasElapsed(1)) this.launchCommand.calculate();
+            // (this.limelightCommand.limelightLatched() || !this.limelightCommand.getColorMatch())
+            if (((this.limelightCommand.limelightLatched() && this.limelightCommand.reachedSpeed())|| !this.limelightCommand.getColorMatch()) && !this.verified) this.startTimer();
+            
+            SmartDashboard.putBoolean("Aimed", (((this.limelightCommand.limelightLatched() && this.limelightCommand.reachedSpeed()) || !this.limelightCommand.getColorMatch())) && this.verified);
+            SmartDashboard.putBoolean("Lime lock", this.limelightCommand.limelightLatched());
+            
+            if (this.timer.hasElapsed(0.8)) this.launchCommand.calculate();
             else this.launchCommand.end();
 
         } else if (!this.shotLatch) {
@@ -79,7 +82,7 @@ public class Shoot extends Sequence{
             this.limelightCommand.calculate();
         }
 
-        if (this.timer.hasElapsed(1.8) && this.shotLatch) {
+        if (this.timer.hasElapsed(1.6) && this.shotLatch) {
             this.end();
         }
     }

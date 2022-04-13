@@ -47,19 +47,19 @@ public class Constants {
     public static final boolean MINI_BOT = false;
 
     // Shooter PID Constants
-    public static final SparkMaxConstants LEFT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000546, 0, 0, 0, 0.000181, -1, 1, 0, 0, 6000, 4800, 0.1);
-    public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000545, 0, 0, 0, 0.000179, -1, 1, 0, 0, 6000, 4800, 0.1);
+    public static final SparkMaxConstants LEFT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000548, 0, 0, 0, 0.000186, -1, 1, 0, 0, 6000, 4800, 0.1);
+    public static final SparkMaxConstants RIGHT_SHOOTER_WHEEL_CONSTANTS = new SparkMaxConstants(0.000548, 0, 0, 0, 0.000186, -1, 1, 0, 0, 6000, 4800, 0.1);
 
     // Lift PID Constants
-    public static final SparkMaxConstants LEFT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0); // 1000, 1000, 0
-    public static final SparkMaxConstants RIGHT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 3000, 2000, 0); // 1000, 1000, 0
+    public static final SparkMaxConstants LEFT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 5500, 0); // 1000, 1000, 0
+    public static final SparkMaxConstants RIGHT_ARM_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 5500, 0); // 1000, 1000, 0
     
     // Winch PID Constants
-    public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 5000, 2500, 0); // 3000, 1500, 0
+    public static final SparkMaxConstants WINCH_CONSTANTS = new SparkMaxConstants(5e-5, 1e-6, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 5500, 0); // 3000, 1500, 0
 
     // Drive PID Constants
-    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 3000, 0.1);
-    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 3000, 0.1);
+    public static final SparkMaxConstants DRIVEL1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 3500, 0.1);
+    public static final SparkMaxConstants DRIVER1_CONSTANTS = new SparkMaxConstants(1e-4, 0, 0, 0, 0.000156, -1, 1, 0, 0, 6000, 3500, 0.1);
     
     //Auto directory
     public static final String ROOT_DIRECTORY = "csv/";
@@ -96,5 +96,5 @@ public class Constants {
     public static final I2C.Port I2C_PORT = I2C.Port.kOnboard;
     public static final Color COLOR_RED = new Color(0.561, 0.232, 0.114);
     public static final Color COLOR_BLUE = new Color(0.143, 0.427, 0.429);
-    public static final int PROXIMITY = 900;
+    public static final int PROXIMITY = 800;
 }
