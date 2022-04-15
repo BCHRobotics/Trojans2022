@@ -54,11 +54,11 @@ public class Climb extends Sequence{
                 this.armHeight = 0;
                 break;
             case 3:
-                this.armPos = 0.6;
+                this.armPos = 0.55;
                 this.armHeight = 0;
                 break;
             case 4:
-                this.armPos = 0.6;
+                this.armPos = 0.55;
                 this.armHeight = 0.5;
                 break;
             case 5:
@@ -70,11 +70,11 @@ public class Climb extends Sequence{
                 this.armHeight = 1;
                 break;
             case 7:
-                this.armPos = 0.6;
+                this.armPos = 0.55;
                 this.armHeight = 1;
                 break;
             case 8:
-                this.armPos = 0.6;
+                this.armPos = 0.55;
                 this.armHeight = 0.5;
                 break;
             case 9:
@@ -86,7 +86,7 @@ public class Climb extends Sequence{
                 this.armHeight = 0;
                 break;
             case 11:
-                this.armPos = 0.6;
+                this.armPos = 0.55;
                 this.armHeight = 0;
                 break;
             case 12:

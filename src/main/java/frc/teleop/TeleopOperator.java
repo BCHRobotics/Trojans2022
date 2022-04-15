@@ -192,7 +192,7 @@ public class TeleopOperator extends TeleopComponent {
             }
         }
 
-        this.climbSwing.setArmPosition(1);
+        this.climbSwing.setArmPosition(0);
         //this.manualShootCommand.setShooterSpeed(SmartDashboard.getNumber("Shooter Wheels", 0));
 
         this.stageCommand.cargoPresent();
