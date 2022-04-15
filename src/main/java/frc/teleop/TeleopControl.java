@@ -16,14 +16,14 @@ public class TeleopControl {
 
     private TeleopControl() {
         this.components = new ArrayList<>();
-
+        
         this.components.add(TeleopDriver.getInstance());
         this.components.add(TeleopOperator.getInstance());
     }
 
     public void runCycle() {
 		for (TeleopComponent t : this.components) {
-			t.calculate();
+			t.run();
 		}
 	}
 

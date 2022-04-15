@@ -13,9 +13,9 @@ public class CSVReader {
     private static final String COMMA_DELIMITER = ",";
     private static final String fileType = ".csv";
     private static String path;
-    private static List<List<Double>> records = new ArrayList<>();
 
     public static List<List<Double>> convertToArrayList(String fileName) throws FileNotFoundException {
+        List<List<Double>> records = new ArrayList<>();
         path = new String(path = Constants.ROOT_DIRECTORY + fileName + fileType);
         System.out.println(path);
         try (Scanner scanner = new Scanner(new File(path));) {

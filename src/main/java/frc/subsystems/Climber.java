@@ -1,6 +1,7 @@
 package frc.subsystems;
 
 import frc.io.subsystems.ClimberIO;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.subsystems.ArmIO;
 
 public class Climber extends Subsystem {
@@ -32,15 +33,26 @@ public class Climber extends Subsystem {
     }
 
     @Override
-    public void calculate() {
+    public void run() {
         this.winchIO.setWinchExtension(climberWinchPosition);
         this.armIO.setArmPosition(robotArmPosition);
+        
+        SmartDashboard.putNumber("Winch Encoder", this.winchIO.getLeftWinchEncoder().getPosition());
+        SmartDashboard.putNumber("Arm Encoder", this.armIO.getLeftArmEncoder().getPosition());
     }
 
     @Override
     public void disable() {
         this.winchIO.stopAllOutputs();
         this.armIO.stopAllOutputs();
+    }
+
+    public double getArmPosition() {
+        return this.armIO.getLeftArmEncoder().getPosition();
+    }
+
+    public double getWinchPosition() {
+        return this.winchIO.getLeftWinchEncoder().getPosition();
     }
 
     /**

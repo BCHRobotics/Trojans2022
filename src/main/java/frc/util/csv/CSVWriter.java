@@ -3,6 +3,8 @@ package frc.util.csv;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +22,14 @@ public class CSVWriter {
     
     public void setFileName(String fileName) {
         this.filePath = directory + fileName + ".csv";
+    }
+
+    public void deleteCopy() {
+        try {
+            Files.deleteIfExists(Paths.get(this.filePath));
+        } catch (Exception e) {
+            return;
+        }
     }
 
     public void setHeader(String inputHeaders){

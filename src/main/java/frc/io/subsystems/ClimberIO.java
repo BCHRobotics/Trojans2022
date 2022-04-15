@@ -60,7 +60,7 @@ public class ClimberIO implements IIO{
         this.leftWinchPidController.setConstants(leftWinchConstants);
 
         // Inversion state of left Winch
-        this.leftWinchMotor.setInverted(false);
+        this.leftWinchMotor.setInverted(true);
 
         // Set right Winch to copy left Winch inversly
         this.rightWinchMotor.follow(leftWinchMotor, true);
@@ -76,6 +76,7 @@ public class ClimberIO implements IIO{
      */
     public void setWinchExtension(double setPoint) {
         if (!enabled) return;
+        if (setPoint < 0) return;
         this.leftWinchPidController.setPosition(setPoint);
     }
 

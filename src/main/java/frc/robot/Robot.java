@@ -8,13 +8,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
-import frc.imaging.Limelight;
 import frc.io.subsystems.DriveIO;
 import frc.io.subsystems.IO;
-import frc.io.subsystems.ShooterIO;
-import frc.subsystems.Drive;
+import frc.subsystems.Drivetrain;
 import frc.subsystems.Shooter;
 import frc.teleop.TeleopControl;
+import frc.util.imaging.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,7 +30,7 @@ public class Robot extends TimedRobot {
     private TeleopControl teleopControl;
     private AutoControl autoControl;
 
-    private Drive drive;
+    private Drivetrain drive;
     private Shooter shooter;
 
     public static boolean teleopInitialized = false;
@@ -50,17 +49,14 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-
         this.robotIO = IO.getInstance();
-        ShooterIO.getInstance();
+        this.robotIO.resetInputs();
         this.teleopControl = TeleopControl.getInstance();
         this.autoControl = AutoControl.getInstance();
         this.autoBuilder = AutoBuilder.getInstance();
 
-        this.drive = Drive.getInstance();
+        this.drive = Drivetrain.getInstance();
         this.shooter = Shooter.getInstance();
-
-        this.robotIO.resetInputs();
 
         Limelight.getInstance().setLedMode(1);
     }
@@ -101,21 +97,22 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        this.autoControl.initialize();
         this.robotIO.resetInputs();
+        this.autoControl.initialize();
     }
 
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
-        this.autoControl.runCycle();
         this.robotIO.updateInputs();
+        this.autoControl.runCycle();
         SmartDashboard.updateValues();
     }
 
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {
+        this.robotIO.resetInputs();
         this.autoControl.disable();
         this.teleopControl.initialize();
         Robot.teleopInitialized = true;
@@ -135,6 +132,7 @@ public class Robot extends TimedRobot {
     /** This function is called once when the robot is disabled. */
     @Override
     public void disabledInit() {
+        this.robotIO.resetInputs();
         //this.robotIO.stopAllOutputs();
         this.autoControl.disable();
         this.teleopControl.disable();
@@ -182,9 +180,9 @@ public class Robot extends TimedRobot {
                 }
                 
             } else {
-                this.autoBuilder.convertData();
                 isRecording = false;
                 if (stopedRecording == false) {
+                    this.autoBuilder.convertData();
                     this.robotIO.resetInputs();
                     stopedRecording = true;
                 }

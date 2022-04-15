@@ -1,47 +1,53 @@
 package frc.teleop;
 
-import frc.imaging.Limelight;
-import frc.imaging.Limelight.LimelightTargetType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.commands.shoot.*;
+import frc.commands.climb.*;
+import frc.commands.intake.Stage;
 import frc.io.DriverInput;
-import frc.robot.Constants;
-import frc.subsystems.Shooter;
-import frc.subsystems.Climber;
-import frc.subsystems.Drive;
+import frc.sequences.Climb;
+import frc.sequences.Shoot;
 import frc.util.devices.Controller;
 import frc.util.devices.Controller.Axis;
 import frc.util.devices.Controller.Side;
-import frc.util.math.Trajectory;
+import frc.util.math.Arithmetic;
 
 public class TeleopOperator extends TeleopComponent {
 
     private static TeleopOperator instance;
 
     private Controller operatorController;
-    private Trajectory trajectoy;
     private DriverInput driverInput;
-    private Limelight limelight;
+
+    private Stage stageCommand;
+    private Poly feedCommand;
+    private Fire launchCommand;
+    private Aim limelightCommand;
+    private Manual manualShootCommand;
+    private Lift climbLift;
+    private Swing climbSwing;
+    private Shoot shootSequence;
+    private Climb climbSequence;
 
     // Auto shooting variable
-    private double distance;
-    private double height;
-    private double angle;
-    private double velocity;
-    private double shooterWheelRPM;
-    private double climberArmRevolutions;
-    private double tx;
-    private double seekError;
-    private double kP = -0.1;
-    private double minOutput = 0.05;
+    private boolean shootState;
+    private boolean shootLatch;
+    private boolean shootAutomate;
+    private boolean climbLatch;
+    private boolean confirmClimb;
+
+    private double manualArmIncrement;
+    private double manualWinchIncrement;
+
+    private long previousTime;
+    private long currentTime;
+    private final long stagerDelay = 800;
 
     private enum OperatorMode {
         SHOOT, CLIMB
     }
 
     private OperatorMode operatorMode = OperatorMode.SHOOT;
-
-    private Drive drive;
-    private Shooter shooter;
-    private Climber climber;
 
     /**
      * Get the instance of the TeleopOperator, if none create a new instance
@@ -58,28 +64,41 @@ public class TeleopOperator extends TeleopComponent {
     private TeleopOperator() {
         this.driverInput = DriverInput.getInstance();
 
-        this.drive = Drive.getInstance();
-        this.shooter = Shooter.getInstance();
-        this.climber = Climber.getInstance();
+        this.stageCommand = Stage.getInstance();
+        this.feedCommand = Poly.getInstance();
+        this.launchCommand = Fire.getInstance();
+        this.limelightCommand = Aim.getInstance();
+        this.manualShootCommand = Manual.getInstance();
+        this.climbLift = Lift.getInstance();
+        this.climbSwing = Swing.getInstance();
+        this.shootSequence = Shoot.getInstance();
+        this.climbSequence = Climb.getInstance();
 
-        this.trajectoy = new Trajectory();
-        this.limelight = Limelight.getInstance();
-
-        this.operatorController = driverInput.getDriverController();
+        this.operatorController = driverInput.getOperatorController();
     }
 
     @Override
     public void firstCycle() {
-        this.drive.firstCycle();
-        this.shooter.firstCycle();
-        this.climber.firstCycle();
+        this.stageCommand.initialize();
+        this.feedCommand.initialize();
+        this.launchCommand.initialize();
+        this.limelightCommand.initialize();
+        this.manualShootCommand.initialize();
+        this.climbLift.initialize();
+        this.climbSwing.initialize();
+        this.shootSequence.initialize();
+        this.climbSequence.initialize();
+        
+        this.climbLift.end();
+        this.climbSwing.end();
+        this.climbSequence.end();
 
-        this.limelight.setLedMode(0);
-        this.limelight.setLimelightState(LimelightTargetType.UPPER_HUB);
+        SmartDashboard.putNumber("Shooter Wheels", 2000);
+        SmartDashboard.putNumber("Distance", 0);
     }
 
     @Override
-    public void calculate() {
+    public void run() {
         switch (operatorMode) {
             case SHOOT:
                 shootMode();
@@ -93,73 +112,167 @@ public class TeleopOperator extends TeleopComponent {
         }
 
         if (operatorController.getModeSwitchButtonsPressed()) {
-            if (operatorMode == OperatorMode.SHOOT)
+            this.firstCycle();
+            if (operatorMode == OperatorMode.SHOOT) {
                 operatorMode = OperatorMode.CLIMB;
-            if (operatorMode == OperatorMode.CLIMB)
+                this.confirmClimb = true;
+            } else if (operatorMode == OperatorMode.CLIMB) {
                 operatorMode = OperatorMode.SHOOT;
+            }
         }
 
-        this.drive.calculate();
-        this.shooter.calculate();
-        this.climber.calculate();
+        this.execute();
     }
 
     private void shootMode() {
-        this.distance = this.limelight.getTargetDistance();
-        this.height = Constants.TARGET_HEIGHT - Constants.SHOOTER_HEIGHT;
-
-        this.trajectoy.setDistance(this.distance);
-        this.trajectoy.setHeight(this.height);
-
-        this.angle = trajectoy.getAngle();
-        this.velocity = trajectoy.getVelocity();
-
-        this.shooterWheelRPM = (this.velocity * 60) / (Math.PI * 0.1016);
-        this.climberArmRevolutions = (this.angle / 360) * Constants.LIFT_ARM_GEAR_REDUCTION;
-
-        if (this.operatorController.getYButton()) {
-            this.climber.setRobotArmPosition(this.climberArmRevolutions);
-            this.shooter.setShooterWheelSpeed(this.shooterWheelRPM);
-        } else {
-            this.climber.setRobotArmPosition(65.625);
-            this.shooter.setShooterWheelSpeed(1200);
-        }
+        this.currentTime = System.currentTimeMillis();
 
         // Algorithim to hunt for target and latch on to it
-        this.tx = this.limelight.getTargetX();
 
-        if (this.tx > 1.0)
-            this.seekError = (tx * this.kP) - this.minOutput;
-        else if (this.tx < 1.0)
-            this.seekError = (tx * this.kP) + this.minOutput;
+        if (this.operatorController.getYButton()) {
+            this.idleMode();
 
-        if (this.operatorController.getAButton()) {
-            this.drive.setOutput(0, this.seekError);
+            this.shootState = false;
+            this.shootLatch = false;
+            this.shootAutomate = false;
+        } else if (this.operatorController.getAButton() || this.shootAutomate) {
+            if (!this.shootAutomate) this.shootAutomate = true;
+            this.shootSequence.calculate();
+            this.shootState = true;
+            this.previousTime = currentTime;
+            if (this.shootSequence.isFinished()) { 
+                this.shootAutomate = false;
+                this.shootSequence.end();
+                this.shootSequence.reset();
+            }
+        } else if (this.operatorController.getRightBumper()) {
+            this.limelightCommand.setColorMatch(true);
+            this.limelightCommand.calculate();
+            this.stageCommand.calculate();
+
+            this.shootState = true;
+            this.shootLatch = true;
+        } else if (this.operatorController.getXButton()) {
+            this.stageCommand.end();
+            this.feedCommand.calculate();
+            this.launchCommand.calculate();
+            this.previousTime = this.currentTime;
+            this.shootState = true;
+            this.shootLatch = false;
+        } else if (this.operatorController.getLeftBumper()) {
+            this.manualShootCommand.setShooterSpeed(2350);
+            this.stageCommand.end();
+
+            this.shootState = true;
+            this.shootLatch = true;
+        } else if (this.operatorController.getLeftTriggerAxis() > 0.5) {
+            this.manualShootCommand.setShooterSpeed(1050);
+            this.stageCommand.end();
+
+            this.shootState = true;
+            this.shootLatch = true;
+        } else if (operatorController.getRightTriggerAxis() > 0.5) {
+            this.stageCommand.calculate();
+            this.feedCommand.calculate();
+            this.launchCommand.end();
+
+            this.shootState = true;
+            this.shootLatch = true;
+        } else if (this.operatorController.getBButton()) {
+            this.stageCommand.reverse();
+            this.feedCommand.reverse();
+        } else {
+            if (!this.shootState) {
+                this.idleMode();
+                this.previousTime = this.currentTime;
+            } else if (this.shootState && (this.currentTime >= (this.previousTime + this.stagerDelay)) && !this.shootLatch && !this.shootAutomate) {
+                this.idleMode();
+                this.shootState = false;
+                this.shootLatch = false;
+            }
         }
+
+        this.climbSwing.setArmPosition(0);
+        //this.manualShootCommand.setShooterSpeed(SmartDashboard.getNumber("Shooter Wheels", 0));
+
+        this.stageCommand.cargoPresent();
+        this.stageCommand.colorMatches();
+    }
+
+    private void idleMode() {
+        this.stageCommand.end();
+        this.feedCommand.end();
+        this.launchCommand.end();
+        this.limelightCommand.end();
+        this.manualShootCommand.end();
+        this.shootSequence.end();
+        this.climbSequence.end();
     }
 
     /**
      * Manual override mode for operator controller
      */
     private void climbMode() {
-        // Set Lift arm position constant
-        final double liftArmRotations = 65.625;
+        if (this.operatorController.getAButton()) {
+            if (this.confirmClimb) {
+                this.confirmClimb = false;
+                this.climbSequence.advance();
+            }
+        } else if (this.operatorController.getBButton()) {
+            if (this.confirmClimb) {
+                this.confirmClimb = false;
+                this.climbSequence.reverse();
+            }
+        } else if (this.operatorController.getXButton()) {
+            this.climbLatch = !this.climbLatch;
+        } else if (this.operatorController.getYButton()) {
+            this.confirmClimb = true;
+        }
 
-        // Set Climber winch position constant
-        final double climberWinchRotations = 24;
+        SmartDashboard.putBoolean("CLIMB CONFIRMED", this.confirmClimb);
+        SmartDashboard.putBoolean("CLIMB MANUAL", this.climbLatch);
+        this.climbSequence.calculate();
 
-        // Activate Lift based on joystick and constants multiplyer
-        this.climber.setRobotArmPosition(this.operatorController.getJoystick(Side.LEFT, Axis.Y) * liftArmRotations);
+        if (this.climbLatch) {
+            this.manualArmIncrement += this.operatorController.getJoystick(Side.LEFT, Axis.Y) * 0.02;
+            this.manualWinchIncrement += this.operatorController.getJoystick(Side.RIGHT, Axis.Y) * 0.02;
 
-        // Activate Climber based on joystick and constants multiplyer
-        this.climber.setClimberWinchPosition(
-                this.operatorController.getJoystick(Side.RIGHT, Axis.Y) * climberWinchRotations);
+            this.manualArmIncrement = Arithmetic.constrain(this.manualArmIncrement, 0.0, 1.0);
+            this.manualWinchIncrement = Arithmetic.constrain(this.manualWinchIncrement, 0.0, 1.0);
+
+            SmartDashboard.putNumber("Arm Swing %", this.manualArmIncrement * 100);
+            SmartDashboard.putNumber("Arm Extend %", this.manualWinchIncrement * 100);
+
+            this.climbSwing.setArmPosition(this.manualArmIncrement);
+            this.climbLift.setArmHeight(this.manualWinchIncrement);
+
+            this.climbSwing.calculate();
+            this.climbLift.calculate();
+        }
+    }
+
+    private void execute() {
+        this.stageCommand.execute();
+        this.feedCommand.execute();
+        this.launchCommand.execute();
+        this.limelightCommand.execute();
+        this.manualShootCommand.execute();
+        this.climbLift.execute();
+        this.climbSwing.execute();
+        this.shootSequence.execute();
+        this.climbSequence.execute();
     }
 
     @Override
     public void disable() {
-        this.drive.disable();
-        this.shooter.disable();
-        this.climber.disable();
+        this.stageCommand.disable();
+        this.feedCommand.disable();
+        this.launchCommand.disable();
+        this.limelightCommand.disable();
+        this.manualShootCommand.disable();
+        this.climbLift.disable();
+        this.climbSwing.disable();
+        this.shootSequence.disable();
+        this.climbSequence.disable();
     }
 }

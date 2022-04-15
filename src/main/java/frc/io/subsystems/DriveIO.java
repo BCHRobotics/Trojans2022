@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Import required Classes
 import frc.robot.Constants;
 import frc.util.pid.SparkMaxConstants;
@@ -47,6 +48,7 @@ public class DriveIO implements IIO {
         if (!enabled) return;
     
         initMainMotors();
+        SmartDashboard.putBoolean("Brake Mode", false);
 
         if (!miniBot) initFollowMotors();
     }
@@ -87,8 +89,8 @@ public class DriveIO implements IIO {
         this.driveL2.restoreFactoryDefaults();
         this.driveR2.restoreFactoryDefaults();
 
-        this.driveL2.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        this.driveR2.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.driveL2.setIdleMode(this.driveL1.getIdleMode());
+        this.driveR2.setIdleMode(this.driveR1.getIdleMode());
 
         this.driveL2.setSmartCurrentLimit(60, 10);
         this.driveR2.setSmartCurrentLimit(60, 10);
@@ -115,6 +117,19 @@ public class DriveIO implements IIO {
     public void setDriveRightPos(double position) {
         if (!enabled) return;
         this.driveR1PidController.setPosition(position);
+    }
+
+    public void brakeMode(boolean mode) {
+        if (mode) {
+            this.driveL1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            this.driveR1.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        } else {
+            this.driveL1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        }
+        this.driveL1.burnFlash();
+        this.driveR1.burnFlash();
+        SmartDashboard.putBoolean("Brake Mode", mode);
     }
 
     //#region EncoderPositions

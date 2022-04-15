@@ -21,10 +21,13 @@ public class ShooterIO implements IIO {
     private RelativeEncoder rightWheelEncoder;
 
     private SparkMaxPID leftWheelPidController;
+    private SparkMaxConstants leftWheelConstants = Constants.LEFT_SHOOTER_WHEEL_CONSTANTS;
 
-    private SparkMaxConstants leftWheelConstants = Constants.SHOOTER_WHEEL_CONSTANTS;
+    private SparkMaxPID rightWheelPidController;
+    private SparkMaxConstants rightWheelConstants = Constants.RIGHT_SHOOTER_WHEEL_CONSTANTS;
 
     private boolean enabled = Constants.SHOOTER_ENABLED;
+    private double inputSpeed;
 
     public static ShooterIO getInstance() {
         if (instance == null) {
@@ -59,11 +62,12 @@ public class ShooterIO implements IIO {
         this.leftWheelPidController = new SparkMaxPID(leftWheelMotor);
         this.leftWheelPidController.setConstants(leftWheelConstants);
 
-        // Inversion state of shooter wheels
-        this.leftWheelMotor.setInverted(false);
+        this.rightWheelPidController = new SparkMaxPID(rightWheelMotor);
+        this.rightWheelPidController.setConstants(rightWheelConstants);
 
-        // right wheel to copy left wheel inversly
-        this.rightWheelMotor.follow(leftWheelMotor, true);
+        // Inversion state of shooter wheels
+        this.leftWheelMotor.setInverted(true);
+        this.rightWheelMotor.setInverted(false);
 
         // Send out settings to 
         this.leftWheelMotor.burnFlash();
@@ -76,7 +80,13 @@ public class ShooterIO implements IIO {
      */
     public void setWheelSpeed(double speed) {
         if (!enabled) return;
+        this.inputSpeed = speed;
         this.leftWheelPidController.setVelocity(speed);
+        this.rightWheelPidController.setVelocity(speed);
+    }
+
+    public double getInputWheelSpeed() {
+        return this.inputSpeed;
     }
 
     /**
