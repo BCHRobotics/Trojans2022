@@ -41,7 +41,7 @@ public class TeleopDriver extends TeleopComponent {
     @Override
     public void calculate() {
         
-        double speed = 0.75;
+        double speed = 0.3;
 
         if (driverController.getLeftBumper()) speed = 0.5;
         if (driverController.getRightBumper()) speed = 1.0;
