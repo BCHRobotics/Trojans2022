@@ -46,7 +46,7 @@ public class TeleopDriver extends TeleopComponent {
     @Override
     public void run() {
 
-        double speed = 0.75;
+        double speed = 0.3;
 
         speed -= (this.driverController.getLeftTriggerAxis() * 0.25);
         speed += (this.driverController.getRightTriggerAxis() * 0.25);
@@ -64,8 +64,8 @@ public class TeleopDriver extends TeleopComponent {
                 this.drivetrain.brake(false);
         }
 
-        if (driverController.getRightBumper()) this.collect.calculate();
-        else this.collect.end();
+        //if (driverController.getRightBumper()) this.collect.calculate();
+        //else this.collect.end();
 
         this.drivetrain.run();
         this.collect.execute();
