@@ -6,9 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.auto.AutoBuilder;
-import frc.auto.AutoControl;
-import frc.io.subsystems.DriveIO;
 import frc.io.subsystems.IO;
 import frc.subsystems.Drivetrain;
 import frc.teleop.TeleopControl;
@@ -26,18 +23,10 @@ public class Robot extends TimedRobot {
 
     private IO robotIO;
     private TeleopControl teleopControl;
-    private AutoControl autoControl;
 
     private Drivetrain drive;
 
     public static boolean teleopInitialized = false;
-
-    private static boolean isRecording = false;
-    private static boolean stopedRecording = false;
-    private static boolean vectorButton = false;
-
-    
-    private AutoBuilder autoBuilder;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -49,8 +38,6 @@ public class Robot extends TimedRobot {
         this.robotIO = IO.getInstance();
         this.robotIO.resetInputs();
         this.teleopControl = TeleopControl.getInstance();
-        this.autoControl = AutoControl.getInstance();
-        this.autoBuilder = AutoBuilder.getInstance();
 
         this.drive = Drivetrain.getInstance();
     }
@@ -67,10 +54,7 @@ public class Robot extends TimedRobot {
      * SmartDashboard integrated updating.
      */
     @Override
-    public void robotPeriodic() {
-        SmartDashboard.putNumber("DriveR Pos", DriveIO.getInstance().getDriveR1Encoder().getPosition());
-        SmartDashboard.putNumber("DriveL Pos", DriveIO.getInstance().getDriveL1Encoder().getPosition());
-    }
+    public void robotPeriodic() {}
 
     /**
      * This autonomous (along with the chooser code above) shows how to select
@@ -92,14 +76,12 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         this.robotIO.resetInputs();
-        this.autoControl.initialize();
     }
 
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
         this.robotIO.updateInputs();
-        this.autoControl.runCycle();
         SmartDashboard.updateValues();
     }
 
@@ -107,7 +89,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         this.robotIO.resetInputs();
-        this.autoControl.disable();
         this.teleopControl.initialize();
         Robot.teleopInitialized = true;
     }
@@ -127,8 +108,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         this.robotIO.resetInputs();
-        //this.robotIO.stopAllOutputs();
-        this.autoControl.disable();
         this.teleopControl.disable();
     }
 
@@ -145,9 +124,6 @@ public class Robot extends TimedRobot {
         this.robotIO.resetInputs();
         this.drive.firstCycle();
         this.teleopControl.initialize();
-        
-        SmartDashboard.putBoolean("Recording", false);
-        SmartDashboard.putBoolean("Record Vector", false);
     }
 
     /** This function is called periodically during test mode. */
@@ -155,33 +131,5 @@ public class Robot extends TimedRobot {
     public void testPeriodic() {
         SmartDashboard.updateValues();
         this.robotIO.updateInputs();
-
-        try {
-            if(SmartDashboard.getBoolean("Recording", false) == true){
-                this.teleopControl.runCycle();
-                if (isRecording == false) {
-                    this.autoBuilder.setStartRecording();
-                    this.autoBuilder.recordData();
-                    isRecording = true;
-                    stopedRecording = false;
-                }
-                vectorButton = SmartDashboard.getBoolean("Record Vector", false);
-                if (vectorButton == true){
-                    this.autoBuilder.recordData();
-                    vectorButton = false;
-                    SmartDashboard.putBoolean("Record Vector", false);
-                }
-                
-            } else {
-                isRecording = false;
-                if (stopedRecording == false) {
-                    this.autoBuilder.convertData();
-                    this.robotIO.resetInputs();
-                    stopedRecording = true;
-                }
-            }
-        } catch (Exception e) {
-            return;
-        }
     }
 }
