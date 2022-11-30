@@ -1,7 +1,6 @@
 package frc.teleop;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.commands.intake.Collect;
 import frc.io.DriverInput;
 import frc.subsystems.Drivetrain;
 import frc.util.devices.Controller;
@@ -12,7 +11,6 @@ public class TeleopDriver extends TeleopComponent {
     private static TeleopDriver instance;
 
     private Drivetrain drivetrain;
-    private Collect collect;
 
     private Controller driverController;
     private DriverInput driverInput;
@@ -32,14 +30,12 @@ public class TeleopDriver extends TeleopComponent {
     private TeleopDriver() {
         this.driverInput = DriverInput.getInstance();
         this.drivetrain = Drivetrain.getInstance();
-        this.collect = Collect.getInstance();
         this.driverController = driverInput.getDriverController();
     }
 
     @Override
     public void firstCycle() {
         this.drivetrain.firstCycle();
-        this.collect.initialize();
         SmartDashboard.putNumber("Intake Motor Speed", 0.8);
     }
 
@@ -64,16 +60,11 @@ public class TeleopDriver extends TeleopComponent {
                 this.drivetrain.brake(false);
         }
 
-        if (driverController.getRightBumper()) this.collect.calculate();
-        else this.collect.end();
-
         this.drivetrain.run();
-        this.collect.execute();
     }
 
     @Override
     public void disable() {
         this.drivetrain.disable();
-        this.collect.disable();
     }
 }

@@ -11,9 +11,7 @@ import frc.auto.AutoControl;
 import frc.io.subsystems.DriveIO;
 import frc.io.subsystems.IO;
 import frc.subsystems.Drivetrain;
-import frc.subsystems.Shooter;
 import frc.teleop.TeleopControl;
-import frc.util.imaging.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,7 +29,6 @@ public class Robot extends TimedRobot {
     private AutoControl autoControl;
 
     private Drivetrain drive;
-    private Shooter shooter;
 
     public static boolean teleopInitialized = false;
 
@@ -56,9 +53,6 @@ public class Robot extends TimedRobot {
         this.autoBuilder = AutoBuilder.getInstance();
 
         this.drive = Drivetrain.getInstance();
-        this.shooter = Shooter.getInstance();
-
-        Limelight.getInstance().setLedMode(1);
     }
 
     /**
@@ -150,7 +144,6 @@ public class Robot extends TimedRobot {
     public void testInit() {
         this.robotIO.resetInputs();
         this.drive.firstCycle();
-        this.shooter.firstCycle();
         this.teleopControl.initialize();
         
         SmartDashboard.putBoolean("Recording", false);

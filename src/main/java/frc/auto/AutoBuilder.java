@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import frc.io.subsystems.DriveIO;
-import frc.io.subsystems.IntakeIO;
 import frc.robot.Constants;
 import frc.util.csv.CSVWriter;
 
@@ -18,7 +17,6 @@ public class AutoBuilder {
     private static long timer;
 
     private static DriveIO driveIO;
-    private static IntakeIO intakeIO;
 
     public static AutoBuilder getInstance() {
         if (instance == null) {
@@ -30,7 +28,6 @@ public class AutoBuilder {
     private AutoBuilder(){
        writer = new CSVWriter(Constants.ROOT_DIRECTORY);
        driveIO = DriveIO.getInstance();
-       intakeIO = IntakeIO.getInstance();
     }
 
     public void setStartRecording() {
@@ -47,7 +44,6 @@ public class AutoBuilder {
             rows.add((double)timer);
             rows.add((double)driveIO.getDriveL1Encoder().getPosition());
             rows.add((double)driveIO.getDriveR1Encoder().getPosition());
-            rows.add(intakeIO.getIntakeState() == true ? (double)1.0 : (double)0.0);
             rows.add(0.0);
             rows.add(0.0);
             data.add(rows);
