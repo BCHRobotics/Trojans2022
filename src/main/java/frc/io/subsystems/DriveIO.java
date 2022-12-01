@@ -1,29 +1,18 @@
 package frc.io.subsystems;
 
 // Import required Libraries
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Import required Classes
 import frc.robot.Constants;
-import frc.util.pid.SparkMaxConstants;
-import frc.util.pid.SparkMaxPID;
 
 public class DriveIO implements IIO {
     private static DriveIO instance;
 
     // Drive motors
-    private CANSparkMax driveL1;
-    private CANSparkMax driveR1;
-
-    // PID Controllers
-    private SparkMaxPID driveL1PidController;
-    private SparkMaxPID driveR1PidController;
-
-    // PID Constants
-    private SparkMaxConstants driveL1Constants = Constants.DRIVEL1_CONSTANTS;
-    private SparkMaxConstants driveR1Constants = Constants.DRIVER1_CONSTANTS;
+    private TalonSRX leftDriveMotor;
+    private TalonSRX rightDriveMotor;
 
     private boolean enabled = Constants.DRIVE_ENABLED;
 
@@ -37,50 +26,24 @@ public class DriveIO implements IIO {
     private DriveIO() {
         if (!enabled) return;
         initMainMotors();
-        SmartDashboard.putBoolean("Brake Mode", false);
     }
 
     private void initMainMotors() {
-        this.driveL1 = new CANSparkMax(Constants.DRIVE_LEFT1_ID, MotorType.kBrushed); 
-        this.driveR1 = new CANSparkMax(Constants.DRIVE_RIGHT1_ID, MotorType.kBrushed);
+        this.leftDriveMotor = new TalonSRX(Constants.DRIVE_LEFT_ID);
+        this.rightDriveMotor = new TalonSRX(Constants.DRIVE_RIGHT_ID);
 
-        this.driveL1.restoreFactoryDefaults();
-        this.driveR1.restoreFactoryDefaults();
-
-        this.driveL1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        this.driveR1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-
-        this.driveL1.setSmartCurrentLimit(60, 10);
-        this.driveR1.setSmartCurrentLimit(60, 10);
-
-        this.driveL1PidController = new SparkMaxPID(driveL1, driveL1Constants);
-        this.driveR1PidController = new SparkMaxPID(driveR1, driveR1Constants);
-
-        this.driveL1.setInverted(true);
-        this.driveR1.setInverted(false);
-
-        System.out.println(driveL1PidController.getConstants());
-        System.out.println(driveR1PidController.getConstants());
+        this.leftDriveMotor.setInverted(true);
+        this.rightDriveMotor.setInverted(false);
     }
 
     public void setDriveLeft(double speed) {
         if (!enabled) return;
-        this.driveL1.set(speed);
+        this.leftDriveMotor.set(TalonSRXControlMode.PercentOutput, speed);
     }
 
     public void setDriveRight(double speed) {
         if (!enabled) return;
-        this.driveR1.set(speed);
-    }
-
-    public void setDriveLeftPos(double position) {
-        if (!enabled) return;
-        this.driveL1PidController.setPosition(position);
-    }
-
-    public void setDriveRightPos(double position) {
-        if (!enabled) return;
-        this.driveR1PidController.setPosition(position);
+        this.rightDriveMotor.set(TalonSRXControlMode.PercentOutput, speed);
     }
 
     @Override
@@ -96,7 +59,7 @@ public class DriveIO implements IIO {
     @Override
     public void stopAllOutputs() {
         if (!enabled) return;
-        this.driveL1.disable();
-        this.driveR1.disable();
+        this.leftDriveMotor.neutralOutput();
+        this.rightDriveMotor.neutralOutput();
     }
 }

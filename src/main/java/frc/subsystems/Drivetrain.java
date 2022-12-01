@@ -9,14 +9,13 @@ public class Drivetrain extends Subsystem {
 
     public enum DriveState {
         OUTPUT, 
-        VELOCITY,
-        POSITION
+        VELOCITY
     }
 
     private DriveIO driveIO;
 
     // states
-    private DriveState currentState = DriveState.POSITION;
+    private DriveState currentState = DriveState.OUTPUT;
 
     private double leftOut;
     private double rightOut;
@@ -53,9 +52,6 @@ public class Drivetrain extends Subsystem {
                 this.driveIO.setDriveRight(this.rightOut);
                 break;
             case VELOCITY:
-                this.disable();
-                break;
-            case POSITION:
                 this.disable();
                 break;
             default:
