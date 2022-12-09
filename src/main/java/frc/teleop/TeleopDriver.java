@@ -46,10 +46,10 @@ public class TeleopDriver extends TeleopComponent {
     @Override
     public void run() {
 
-        double speed = 0.75;
+        double speed = 0.60;
 
-        speed -= (this.driverController.getLeftTriggerAxis() * 0.25);
-        speed += (this.driverController.getRightTriggerAxis() * 0.25);
+        speed -= (this.driverController.getLeftTriggerAxis() * 0.40);
+        speed += (this.driverController.getRightTriggerAxis() * 0.40);
 
         SmartDashboard.putNumber("Drive Output", speed);
 

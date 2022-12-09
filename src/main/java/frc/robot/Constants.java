@@ -12,10 +12,10 @@ public class Constants {
     public static final double PATH_TURN_P = 6;
 
     // CAN ID(s) for Drivetrain
-    public static final int DRIVE_LEFT1_ID = 10;//11;//10
-    public static final int DRIVE_RIGHT1_ID = 11;//15;//11
-    public static final int DRIVE_LEFT2_ID = 12;//12;//12
-    public static final int DRIVE_RIGHT2_ID = 13;//16;//13
+    public static final int DRIVE_LEFT1_ID = 10;  //11--OR--10
+    public static final int DRIVE_RIGHT1_ID = 11; //15--OR--11
+    public static final int DRIVE_LEFT2_ID = 12;  //12--OR--12
+    public static final int DRIVE_RIGHT2_ID = 13; //16--OR--13
 
     // CAN ID(s) for Intake / Stager
     public static final int INTKAE_ROLLER_ID = 20; //20
@@ -23,16 +23,16 @@ public class Constants {
     public static final int FEEDER_ROLLER_ID = 22; //22
 
     // CAN ID(s) for Shooter
-    public static final int LEFT_SHOOTER_WHEEL_ID = 30;//30
-    public static final int RIGHT_SHOOTER_WHEEL_ID = 31;//31
+    public static final int LEFT_SHOOTER_WHEEL_ID = 30; //30
+    public static final int RIGHT_SHOOTER_WHEEL_ID = 31; //31
 
     // CAN ID(s) for Arm
-    public static final int LEFT_ARM_ID = 40;//40
-    public static final int RIGHT_ARM_ID = 41;//41
+    public static final int LEFT_ARM_ID = 40; //40
+    public static final int RIGHT_ARM_ID = 41; //41
 
     // CAN ID(s) for Winch
-    public static final int LEFT_WINCH_ID = 50;//50
-    public static final int RIGHT_WINCH_ID = 51;//51
+    public static final int LEFT_WINCH_ID = 50; //50
+    public static final int RIGHT_WINCH_ID = 51; //51
 
     // CSV Test version
     public static final int VERSION = 11;
@@ -67,7 +67,7 @@ public class Constants {
     // Limlight constants
     public static final double LIMELIGHT_HEIGHT = 0.7239; // Height in meters
     public static final double LIMELIGHT_ANGLE = 27; // Angle in degrees
-    public static final double TARGET_HEIGHT = 2.64; // Height in meters
+    public static final double TARGET_HEIGHT = 1.10; // Height in meters
     public static final double SHOOTER_HEIGHT = 0.6096; // Height in meteres
     public static final double CHASIS_LEFT_CONVERSION = 8.2996914955; // Left encoder conversion factor (90 degrees / Left encoder revolutions)
     public static final double CHASIS_RIGHT_CONVERSION = -7.9212225920; // Right encoder conversion factor (90 degrees / Right encoder revolutions)
