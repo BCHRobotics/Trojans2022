@@ -93,7 +93,7 @@ public class TeleopOperator extends TeleopComponent {
         this.climbSwing.end();
         this.climbSequence.end();
 
-        SmartDashboard.putNumber("Shooter Wheels", 2000);
+        SmartDashboard.putNumber("Shooter Wheels", 1200);
         SmartDashboard.putNumber("Distance", 0);
     }
 
@@ -171,7 +171,7 @@ public class TeleopOperator extends TeleopComponent {
 
             this.shootState = true;
             this.shootLatch = true;
-        } else if (operatorController.getRightTriggerAxis() > 0.5) {
+        } else if (this.operatorController.getRightTriggerAxis() > 0.5) {
             this.stageCommand.calculate();
             this.feedCommand.calculate();
             this.launchCommand.end();

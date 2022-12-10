@@ -50,8 +50,7 @@ public class Manual extends Command {
 
     @Override
     public void end() {
-        this.shooter.setShooterWheelSpeed(0);
-        this.calculate();
+        this.setShooterSpeed(0);
         this.isFinished = true;
     }
 
