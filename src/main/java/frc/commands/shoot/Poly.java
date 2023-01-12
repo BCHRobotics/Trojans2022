@@ -5,9 +5,6 @@ import frc.subsystems.Intake;
 
 public class Poly extends Command{
     private static Poly instance;
-
-    private boolean isFinished;
-
     private Intake intake;
 
     public static Poly getInstance() {
@@ -19,12 +16,8 @@ public class Poly extends Command{
 
     private Poly() {
         this.intake = Intake.getInstance();
-    }
 
-    @Override
-    public void initialize() {
-        this.intake.firstCycle();
-        this.isFinished = false;
+        setOnEnd(this::onEnd);
     }
 
     @Override
@@ -36,25 +29,9 @@ public class Poly extends Command{
         this.intake.setFeederSpeed(-1);
     }
 
-    @Override
-    public void execute() {
-        this.intake.run();
-    }
-
-    @Override
-    public void end() {
+    private void onEnd() {
         this.intake.setFeederSpeed(0);
         this.isFinished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return this.isFinished;
-    }
-
-    @Override
-    public void disable() {
-        this.intake.disable();
     }
     
 }

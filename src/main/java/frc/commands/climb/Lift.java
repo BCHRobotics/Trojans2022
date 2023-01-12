@@ -11,8 +11,6 @@ public class Lift extends Command {
 
     private double winchPosition;
 
-    private Boolean isFinished;
-
     public static Lift getInstance() {
         if (instance == null) {
             instance = new Lift();
@@ -22,12 +20,8 @@ public class Lift extends Command {
 
     private Lift() {
         this.climber = Climber.getInstance();
-    }
 
-    @Override
-    public void initialize() {
-        this.climber.firstCycle();
-        this.isFinished = false;
+        setOnEnd(this::onEnd);
     }
 
     public void setArmHeight(double input) {
@@ -52,25 +46,8 @@ public class Lift extends Command {
         this.climber.setClimberWinchPosition(this.winchPosition);
     }
 
-    @Override
-    public void execute() {
-        this.climber.run();
-    }
-
-    @Override
-    public void end() {
+    private void onEnd() {
         this.climber.setClimberWinchPosition(0);
-        this.isFinished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return this.isFinished;
-    }
-
-    @Override
-    public void disable() {
-        this.climber.disable();
     }
     
 }

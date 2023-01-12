@@ -10,8 +10,7 @@ import frc.auto.AutoBuilder;
 import frc.auto.AutoControl;
 import frc.io.subsystems.DriveIO;
 import frc.io.subsystems.IO;
-import frc.subsystems.Drivetrain;
-import frc.subsystems.Shooter;
+import frc.subsystems.Subsystems;
 import frc.teleop.TeleopControl;
 import frc.util.imaging.Limelight;
 
@@ -30,13 +29,12 @@ public class Robot extends TimedRobot {
     private TeleopControl teleopControl;
     private AutoControl autoControl;
 
-    private Drivetrain drive;
-    private Shooter shooter;
+    private Subsystems subsystems;
 
     public static boolean teleopInitialized = false;
 
     private static boolean isRecording = false;
-    private static boolean stopedRecording = false;
+    private static boolean stoppedRecording = false;
     private static boolean vectorButton = false;
 
     
@@ -55,8 +53,7 @@ public class Robot extends TimedRobot {
         this.autoControl = AutoControl.getInstance();
         this.autoBuilder = AutoBuilder.getInstance();
 
-        this.drive = Drivetrain.getInstance();
-        this.shooter = Shooter.getInstance();
+        this.subsystems = Subsystems.getInstance();
 
         Limelight.getInstance().setLedMode(1);
     }
@@ -149,8 +146,7 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         this.robotIO.resetInputs();
-        this.drive.firstCycle();
-        this.shooter.firstCycle();
+        this.subsystems.firstCycle();
         this.teleopControl.initialize();
         
         SmartDashboard.putBoolean("Recording", false);
@@ -170,7 +166,7 @@ public class Robot extends TimedRobot {
                     this.autoBuilder.setStartRecording();
                     this.autoBuilder.recordData();
                     isRecording = true;
-                    stopedRecording = false;
+                    stoppedRecording = false;
                 }
                 vectorButton = SmartDashboard.getBoolean("Record Vector", false);
                 if (vectorButton == true){
@@ -181,10 +177,10 @@ public class Robot extends TimedRobot {
                 
             } else {
                 isRecording = false;
-                if (stopedRecording == false) {
+                if (stoppedRecording == false) {
                     this.autoBuilder.convertData();
                     this.robotIO.resetInputs();
-                    stopedRecording = true;
+                    stoppedRecording = true;
                 }
             }
         } catch (Exception e) {

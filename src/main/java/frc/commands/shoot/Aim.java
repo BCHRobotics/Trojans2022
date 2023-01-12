@@ -14,7 +14,6 @@ public class Aim extends Command {
     private Shooter shooter;
     private Limelight limelight;
 
-    private boolean isFinished;
     private boolean colorMatches;
     private double shooterSpeed;
 
@@ -35,10 +34,12 @@ public class Aim extends Command {
         this.drive = Drivetrain.getInstance();
         this.shooter = Shooter.getInstance();
         this.limelight = Limelight.getInstance();
+
+        setOnInitialize(this::onInitialize);
+        setOnEnd(this::onEnd);
     }
 
-    @Override
-    public void initialize() {
+    private void onInitialize() {
         this.drive.firstCycle();
         this.shooter.firstCycle();
         this.limelight.setLedMode(1);
@@ -59,24 +60,11 @@ public class Aim extends Command {
         SmartDashboard.putNumber("Setpoint", this.shooter.calculateShooterRPM(this.limelight.getTargetDistance()));
     }
 
-    @Override
-    public void execute() {
-        this.shooter.run();
-        this.drive.run();
-    }
-
-    @Override
-    public void end() {
+    private void onEnd() {
         this.limelight.setLedMode(1);
         this.drive.setPositionMode(false);
         this.shooterSpeed = 0;
         this.shooter.setShooterWheelSpeed(0);
-        this.isFinished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return this.isFinished;
     }
 
     public boolean reachedSpeed() {
@@ -97,12 +85,6 @@ public class Aim extends Command {
 
     public boolean getColorMatch() {
         return this.colorMatches;
-    }
-
-    @Override
-    public void disable() {
-        this.drive.disable();
-        this.shooter.disable();
     }
     
 }

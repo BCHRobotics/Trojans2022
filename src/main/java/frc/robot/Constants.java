@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.util.pid.SparkMaxConstants;
 
 public class Constants {
+
     public static final boolean USING_DASHBOARD = true;
     public static final double CONTROLLER_DEADZONE = 0.1;
     public static final double WHEEL_DIAMETER = 6;

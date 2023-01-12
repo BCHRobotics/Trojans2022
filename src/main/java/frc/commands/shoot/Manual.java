@@ -10,8 +10,6 @@ public class Manual extends Command {
 
     private double speed;
 
-    private Boolean isFinished;
-
     public static Manual getInstance() {
         if (instance == null) {
             instance = new Manual();
@@ -21,12 +19,8 @@ public class Manual extends Command {
 
     private Manual() {
         this.shooter = Shooter.getInstance();
-    }
 
-    @Override
-    public void initialize() {
-        this.shooter.firstCycle();
-        this.isFinished = false;
+        setOnEnd(this::onEnd);
     }
 
     public void setShooterSpeed(double input) {
@@ -43,26 +37,10 @@ public class Manual extends Command {
         this.shooter.setShooterWheelSpeed(this.speed);
     }
 
-    @Override
-    public void execute() {
-        this.shooter.run();
-    }
-
-    @Override
-    public void end() {
+    private void onEnd() {
         this.shooter.setShooterWheelSpeed(0);
         this.calculate();
         this.isFinished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return this.isFinished;
-    }
-
-    @Override
-    public void disable() {
-        this.shooter.disable();
     }
     
 }

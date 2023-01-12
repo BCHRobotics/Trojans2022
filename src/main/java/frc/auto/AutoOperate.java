@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import frc.commands.intake.Collect;
-import frc.commands.shoot.Manual;
 import frc.sequences.Shoot;
 import frc.subsystems.Drivetrain;
 import frc.util.csv.CSVReader;

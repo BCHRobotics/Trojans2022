@@ -14,9 +14,6 @@ import frc.subsystems.Intake;
 
 public class Stage extends Command{
     private static Stage instance;
-
-    private boolean isFinished;
-
     private Intake intake;
     
     private ColorSensorV3 colorSensor = new ColorSensorV3(Constants.I2C_PORT);
@@ -34,10 +31,12 @@ public class Stage extends Command{
 
     private Stage() {
         this.intake = Intake.getInstance();
+
+        setOnInitialize(this::onInitialize);
+        setOnEnd(this::onEnd);
     }
 
-    @Override
-    public void initialize() {
+    private void onInitialize() {
         this.intake.firstCycle();
         this.isFinished = false;
 
@@ -54,25 +53,9 @@ public class Stage extends Command{
         this.intake.setStagerSpeed(-1);
     }
 
-    @Override
-    public void execute() {
-        this.intake.run();
-    }
-
-    @Override
-    public void end() {
+    private void onEnd() {
         this.intake.setStagerSpeed(0);
         this.isFinished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return this.isFinished;
-    }
-
-    @Override
-    public void disable() {
-        this.intake.disable();
     }
 
     public boolean colorMatches() {
